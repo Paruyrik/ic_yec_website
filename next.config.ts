@@ -9,9 +9,15 @@ const dirname = path.dirname(__filename)
 const nextConfig: NextConfig = {
   images: {
     localPatterns: [
-      {
-        pathname: '/api/media/file/**',
-      },
+      { pathname: '/api/media/file/**' },
+    ],
+    remotePatterns: [
+      // Local dev — Payload serves uploads at the same origin
+      { protocol: 'http',  hostname: 'localhost' },
+      { protocol: 'https', hostname: 'localhost' },
+      // Uploadthing CDN (production)
+      { protocol: 'https', hostname: '*.ufs.sh' },
+      { protocol: 'https', hostname: '*.utfs.io' },
     ],
   },
   webpack: (webpackConfig) => {

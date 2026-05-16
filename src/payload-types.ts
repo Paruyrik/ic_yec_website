@@ -69,6 +69,17 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    documents: Document;
+    projects: Project;
+    'open-calls': OpenCall;
+    registrations: Registration;
+    'team-members': TeamMember;
+    partners: Partner;
+    pages: Page;
+    'form-templates': FormTemplate;
+    faqs: Faq;
+    stories: Story;
+    newsletters: Newsletter;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -78,18 +89,37 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    documents: DocumentsSelect<false> | DocumentsSelect<true>;
+    projects: ProjectsSelect<false> | ProjectsSelect<true>;
+    'open-calls': OpenCallsSelect<false> | OpenCallsSelect<true>;
+    registrations: RegistrationsSelect<false> | RegistrationsSelect<true>;
+    'team-members': TeamMembersSelect<false> | TeamMembersSelect<true>;
+    partners: PartnersSelect<false> | PartnersSelect<true>;
+    pages: PagesSelect<false> | PagesSelect<true>;
+    'form-templates': FormTemplatesSelect<false> | FormTemplatesSelect<true>;
+    faqs: FaqsSelect<false> | FaqsSelect<true>;
+    stories: StoriesSelect<false> | StoriesSelect<true>;
+    newsletters: NewslettersSelect<false> | NewslettersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: string;
+    defaultIDType: number;
   };
-  fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
-  locale: null;
+  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('en' | 'hy' | 'ru') | ('en' | 'hy' | 'ru')[];
+  globals: {
+    'email-settings': EmailSetting;
+    'projects-settings': ProjectsSetting;
+    'site-settings': SiteSetting;
+  };
+  globalsSelect: {
+    'email-settings': EmailSettingsSelect<false> | EmailSettingsSelect<true>;
+    'projects-settings': ProjectsSettingsSelect<false> | ProjectsSettingsSelect<true>;
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+  };
+  locale: 'en' | 'hy' | 'ru';
   widgets: {
     collections: CollectionsWidget;
   };
@@ -122,7 +152,7 @@ export interface UserAuthOperations {
  * via the `definition` "users".
  */
 export interface User {
-  id: string;
+  id: number;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -147,8 +177,10 @@ export interface User {
  * via the `definition` "media".
  */
 export interface Media {
-  id: string;
+  id: number;
   alt: string;
+  _key?: string | null;
+  prefix?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -163,10 +195,754 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "documents".
+ */
+export interface Document {
+  id: number;
+  alt?: string | null;
+  _key?: string | null;
+  prefix?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects".
+ */
+export interface Project {
+  id: number;
+  title: string;
+  slug: string;
+  status: 'ongoing' | 'completed' | 'upcoming';
+  fundingSource?: ('erasmus-plus' | 'other-eu' | 'national' | 'private') | null;
+  theme?: ('art' | 'sport' | 'emotional-intelligence' | 'training' | 'inclusion' | 'digital' | 'environment')[] | null;
+  startDate?: string | null;
+  endDate?: string | null;
+  /**
+   * Total number of participants in this project.
+   */
+  participants?: number | null;
+  countries?:
+    | {
+        country?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Specific locations shown as pins on the interactive map.
+   */
+  mapPoints?:
+    | {
+        city: string;
+        country: string;
+        /**
+         * Latitude (e.g. 40.1872)
+         */
+        lat: number;
+        /**
+         * Longitude (e.g. 44.5152)
+         */
+        lng: number;
+        /**
+         * Shown in the map tooltip.
+         */
+        description?: string | null;
+        type?: ('main-venue' | 'partner-org' | 'event-location') | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Key results and achievements of this project.
+   */
+  outcomes?:
+    | {
+        outcome: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Participant quotes shown on the project page.
+   */
+  testimonials?:
+    | {
+        quote: string;
+        author: string;
+        role?: string | null;
+        photo?: (number | null) | Media;
+        country?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * YouTube or Vimeo URL for the project video.
+   */
+  videoUrl?: string | null;
+  /**
+   * Show on homepage featured section.
+   */
+  featured?: boolean | null;
+  coverImage?: (number | null) | Media;
+  gallery?:
+    | {
+        image?: (number | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
+  summary?: string | null;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  partners?: (number | Partner)[] | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "partners".
+ */
+export interface Partner {
+  id: number;
+  name: string;
+  logo?: (number | null) | Media;
+  website?: string | null;
+  type: 'partner' | 'funder' | 'network';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "open-calls".
+ */
+export interface OpenCall {
+  id: number;
+  title: string;
+  slug: string;
+  type: 'youth-exchange' | 'training-course' | 'esc-volunteering' | 'seminar' | 'other';
+  deadline: string;
+  status?: ('open' | 'closed' | 'archived') | null;
+  location?: string | null;
+  dates?: {
+    from?: string | null;
+    to?: string | null;
+  };
+  eligibility?: {
+    ageMin?: number | null;
+    ageMax?: number | null;
+    countries?:
+      | {
+          country?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    spotsAvailable?: number | null;
+  };
+  coverImage?: (number | null) | Media;
+  summary?: string | null;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Dynamic form fields shown in the registration form. Add, reorder, or remove fields freely.
+   */
+  formFields?:
+    | (
+        | {
+            label: string;
+            placeholder?: string | null;
+            helpText?: string | null;
+            required?: boolean | null;
+            minLength?: number | null;
+            maxLength?: number | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'textField';
+          }
+        | {
+            label: string;
+            placeholder?: string | null;
+            helpText?: string | null;
+            required?: boolean | null;
+            rows?: number | null;
+            minLength?: number | null;
+            maxLength?: number | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'textareaField';
+          }
+        | {
+            label: string;
+            placeholder?: string | null;
+            helpText?: string | null;
+            required?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'emailField';
+          }
+        | {
+            label: string;
+            placeholder?: string | null;
+            helpText?: string | null;
+            required?: boolean | null;
+            international?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'phoneField';
+          }
+        | {
+            label: string;
+            placeholder?: string | null;
+            helpText?: string | null;
+            required?: boolean | null;
+            min?: number | null;
+            max?: number | null;
+            step?: number | null;
+            /**
+             * Label shown next to the input, e.g. "years"
+             */
+            unit?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'numberField';
+          }
+        | {
+            label: string;
+            helpText?: string | null;
+            required?: boolean | null;
+            /**
+             * Earliest selectable date
+             */
+            minDate?: string | null;
+            /**
+             * Latest selectable date
+             */
+            maxDate?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'dateField';
+          }
+        | {
+            label: string;
+            helpText?: string | null;
+            required?: boolean | null;
+            /**
+             * Allow selecting more than one option
+             */
+            multiple?: boolean | null;
+            options?:
+              | {
+                  label: string;
+                  value: string;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'selectField';
+          }
+        | {
+            label: string;
+            helpText?: string | null;
+            required?: boolean | null;
+            options?:
+              | {
+                  label: string;
+                  value: string;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'radioField';
+          }
+        | {
+            /**
+             * Checkbox label / agreement text
+             */
+            label: string;
+            helpText?: string | null;
+            required?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'checkboxField';
+          }
+        | {
+            label: string;
+            helpText?: string | null;
+            /**
+             * Require at least one selection
+             */
+            required?: boolean | null;
+            options?:
+              | {
+                  label: string;
+                  value: string;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'checkboxGroupField';
+          }
+        | {
+            label: string;
+            helpText?: string | null;
+            required?: boolean | null;
+            /**
+             * Comma-separated file extensions
+             */
+            accept?: string | null;
+            maxSizeMB?: number | null;
+            multiple?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'fileField';
+          }
+        | {
+            label: string;
+            placeholder?: string | null;
+            helpText?: string | null;
+            required?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'urlField';
+          }
+        | {
+            label: string;
+            helpText?: string | null;
+            required?: boolean | null;
+            multiple?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'countryField';
+          }
+        | {
+            text: string;
+            level?: ('h2' | 'h3' | 'h4') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'headingField';
+          }
+        | {
+            text: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'paragraphField';
+          }
+        | {
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'dividerField';
+          }
+      )[]
+    | null;
+  registrationEnabled?: boolean | null;
+  /**
+   * Pick a template to copy its fields into "Form Fields" on save. Clears automatically after applying.
+   */
+  applyTemplate?: (number | null) | FormTemplate;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "form-templates".
+ */
+export interface FormTemplate {
+  id: number;
+  /**
+   * e.g. "Standard Youth Exchange", "ESC Volunteering"
+   */
+  name: string;
+  /**
+   * Optional note about when to use this template.
+   */
+  description?: string | null;
+  /**
+   * Build the field set once here. Apply it to any open call via the "Apply template" option.
+   */
+  formFields?:
+    | (
+        | {
+            label: string;
+            placeholder?: string | null;
+            helpText?: string | null;
+            required?: boolean | null;
+            minLength?: number | null;
+            maxLength?: number | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'textField';
+          }
+        | {
+            label: string;
+            placeholder?: string | null;
+            helpText?: string | null;
+            required?: boolean | null;
+            rows?: number | null;
+            minLength?: number | null;
+            maxLength?: number | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'textareaField';
+          }
+        | {
+            label: string;
+            placeholder?: string | null;
+            helpText?: string | null;
+            required?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'emailField';
+          }
+        | {
+            label: string;
+            placeholder?: string | null;
+            helpText?: string | null;
+            required?: boolean | null;
+            international?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'phoneField';
+          }
+        | {
+            label: string;
+            placeholder?: string | null;
+            helpText?: string | null;
+            required?: boolean | null;
+            min?: number | null;
+            max?: number | null;
+            step?: number | null;
+            /**
+             * Label shown next to the input, e.g. "years"
+             */
+            unit?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'numberField';
+          }
+        | {
+            label: string;
+            helpText?: string | null;
+            required?: boolean | null;
+            /**
+             * Earliest selectable date
+             */
+            minDate?: string | null;
+            /**
+             * Latest selectable date
+             */
+            maxDate?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'dateField';
+          }
+        | {
+            label: string;
+            helpText?: string | null;
+            required?: boolean | null;
+            /**
+             * Allow selecting more than one option
+             */
+            multiple?: boolean | null;
+            options?:
+              | {
+                  label: string;
+                  value: string;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'selectField';
+          }
+        | {
+            label: string;
+            helpText?: string | null;
+            required?: boolean | null;
+            options?:
+              | {
+                  label: string;
+                  value: string;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'radioField';
+          }
+        | {
+            /**
+             * Checkbox label / agreement text
+             */
+            label: string;
+            helpText?: string | null;
+            required?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'checkboxField';
+          }
+        | {
+            label: string;
+            helpText?: string | null;
+            /**
+             * Require at least one selection
+             */
+            required?: boolean | null;
+            options?:
+              | {
+                  label: string;
+                  value: string;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'checkboxGroupField';
+          }
+        | {
+            label: string;
+            helpText?: string | null;
+            required?: boolean | null;
+            /**
+             * Comma-separated file extensions
+             */
+            accept?: string | null;
+            maxSizeMB?: number | null;
+            multiple?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'fileField';
+          }
+        | {
+            label: string;
+            placeholder?: string | null;
+            helpText?: string | null;
+            required?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'urlField';
+          }
+        | {
+            label: string;
+            helpText?: string | null;
+            required?: boolean | null;
+            multiple?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'countryField';
+          }
+        | {
+            text: string;
+            level?: ('h2' | 'h3' | 'h4') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'headingField';
+          }
+        | {
+            text: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'paragraphField';
+          }
+        | {
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'dividerField';
+          }
+      )[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "registrations".
+ */
+export interface Registration {
+  id: number;
+  openCall: number | OpenCall;
+  applicantName: string;
+  email: string;
+  phone?: string | null;
+  country: string;
+  dateOfBirth: string;
+  motivationLetter?: string | null;
+  cv?: (number | null) | Document;
+  answers?:
+    | {
+        blockType?: string | null;
+        fieldLabel?: string | null;
+        value?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  status?: ('pending' | 'reviewing' | 'accepted' | 'rejected' | 'waitlisted') | null;
+  gdprConsent: boolean;
+  /**
+   * Internal notes — not visible to applicant
+   */
+  notes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "team-members".
+ */
+export interface TeamMember {
+  id: number;
+  name: string;
+  role?: string | null;
+  bio?: string | null;
+  photo?: (number | null) | Media;
+  email?: string | null;
+  linkedin?: string | null;
+  order?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages".
+ */
+export interface Page {
+  id: number;
+  title: string;
+  slug: string;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faqs".
+ */
+export interface Faq {
+  id: number;
+  question: string;
+  /**
+   * Plain text answer. Use double line-breaks for paragraphs.
+   */
+  answer: string;
+  category:
+    | 'application-process'
+    | 'erasmus-plus'
+    | 'esc-volunteering'
+    | 'youth-exchanges'
+    | 'training-courses'
+    | 'general';
+  /**
+   * Lower numbers appear first within a category.
+   */
+  order?: number | null;
+  published?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "stories".
+ */
+export interface Story {
+  id: number;
+  quote: string;
+  author: string;
+  /**
+   * Age at time of participation
+   */
+  age?: number | null;
+  country: string;
+  /**
+   * e.g. "Touch of the Art 2024"
+   */
+  projectName?: string | null;
+  photo?: (number | null) | Media;
+  featured?: boolean | null;
+  /**
+   * Lower = shown first
+   */
+  order?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "newsletters".
+ */
+export interface Newsletter {
+  id: number;
+  title: string;
+  /**
+   * e.g. "Spring 2024", "Issue #3"
+   */
+  issueName?: string | null;
+  publishedDate: string;
+  /**
+   * Short summary shown in the archive preview (2–3 sentences).
+   */
+  preview: string;
+  /**
+   * Link to full newsletter (Mailchimp archive, PDF, etc.)
+   */
+  archiveUrl?: string | null;
+  coverImage?: (number | null) | Media;
+  published?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
-  id: string;
+  id: number;
   key: string;
   data:
     | {
@@ -183,20 +959,64 @@ export interface PayloadKv {
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: string;
+  id: number;
   document?:
     | ({
         relationTo: 'users';
-        value: string | User;
+        value: number | User;
       } | null)
     | ({
         relationTo: 'media';
-        value: string | Media;
+        value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'documents';
+        value: number | Document;
+      } | null)
+    | ({
+        relationTo: 'projects';
+        value: number | Project;
+      } | null)
+    | ({
+        relationTo: 'open-calls';
+        value: number | OpenCall;
+      } | null)
+    | ({
+        relationTo: 'registrations';
+        value: number | Registration;
+      } | null)
+    | ({
+        relationTo: 'team-members';
+        value: number | TeamMember;
+      } | null)
+    | ({
+        relationTo: 'partners';
+        value: number | Partner;
+      } | null)
+    | ({
+        relationTo: 'pages';
+        value: number | Page;
+      } | null)
+    | ({
+        relationTo: 'form-templates';
+        value: number | FormTemplate;
+      } | null)
+    | ({
+        relationTo: 'faqs';
+        value: number | Faq;
+      } | null)
+    | ({
+        relationTo: 'stories';
+        value: number | Story;
+      } | null)
+    | ({
+        relationTo: 'newsletters';
+        value: number | Newsletter;
       } | null);
   globalSlug?: string | null;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -206,10 +1026,10 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: string;
+  id: number;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   key?: string | null;
   value?:
@@ -229,7 +1049,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: string;
+  id: number;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
@@ -263,6 +1083,8 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
+  _key?: T;
+  prefix?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -274,6 +1096,616 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "documents_select".
+ */
+export interface DocumentsSelect<T extends boolean = true> {
+  alt?: T;
+  _key?: T;
+  prefix?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects_select".
+ */
+export interface ProjectsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  status?: T;
+  fundingSource?: T;
+  theme?: T;
+  startDate?: T;
+  endDate?: T;
+  participants?: T;
+  countries?:
+    | T
+    | {
+        country?: T;
+        id?: T;
+      };
+  mapPoints?:
+    | T
+    | {
+        city?: T;
+        country?: T;
+        lat?: T;
+        lng?: T;
+        description?: T;
+        type?: T;
+        id?: T;
+      };
+  outcomes?:
+    | T
+    | {
+        outcome?: T;
+        id?: T;
+      };
+  testimonials?:
+    | T
+    | {
+        quote?: T;
+        author?: T;
+        role?: T;
+        photo?: T;
+        country?: T;
+        id?: T;
+      };
+  videoUrl?: T;
+  featured?: T;
+  coverImage?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
+  summary?: T;
+  content?: T;
+  partners?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "open-calls_select".
+ */
+export interface OpenCallsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  type?: T;
+  deadline?: T;
+  status?: T;
+  location?: T;
+  dates?:
+    | T
+    | {
+        from?: T;
+        to?: T;
+      };
+  eligibility?:
+    | T
+    | {
+        ageMin?: T;
+        ageMax?: T;
+        countries?:
+          | T
+          | {
+              country?: T;
+              id?: T;
+            };
+        spotsAvailable?: T;
+      };
+  coverImage?: T;
+  summary?: T;
+  content?: T;
+  formFields?:
+    | T
+    | {
+        textField?:
+          | T
+          | {
+              label?: T;
+              placeholder?: T;
+              helpText?: T;
+              required?: T;
+              minLength?: T;
+              maxLength?: T;
+              id?: T;
+              blockName?: T;
+            };
+        textareaField?:
+          | T
+          | {
+              label?: T;
+              placeholder?: T;
+              helpText?: T;
+              required?: T;
+              rows?: T;
+              minLength?: T;
+              maxLength?: T;
+              id?: T;
+              blockName?: T;
+            };
+        emailField?:
+          | T
+          | {
+              label?: T;
+              placeholder?: T;
+              helpText?: T;
+              required?: T;
+              id?: T;
+              blockName?: T;
+            };
+        phoneField?:
+          | T
+          | {
+              label?: T;
+              placeholder?: T;
+              helpText?: T;
+              required?: T;
+              international?: T;
+              id?: T;
+              blockName?: T;
+            };
+        numberField?:
+          | T
+          | {
+              label?: T;
+              placeholder?: T;
+              helpText?: T;
+              required?: T;
+              min?: T;
+              max?: T;
+              step?: T;
+              unit?: T;
+              id?: T;
+              blockName?: T;
+            };
+        dateField?:
+          | T
+          | {
+              label?: T;
+              helpText?: T;
+              required?: T;
+              minDate?: T;
+              maxDate?: T;
+              id?: T;
+              blockName?: T;
+            };
+        selectField?:
+          | T
+          | {
+              label?: T;
+              helpText?: T;
+              required?: T;
+              multiple?: T;
+              options?:
+                | T
+                | {
+                    label?: T;
+                    value?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        radioField?:
+          | T
+          | {
+              label?: T;
+              helpText?: T;
+              required?: T;
+              options?:
+                | T
+                | {
+                    label?: T;
+                    value?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        checkboxField?:
+          | T
+          | {
+              label?: T;
+              helpText?: T;
+              required?: T;
+              id?: T;
+              blockName?: T;
+            };
+        checkboxGroupField?:
+          | T
+          | {
+              label?: T;
+              helpText?: T;
+              required?: T;
+              options?:
+                | T
+                | {
+                    label?: T;
+                    value?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        fileField?:
+          | T
+          | {
+              label?: T;
+              helpText?: T;
+              required?: T;
+              accept?: T;
+              maxSizeMB?: T;
+              multiple?: T;
+              id?: T;
+              blockName?: T;
+            };
+        urlField?:
+          | T
+          | {
+              label?: T;
+              placeholder?: T;
+              helpText?: T;
+              required?: T;
+              id?: T;
+              blockName?: T;
+            };
+        countryField?:
+          | T
+          | {
+              label?: T;
+              helpText?: T;
+              required?: T;
+              multiple?: T;
+              id?: T;
+              blockName?: T;
+            };
+        headingField?:
+          | T
+          | {
+              text?: T;
+              level?: T;
+              id?: T;
+              blockName?: T;
+            };
+        paragraphField?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+              blockName?: T;
+            };
+        dividerField?:
+          | T
+          | {
+              id?: T;
+              blockName?: T;
+            };
+      };
+  registrationEnabled?: T;
+  applyTemplate?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "registrations_select".
+ */
+export interface RegistrationsSelect<T extends boolean = true> {
+  openCall?: T;
+  applicantName?: T;
+  email?: T;
+  phone?: T;
+  country?: T;
+  dateOfBirth?: T;
+  motivationLetter?: T;
+  cv?: T;
+  answers?:
+    | T
+    | {
+        blockType?: T;
+        fieldLabel?: T;
+        value?: T;
+        id?: T;
+      };
+  status?: T;
+  gdprConsent?: T;
+  notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "team-members_select".
+ */
+export interface TeamMembersSelect<T extends boolean = true> {
+  name?: T;
+  role?: T;
+  bio?: T;
+  photo?: T;
+  email?: T;
+  linkedin?: T;
+  order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "partners_select".
+ */
+export interface PartnersSelect<T extends boolean = true> {
+  name?: T;
+  logo?: T;
+  website?: T;
+  type?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages_select".
+ */
+export interface PagesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  content?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "form-templates_select".
+ */
+export interface FormTemplatesSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  formFields?:
+    | T
+    | {
+        textField?:
+          | T
+          | {
+              label?: T;
+              placeholder?: T;
+              helpText?: T;
+              required?: T;
+              minLength?: T;
+              maxLength?: T;
+              id?: T;
+              blockName?: T;
+            };
+        textareaField?:
+          | T
+          | {
+              label?: T;
+              placeholder?: T;
+              helpText?: T;
+              required?: T;
+              rows?: T;
+              minLength?: T;
+              maxLength?: T;
+              id?: T;
+              blockName?: T;
+            };
+        emailField?:
+          | T
+          | {
+              label?: T;
+              placeholder?: T;
+              helpText?: T;
+              required?: T;
+              id?: T;
+              blockName?: T;
+            };
+        phoneField?:
+          | T
+          | {
+              label?: T;
+              placeholder?: T;
+              helpText?: T;
+              required?: T;
+              international?: T;
+              id?: T;
+              blockName?: T;
+            };
+        numberField?:
+          | T
+          | {
+              label?: T;
+              placeholder?: T;
+              helpText?: T;
+              required?: T;
+              min?: T;
+              max?: T;
+              step?: T;
+              unit?: T;
+              id?: T;
+              blockName?: T;
+            };
+        dateField?:
+          | T
+          | {
+              label?: T;
+              helpText?: T;
+              required?: T;
+              minDate?: T;
+              maxDate?: T;
+              id?: T;
+              blockName?: T;
+            };
+        selectField?:
+          | T
+          | {
+              label?: T;
+              helpText?: T;
+              required?: T;
+              multiple?: T;
+              options?:
+                | T
+                | {
+                    label?: T;
+                    value?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        radioField?:
+          | T
+          | {
+              label?: T;
+              helpText?: T;
+              required?: T;
+              options?:
+                | T
+                | {
+                    label?: T;
+                    value?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        checkboxField?:
+          | T
+          | {
+              label?: T;
+              helpText?: T;
+              required?: T;
+              id?: T;
+              blockName?: T;
+            };
+        checkboxGroupField?:
+          | T
+          | {
+              label?: T;
+              helpText?: T;
+              required?: T;
+              options?:
+                | T
+                | {
+                    label?: T;
+                    value?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        fileField?:
+          | T
+          | {
+              label?: T;
+              helpText?: T;
+              required?: T;
+              accept?: T;
+              maxSizeMB?: T;
+              multiple?: T;
+              id?: T;
+              blockName?: T;
+            };
+        urlField?:
+          | T
+          | {
+              label?: T;
+              placeholder?: T;
+              helpText?: T;
+              required?: T;
+              id?: T;
+              blockName?: T;
+            };
+        countryField?:
+          | T
+          | {
+              label?: T;
+              helpText?: T;
+              required?: T;
+              multiple?: T;
+              id?: T;
+              blockName?: T;
+            };
+        headingField?:
+          | T
+          | {
+              text?: T;
+              level?: T;
+              id?: T;
+              blockName?: T;
+            };
+        paragraphField?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+              blockName?: T;
+            };
+        dividerField?:
+          | T
+          | {
+              id?: T;
+              blockName?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faqs_select".
+ */
+export interface FaqsSelect<T extends boolean = true> {
+  question?: T;
+  answer?: T;
+  category?: T;
+  order?: T;
+  published?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "stories_select".
+ */
+export interface StoriesSelect<T extends boolean = true> {
+  quote?: T;
+  author?: T;
+  age?: T;
+  country?: T;
+  projectName?: T;
+  photo?: T;
+  featured?: T;
+  order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "newsletters_select".
+ */
+export interface NewslettersSelect<T extends boolean = true> {
+  title?: T;
+  issueName?: T;
+  publishedDate?: T;
+  preview?: T;
+  archiveUrl?: T;
+  coverImage?: T;
+  published?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -314,6 +1746,330 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "email-settings".
+ */
+export interface EmailSetting {
+  id: number;
+  emailOnAccept?: boolean | null;
+  /**
+   * Off by default — staff choose manually per decision
+   */
+  emailOnReject?: boolean | null;
+  emailOnWaitlist?: boolean | null;
+  coordinatorEmail?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects-settings".
+ */
+export interface ProjectsSetting {
+  id: number;
+  mapSection?: {
+    enabled?: boolean | null;
+    title?: string | null;
+    /**
+     * Short description shown below the map title.
+     */
+    subtitle?: string | null;
+    /**
+     * Hex colour for countries that have projects (e.g. #3D3785).
+     */
+    activeCountryColor?: string | null;
+    /**
+     * Hex colour for location pins on the map.
+     */
+    pinColor?: string | null;
+  };
+  /**
+   * Numbers shown in the stats bar above the map. Leave at 0 to hide.
+   */
+  impactStats?: {
+    stats?:
+      | {
+          /**
+           * e.g. "150+", "12", "5 years"
+           */
+          value: string;
+          /**
+           * e.g. "Participants", "Countries reached"
+           */
+          label: string;
+          /**
+           * Emoji or icon character (e.g. 🌍 👥 📋).
+           */
+          icon?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: number;
+  timeline?: {
+    enabled?: boolean | null;
+    title?: string | null;
+    /**
+     * Steps shown in the "after you apply" timeline.
+     */
+    steps?:
+      | {
+          /**
+           * Emoji (e.g. 📝 🔍 ✉️ ✈️ 🎓)
+           */
+          icon?: string | null;
+          title: string;
+          description?: string | null;
+          /**
+           * e.g. "~2 weeks"
+           */
+          duration?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  erasmusExplainer?: {
+    enabled?: boolean | null;
+    title?: string | null;
+    subtitle?: string | null;
+    items?:
+      | {
+          question: string;
+          answer: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  partnerPortal?: {
+    enabled?: boolean | null;
+    title?: string | null;
+    subtitle?: string | null;
+    /**
+     * Direct URL to the Partner Information Form (PDF or Google Form).
+     */
+    pifUrl?: string | null;
+    /**
+     * Partnership inquiry email (pre-fills mailto link).
+     */
+    contactEmail?: string | null;
+    /**
+     * List the types of partnerships you offer.
+     */
+    types?:
+      | {
+          icon?: string | null;
+          title: string;
+          description?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * What IC-YEC requires from partner organisations.
+     */
+    requirements?:
+      | {
+          item: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  newsletter?: {
+    enabled?: boolean | null;
+    title?: string | null;
+    subtitle?: string | null;
+    /**
+     * Mailchimp / Brevo / Google Form signup link.
+     */
+    signupUrl?: string | null;
+    buttonLabel?: string | null;
+    /**
+     * Show last 3 newsletters below the signup form.
+     */
+    showArchive?: boolean | null;
+  };
+  badgeSettings?: {
+    /**
+     * Open calls closing within this many days show a pulsing urgency badge.
+     */
+    urgentDaysThreshold?: number | null;
+    /**
+     * Show a "● Live" badge on projects currently running.
+     */
+    showLiveBadge?: boolean | null;
+  };
+  /**
+   * Per-theme breakdown shown on the Projects page. Leave blank to hide a theme.
+   */
+  themeImpact?: {
+    themes?:
+      | {
+          theme: 'art' | 'sport' | 'emotional-intelligence' | 'training' | 'inclusion' | 'digital' | 'environment';
+          /**
+           * e.g. "12 projects"
+           */
+          projectCount?: string | null;
+          /**
+           * e.g. "200+ youth"
+           */
+          participantCount?: string | null;
+          /**
+           * e.g. "8 countries"
+           */
+          countriesCount?: string | null;
+          /**
+           * Emoji icon
+           */
+          icon?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "email-settings_select".
+ */
+export interface EmailSettingsSelect<T extends boolean = true> {
+  emailOnAccept?: T;
+  emailOnReject?: T;
+  emailOnWaitlist?: T;
+  coordinatorEmail?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects-settings_select".
+ */
+export interface ProjectsSettingsSelect<T extends boolean = true> {
+  mapSection?:
+    | T
+    | {
+        enabled?: T;
+        title?: T;
+        subtitle?: T;
+        activeCountryColor?: T;
+        pinColor?: T;
+      };
+  impactStats?:
+    | T
+    | {
+        stats?:
+          | T
+          | {
+              value?: T;
+              label?: T;
+              icon?: T;
+              id?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  timeline?:
+    | T
+    | {
+        enabled?: T;
+        title?: T;
+        steps?:
+          | T
+          | {
+              icon?: T;
+              title?: T;
+              description?: T;
+              duration?: T;
+              id?: T;
+            };
+      };
+  erasmusExplainer?:
+    | T
+    | {
+        enabled?: T;
+        title?: T;
+        subtitle?: T;
+        items?:
+          | T
+          | {
+              question?: T;
+              answer?: T;
+              id?: T;
+            };
+      };
+  partnerPortal?:
+    | T
+    | {
+        enabled?: T;
+        title?: T;
+        subtitle?: T;
+        pifUrl?: T;
+        contactEmail?: T;
+        types?:
+          | T
+          | {
+              icon?: T;
+              title?: T;
+              description?: T;
+              id?: T;
+            };
+        requirements?:
+          | T
+          | {
+              item?: T;
+              id?: T;
+            };
+      };
+  newsletter?:
+    | T
+    | {
+        enabled?: T;
+        title?: T;
+        subtitle?: T;
+        signupUrl?: T;
+        buttonLabel?: T;
+        showArchive?: T;
+      };
+  badgeSettings?:
+    | T
+    | {
+        urgentDaysThreshold?: T;
+        showLiveBadge?: T;
+      };
+  themeImpact?:
+    | T
+    | {
+        themes?:
+          | T
+          | {
+              theme?: T;
+              projectCount?: T;
+              participantCount?: T;
+              countriesCount?: T;
+              icon?: T;
+              id?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

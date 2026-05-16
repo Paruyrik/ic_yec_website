@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(docker info *)",
+      "Bash(psql --version)",
+      "Bash(docker compose *)",
+      "Bash(open -a Docker)",
+      "Bash(docker exec *)",
+      "Bash(pnpm payload *)",
+      "Bash(DATABASE_URI=postgresql://payload:payload_dev@127.0.0.1:5432/ic_yec DATABASE_URL=postgresql://payload:payload_dev@127.0.0.1:5432/ic_yec pnpm payload migrate)",
+      "Bash(docker run *)",
+      "Bash(pnpm dev *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/admin)",
+      "Bash(kill %1)",
+      "Bash(wait)",
+      "Bash(mkdir -p /Users/paruyrtsaturyan/Public/projects/ic-yec-website/src/app/\\\\\\(frontend\\\\\\)/projects/\\\\[slug\\\\])",
+      "Bash(mkdir -p /Users/paruyrtsaturyan/Public/projects/ic-yec-website/src/app/\\\\\\(frontend\\\\\\)/open-calls/\\\\[slug\\\\])",
+      "Bash(pnpm list *)",
+      "Bash(mkdir -p /Users/paruyrtsaturyan/Public/projects/ic-yec-website/src/globals && mkdir -p /Users/paruyrtsaturyan/Public/projects/ic-yec-website/src/emails && mkdir -p /Users/paruyrtsaturyan/Public/projects/ic-yec-website/src/app/api/send-decision-email && mkdir -p /Users/paruyrtsaturyan/Public/projects/ic-yec-website/src/app/api/export-registrations && mkdir -p \"/Users/paruyrtsaturyan/Public/projects/ic-yec-website/src/app/\\(payload\\)/admin/registrations/[id]\")",
+      "Bash(grep -v \"^$\")",
+      "Bash(npm info *)",
+      "Bash(pnpm generate:importmap)",
+      "Bash(git remote *)"
+    ],
+    "additionalDirectories": [
+      "/Users/paruyrtsaturyan/Public/projects/ic-yec-website/src/app/(payload)/admin/registrations"
+    ]
+  }
+}

@@ -1,18 +1,23 @@
 import React from 'react'
+import { Header } from '@/components/layout/Header'
+import { Footer } from '@/components/layout/Footer'
+import { CookieBanner } from '@/components/ui/CookieBanner'
 import './styles.css'
 
 export const metadata = {
-  description: 'A blank template using Payload in a Next.js app.',
-  title: 'Payload Blank Template',
+  title: 'IC-YEC — International Center for Youth European Cooperation',
+  description:
+    'Erasmus+ accredited NGO supporting non-formal education, youth mobility, and European cooperation.',
 }
 
-export default async function RootLayout(props: { children: React.ReactNode }) {
-  const { children } = props
-
+export default function FrontendLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>
-        <main>{children}</main>
+      <body style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <Header />
+        <main style={{ flex: 1 }}>{children}</main>
+        <Footer />
+        <CookieBanner />
       </body>
     </html>
   )
