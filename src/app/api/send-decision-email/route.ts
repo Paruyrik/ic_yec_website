@@ -5,11 +5,12 @@ import { render } from '@react-email/components'
 import config from '@/payload.config'
 import { StatusUpdate } from '@/emails/StatusUpdate'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-const FROM   = process.env.EMAIL_FROM ?? 'IC-YEC <noreply@ic-yec.org>'
+const FROM_DEFAULT = 'IC-YEC <noreply@ic-yec.org>'
 const CC_DEFAULT = 'projects.icyec@gmail.com'
 
 export async function POST(req: NextRequest) {
+  const resend = new Resend(process.env.RESEND_API_KEY)
+  const FROM   = process.env.EMAIL_FROM ?? FROM_DEFAULT
   const { registrationId, decision, ccCoordinator } = await req.json()
 
   if (!registrationId || !decision) {

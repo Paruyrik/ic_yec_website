@@ -39,7 +39,6 @@ export function RegistrationConfirmation({ applicantName, openCallTitle, submitt
             <Hr style={{ borderColor: '#EEEDFE', margin: '24px 0' }} />
             <Text style={{ color: '#6B6B8D', fontSize: 13, lineHeight: 1.6 }}>
               IC-YEC · International Center for Youth European Cooperation<br />
-              Erasmus+ Accredited NGO · PIC 887857394 · OID E10290520
             </Text>
           </Section>
         </Container>
