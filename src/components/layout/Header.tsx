@@ -22,12 +22,12 @@ export function Header() {
         {/* Logo / wordmark */}
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0, textDecoration: 'none' }}>
           <Image
-            src="/logo-white.svg"
+            src="/white-logo.png"
             alt="IC-YEC"
-            width={36}
+            width={44}
             height={44}
             priority
-            style={{ width: 36, height: 'auto' }}
+            style={{ width: 44, height: 44, objectFit: 'contain' }}
           />
           <span style={{ color: 'white', fontWeight: 500, fontSize: 17, letterSpacing: '0.01em' }}>IC-YEC</span>
         </Link>

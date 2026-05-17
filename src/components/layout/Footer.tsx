@@ -30,16 +30,16 @@ export function Footer() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <Image
-                src="/logo-white.svg"
+                src="/white-logo.png"
                 alt="IC-YEC"
-                width={32}
-                height={39}
-                style={{ width: 32, height: 'auto' }}
+                width={40}
+                height={40}
+                style={{ width: 40, height: 40, objectFit: 'contain' }}
               />
               <span style={{ color: 'white', fontWeight: 500, fontSize: 16 }}>IC-YEC</span>
             </div>
             <p style={{ fontSize: 13, lineHeight: 1.65, maxWidth: 260 }}>
-              International Center for Youth European Cooperation — supporting non-formal
+              International Center for Youth Empowerment Cooperation — supporting non-formal
               education and youth mobility through art, sport, digital skills, and intercultural exchange.
             </p>
           </div>

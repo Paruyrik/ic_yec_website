@@ -10,6 +10,8 @@ const nextConfig: NextConfig = {
   images: {
     localPatterns: [
       { pathname: '/api/media/file/**' },
+      { pathname: '/*.png' },
+      { pathname: '/*.svg' },
     ],
     remotePatterns: [
       // Local dev — Payload serves uploads at the same origin

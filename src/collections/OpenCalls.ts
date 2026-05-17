@@ -253,6 +253,7 @@ export const OpenCalls: CollectionConfig = {
       required: true,
       unique: true,
       admin: {
+        position: 'sidebar',
         components: {
           Field: {
             path: '@/components/admin/SlugField',
@@ -273,6 +274,7 @@ export const OpenCalls: CollectionConfig = {
       type: 'select',
       options: ['open', 'closed', 'archived'],
       defaultValue: 'open',
+      admin: { position: 'sidebar' },
     },
     { name: 'location', type: 'text', localized: true },
     {
@@ -293,7 +295,7 @@ export const OpenCalls: CollectionConfig = {
         { name: 'spotsAvailable', type: 'number' },
       ],
     },
-    { name: 'coverImage', type: 'upload', relationTo: 'media' },
+    { name: 'coverImage', type: 'upload', relationTo: 'media', admin: { position: 'sidebar' } },
     { name: 'summary', type: 'textarea', localized: true },
     { name: 'content', type: 'richText', localized: true },
     {

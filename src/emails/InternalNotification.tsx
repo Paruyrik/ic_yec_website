@@ -1,8 +1,10 @@
 import {
-  Body, Container, Head, Heading, Hr, Html,
+  Body, Container, Head, Heading, Hr, Html, Img,
   Preview, Section, Text, Link,
 } from '@react-email/components'
 import * as React from 'react'
+
+const BASE_URL = process.env.NEXT_PUBLIC_SERVER_URL ?? 'https://ic-yec.org'
 
 type Props = {
   applicantName: string
@@ -24,9 +26,10 @@ export function InternalNotification({
       <Body style={{ fontFamily: 'system-ui, sans-serif', background: '#F8F8FC', padding: '32px 0' }}>
         <Container style={{ background: 'white', borderRadius: 8, maxWidth: 560, margin: '0 auto', overflow: 'hidden' }}>
           <Section style={{ background: '#1A1833', padding: '20px 32px' }}>
-            <Heading style={{ color: 'white', margin: 0, fontSize: 16, fontWeight: 500 }}>
-              IC-YEC · New Registration
-            </Heading>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <Img src={`${BASE_URL}/white-logo.png`} width="36" height="36" alt="IC-YEC" style={{ display: 'block' }} />
+              <span style={{ color: 'white', fontSize: 15, fontWeight: 500, letterSpacing: '0.01em' }}>IC-YEC · New Registration</span>
+            </div>
           </Section>
           <Section style={{ padding: '28px 32px' }}>
             <Heading style={{ fontSize: 20, fontWeight: 500, color: '#1A1833', marginBottom: 16 }}>

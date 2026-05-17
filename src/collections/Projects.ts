@@ -8,12 +8,27 @@ export const Projects: CollectionConfig = {
   },
   fields: [
     { name: 'title', type: 'text', required: true, localized: true },
-    { name: 'slug', type: 'text', required: true, unique: true },
+    {
+      name: 'slug',
+      type: 'text',
+      required: true,
+      unique: true,
+      admin: {
+        position: 'sidebar',
+        components: {
+          Field: {
+            path: '@/components/admin/SlugField',
+            exportName: 'SlugField',
+          },
+        },
+      },
+    },
     {
       name: 'status',
       type: 'select',
       options: ['ongoing', 'completed', 'upcoming'],
       required: true,
+      admin: { position: 'sidebar' },
     },
     {
       name: 'fundingSource',
@@ -77,7 +92,7 @@ export const Projects: CollectionConfig = {
     },
     { name: 'videoUrl', type: 'text', admin: { description: 'YouTube or Vimeo URL for the project video.' } },
     { name: 'featured', type: 'checkbox', defaultValue: false, admin: { description: 'Show on homepage featured section.', position: 'sidebar' } },
-    { name: 'coverImage', type: 'upload', relationTo: 'media' },
+    { name: 'coverImage', type: 'upload', relationTo: 'media', admin: { position: 'sidebar' } },
     { name: 'gallery', type: 'array', fields: [{ name: 'image', type: 'upload', relationTo: 'media' }] },
     { name: 'summary', type: 'textarea', localized: true },
     { name: 'content', type: 'richText', localized: true },

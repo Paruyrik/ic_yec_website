@@ -56,7 +56,7 @@ export default async function AboutPage() {
           </p>
           <h1 style={{ color: 'white', fontSize: 36, fontWeight: 500 }}>About IC-YEC</h1>
           <p style={{ color: 'rgba(255,255,255,0.7)', marginTop: 10, fontSize: 15, maxWidth: 560 }}>
-            International Center for Youth European Cooperation — bringing young people
+            International Center for Youth Empowerment Cooperation — bringing young people
             together through non-formal education since 2015.
           </p>
         </div>

@@ -1,8 +1,10 @@
 import {
-  Body, Container, Head, Heading, Hr, Html,
-  Preview, Section, Text, Link,
+  Body, Container, Head, Heading, Hr, Html, Img,
+  Preview, Section, Text,
 } from '@react-email/components'
 import * as React from 'react'
+
+const BASE_URL = process.env.NEXT_PUBLIC_SERVER_URL ?? 'https://ic-yec.org'
 
 type Props = {
   applicantName: string
@@ -17,8 +19,11 @@ export function RegistrationConfirmation({ applicantName, openCallTitle, submitt
       <Preview>Your application to {openCallTitle} has been received</Preview>
       <Body style={{ fontFamily: 'system-ui, sans-serif', background: '#F8F8FC', padding: '32px 0' }}>
         <Container style={{ background: 'white', borderRadius: 8, maxWidth: 560, margin: '0 auto', overflow: 'hidden' }}>
-          <Section style={{ background: '#3D3785', padding: '24px 32px' }}>
-            <Heading style={{ color: 'white', margin: 0, fontSize: 20, fontWeight: 500 }}>IC-YEC</Heading>
+          <Section style={{ background: '#3D3785', padding: '20px 32px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <Img src={`${BASE_URL}/white-logo.png`} width="40" height="40" alt="IC-YEC" style={{ display: 'block' }} />
+              <span style={{ color: 'white', fontSize: 17, fontWeight: 500, letterSpacing: '0.01em' }}>IC-YEC</span>
+            </div>
           </Section>
           <Section style={{ padding: '32px' }}>
             <Heading style={{ fontSize: 22, fontWeight: 500, color: '#1A1833', marginBottom: 8 }}>
@@ -38,7 +43,7 @@ export function RegistrationConfirmation({ applicantName, openCallTitle, submitt
             </Text>
             <Hr style={{ borderColor: '#EEEDFE', margin: '24px 0' }} />
             <Text style={{ color: '#6B6B8D', fontSize: 13, lineHeight: 1.6 }}>
-              IC-YEC · International Center for Youth European Cooperation<br />
+              IC-YEC · International Center for Youth Empowerment Cooperation<br />
             </Text>
           </Section>
         </Container>
