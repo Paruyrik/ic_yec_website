@@ -2,12 +2,12 @@
 
 import { useEffect } from 'react'
 
-type Decision = 'accepted' | 'waitlisted' | 'rejected'
+type Decision = 'shortlisted' | 'accepted' | 'rejected'
 
-const CONFIG: Record<Decision, { label: string; bg: string; text: string; border: string }> = {
-  accepted:   { label: 'Accept',   bg: '#EAF3DE', text: '#3B6D11', border: '#4F9A5E' },
-  waitlisted: { label: 'Waitlist', bg: '#FEF3C7', text: '#92400E', border: '#D97706' },
-  rejected:   { label: 'Reject',   bg: '#FCEBEB', text: '#A32D2D', border: '#D14242' },
+const CONFIG: Record<Decision, { label: string; bg: string; text: string; border: string; noEmail?: boolean }> = {
+  shortlisted: { label: 'Shortlist', bg: '#EEEDFE', text: '#3C3489', border: '#7C6FCD', noEmail: true },
+  accepted:    { label: 'Accept',    bg: '#EAF3DE', text: '#3B6D11', border: '#4F9A5E' },
+  rejected:    { label: 'Reject',    bg: '#FCEBEB', text: '#A32D2D', border: '#D14242' },
 }
 
 type Props = {
@@ -47,20 +47,24 @@ export function BulkConfirmModal({ decision, count, sendEmail, onToggleEmail, on
             {c.label} {count} applicant{count !== 1 ? 's' : ''}?
           </h3>
           <p style={{ fontSize: 14, color: c.text, opacity: 0.8, marginTop: 6 }}>
-            This will update the status for all selected registrations.
+            {c.noEmail
+              ? 'Internal only — applicants will not be notified.'
+              : 'This will update the status for all selected registrations.'}
           </p>
         </div>
 
         <div style={{ padding: '20px 24px' }}>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', fontSize: 14 }}>
-            <input
-              type="checkbox"
-              className="gdpr"
-              checked={sendEmail}
-              onChange={onToggleEmail}
-            />
-            Send notification email to applicants
-          </label>
+          {!c.noEmail && (
+            <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', fontSize: 14 }}>
+              <input
+                type="checkbox"
+                className="gdpr"
+                checked={sendEmail}
+                onChange={onToggleEmail}
+              />
+              Send notification email to applicants
+            </label>
+          )}
 
           <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
             <button

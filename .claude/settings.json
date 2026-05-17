@@ -20,7 +20,9 @@
       "Bash(grep -v \"^$\")",
       "Bash(npm info *)",
       "Bash(pnpm generate:importmap)",
-      "Bash(git remote *)"
+      "Bash(git remote *)",
+      "Skill(payload)",
+      "Skill(payload:*)"
     ],
     "additionalDirectories": [
       "/Users/paruyrtsaturyan/Public/projects/ic-yec-website/src/app/(payload)/admin/registrations"

@@ -809,8 +809,11 @@ export interface Registration {
         id?: string | null;
       }[]
     | null;
-  status?: ('pending' | 'reviewing' | 'accepted' | 'rejected' | 'waitlisted') | null;
-  gdprConsent: boolean;
+  status?: ('pending' | 'reviewing' | 'shortlisted' | 'interview' | 'accepted' | 'rejected') | null;
+  /**
+   * Google Form/Doc link — included in the acceptance email
+   */
+  agreementUrl?: string | null;
   /**
    * Internal notes — not visible to applicant
    */
@@ -1424,7 +1427,7 @@ export interface RegistrationsSelect<T extends boolean = true> {
         id?: T;
       };
   status?: T;
-  gdprConsent?: T;
+  agreementUrl?: T;
   notes?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -1908,6 +1911,45 @@ export interface SiteSetting {
     showLiveBadge?: boolean | null;
   };
   /**
+   * Configure the dark partner map shown on the home and projects pages.
+   */
+  mapConfig?: {
+    /**
+     * Hex color used to highlight partner countries on the map.
+     */
+    activeCountryColor?: string | null;
+    /**
+     * Hex color for the IC-YEC headquarters dot (home city).
+     */
+    homeCityColor?: string | null;
+    /**
+     * Hex color for partner city dots.
+     */
+    partnerCityColor?: string | null;
+    /**
+     * Partner cities displayed as pulsing dots. Leave empty to use the built-in default list.
+     */
+    cities?:
+      | {
+          city: string;
+          country: string;
+          /**
+           * Latitude (e.g. 40.18)
+           */
+          lat: number;
+          /**
+           * Longitude (e.g. 44.51)
+           */
+          lng: number;
+          /**
+           * Mark as IC-YEC HQ / home city
+           */
+          isHome?: boolean | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  /**
    * Per-theme breakdown shown on the Projects page. Leave blank to hide a theme.
    */
   themeImpact?: {
@@ -2052,6 +2094,23 @@ export interface SiteSettingsSelect<T extends boolean = true> {
     | {
         urgentDaysThreshold?: T;
         showLiveBadge?: T;
+      };
+  mapConfig?:
+    | T
+    | {
+        activeCountryColor?: T;
+        homeCityColor?: T;
+        partnerCityColor?: T;
+        cities?:
+          | T
+          | {
+              city?: T;
+              country?: T;
+              lat?: T;
+              lng?: T;
+              isHome?: T;
+              id?: T;
+            };
       };
   themeImpact?:
     | T

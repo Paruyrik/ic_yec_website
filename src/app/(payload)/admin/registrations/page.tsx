@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
-import { BulkActionBar } from '@/components/admin/BulkActionBar'
 import { BulkConfirmModal } from '@/components/admin/BulkConfirmModal'
 import { StarButton } from '@/components/admin/StarButton'
 import { useFavourites } from '@/hooks/useFavourites'
@@ -10,8 +9,8 @@ import { StatusPill } from '@/components/ui/StatusPill'
 import { FilterBar } from '@/components/ui/FilterBar'
 import { EmptyState } from '@/components/ui/EmptyState'
 
-type Decision = 'accepted' | 'waitlisted' | 'rejected'
-type Status = 'pending' | 'reviewing' | 'accepted' | 'rejected' | 'waitlisted'
+type Decision = 'shortlisted' | 'accepted' | 'rejected'
+type Status = 'pending' | 'reviewing' | 'shortlisted' | 'interview' | 'accepted' | 'rejected'
 
 type OpenCallOption = { id: string; title: string }
 
@@ -26,11 +25,12 @@ type Registration = {
 }
 
 const STATUS_OPTIONS = [
-  { label: 'Pending',    value: 'pending' },
-  { label: 'Reviewing',  value: 'reviewing' },
-  { label: 'Accepted',   value: 'accepted' },
-  { label: 'Rejected',   value: 'rejected' },
-  { label: 'Waitlisted', value: 'waitlisted' },
+  { label: 'Pending',             value: 'pending' },
+  { label: 'Reviewing',           value: 'reviewing' },
+  { label: 'Shortlisted',         value: 'shortlisted' },
+  { label: 'Interview scheduled', value: 'interview' },
+  { label: 'Accepted',            value: 'accepted' },
+  { label: 'Rejected',            value: 'rejected' },
 ]
 
 function openCallId(r: Registration): string {
@@ -163,39 +163,81 @@ export default function RegistrationsPage() {
   return (
     <div style={{ padding: '32px 40px', fontFamily: 'system-ui, sans-serif', color: '#1A1833' }}>
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
-        <div>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24, gap: 12 }}>
+        <div style={{ flexShrink: 0 }}>
           <h1 style={{ fontSize: 22, fontWeight: 500, margin: 0 }}>Registrations</h1>
           <p style={{ fontSize: 13, color: '#6B6B8D', marginTop: 4 }}>
             {rows.length} total
             {starredCount > 0 && ` · ${starredCount} starred`}
           </p>
         </div>
-        <div style={{ display: 'flex', gap: 10 }}>
-          <button
-            type="button"
-            onClick={() => setShowFavsOnly((v) => !v)}
-            style={{
-              padding: '7px 14px', borderRadius: 8, fontSize: 13, fontWeight: 500,
-              border: '1.5px solid',
-              borderColor: showFavsOnly ? '#D97706' : '#E2E1F5',
-              background: showFavsOnly ? '#FEF3C7' : 'transparent',
-              color: showFavsOnly ? '#92400E' : '#6B6B8D',
-              cursor: 'pointer',
-            }}
-          >
-            {showFavsOnly ? '★ Starred only' : '☆ Show starred'}
-          </button>
-          <a
-            href="/api/export-registrations?format=csv"
-            style={{
-              padding: '7px 14px', borderRadius: 8, fontSize: 13, fontWeight: 500,
-              background: '#EEEDFE', color: '#3D3785', textDecoration: 'none',
-            }}
-          >
-            ⬇ Export all
-          </a>
-        </div>
+
+        {selected.size > 0 ? (
+          /* ── Selection action bar ── */
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+            <span style={{ fontSize: 13, fontWeight: 500, color: '#3D3785', padding: '6px 12px', background: '#EEEDFE', borderRadius: 8, whiteSpace: 'nowrap' }}>
+              {selected.size} selected
+            </span>
+            <div style={{ width: 1, height: 24, background: '#E2E1F5', flexShrink: 0 }} />
+            {([
+              { decision: 'shortlisted' as Decision, label: '★ Shortlist', bg: '#EEEDFE', text: '#3C3489' },
+              { decision: 'accepted'    as Decision, label: '✓ Accept',    bg: '#EAF3DE', text: '#3B6D11' },
+              { decision: 'rejected'    as Decision, label: '✕ Reject',    bg: '#FCEBEB', text: '#A32D2D' },
+            ]).map((a) => (
+              <button
+                key={a.decision}
+                type="button"
+                onClick={() => setPendingDecision(a.decision)}
+                style={{ padding: '7px 14px', borderRadius: 8, fontSize: 13, fontWeight: 500, border: 'none', cursor: 'pointer', background: a.bg, color: a.text, whiteSpace: 'nowrap' }}
+              >
+                {a.label}
+              </button>
+            ))}
+            <div style={{ width: 1, height: 24, background: '#E2E1F5', flexShrink: 0 }} />
+            <button
+              type="button"
+              onClick={handleExportSelected}
+              style={{ padding: '7px 14px', borderRadius: 8, fontSize: 13, fontWeight: 500, border: 'none', cursor: 'pointer', background: '#EEEDFE', color: '#3D3785', whiteSpace: 'nowrap' }}
+            >
+              ⬇ Export selected
+            </button>
+            <button
+              type="button"
+              onClick={() => setSelected(new Set())}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6B6B8D', fontSize: 18, lineHeight: 1, padding: '2px 6px' }}
+              aria-label="Clear selection"
+            >
+              ×
+            </button>
+          </div>
+        ) : (
+          /* ── Default actions ── */
+          <div style={{ display: 'flex', gap: 10 }}>
+            <button
+              type="button"
+              onClick={() => setShowFavsOnly((v) => !v)}
+              style={{
+                padding: '7px 14px', borderRadius: 8, fontSize: 13, fontWeight: 500,
+                border: '1.5px solid',
+                borderColor: showFavsOnly ? '#D97706' : '#E2E1F5',
+                background: showFavsOnly ? '#FEF3C7' : 'transparent',
+                color: showFavsOnly ? '#92400E' : '#6B6B8D',
+                cursor: 'pointer',
+              }}
+            >
+              {showFavsOnly ? '★ Starred only' : '☆ Show starred'}
+            </button>
+            <a
+              href="/api/export-registrations?format=csv"
+              style={{
+                padding: '7px 14px', borderRadius: 8, fontSize: 13, fontWeight: 500,
+                background: '#EEEDFE', color: '#3D3785', textDecoration: 'none',
+              }}
+            >
+              ⬇ Export all
+            </a>
+          </div>
+        )}
       </div>
 
       {/* Filters */}
@@ -341,14 +383,6 @@ export default function RegistrationsPage() {
           </table>
         )}
       </div>
-
-      {/* Bulk action bar */}
-      <BulkActionBar
-        count={selected.size}
-        onDecision={(d) => setPendingDecision(d)}
-        onExport={handleExportSelected}
-        onClear={() => setSelected(new Set())}
-      />
 
       {/* Confirm modal */}
       {pendingDecision && (

@@ -20,7 +20,10 @@ export default async function RegistrationDecisionPage({ params }: { params: Pro
   const callTitle   = typeof openCall?.title === 'string' ? openCall.title : openCall?.title?.en ?? 'Open Call'
   const dob         = reg.dateOfBirth ? new Date(reg.dateOfBirth as string) : null
   const age         = dob ? Math.floor((Date.now() - dob.getTime()) / 31_557_600_000) : null
-  const cvUrl       = reg.cv && typeof reg.cv === 'object' ? (reg.cv as any).url : null
+  const cvObj       = reg.cv && typeof reg.cv === 'object' ? (reg.cv as any) : null
+  const cvUrl       = cvObj?.url ?? null
+  const cvFilename  = cvObj?.filename ?? null
+  const cvMimeType  = cvObj?.mimeType ?? null
   const submittedAt = new Date(reg.createdAt as string).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
 
   return (
@@ -36,6 +39,8 @@ export default async function RegistrationDecisionPage({ params }: { params: Pro
         openCallId:    String(openCall?.id ?? ''),
         submittedAt,
         cvUrl,
+        cvFilename,
+        cvMimeType,
         notes:         reg.notes ?? '',
         motivationLetter: reg.motivationLetter ?? '',
       }}

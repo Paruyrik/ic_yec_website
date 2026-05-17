@@ -143,6 +143,8 @@ async function seed() {
   console.log('  → open-calls')
   const openCallsData = [
     {
+      // NOTE: formFields = EXTRA fields only. Core fields (Name, DOB, Email, Phone,
+      // Country, Motivation Letter, CV, GDPR) are always rendered by RegistrationForm.
       title: 'Youth Exchange: Colours of Europe',
       slug: 'youth-exchange-colours-of-europe',
       type: 'youth-exchange',
@@ -154,17 +156,10 @@ async function seed() {
       summary: 'A 10-day international youth exchange exploring cultural identity through visual arts. Join 30 young people from 3 countries for workshops, exhibitions, and intercultural evenings.',
       registrationEnabled: true,
       formFields: [
-        { blockType: 'textField', label: 'Full Name', placeholder: 'Your full name', required: true },
-        { blockType: 'emailField', label: 'Email Address', placeholder: 'you@example.com', required: true },
-        { blockType: 'phoneField', label: 'Phone Number', required: false },
-        { blockType: 'countryField', label: 'Country of Residence', required: true },
-        { blockType: 'dateField', label: 'Date of Birth', required: true },
         { blockType: 'selectField', label: 'T-shirt size', required: true, options: [
           { label: 'XS', value: 'xs' }, { label: 'S', value: 's' }, { label: 'M', value: 'm' },
           { label: 'L', value: 'l' }, { label: 'XL', value: 'xl' },
         ]},
-        { blockType: 'textareaField', label: 'Motivation Letter', placeholder: 'Why do you want to participate?', required: true, rows: 6 },
-        { blockType: 'checkboxField', label: 'I agree to the GDPR terms and data processing policy', required: true },
       ],
     },
     {
@@ -179,12 +174,7 @@ async function seed() {
       summary: 'A 7-day residential training course for youth workers and educators who want to strengthen their facilitation skills using non-formal learning methods.',
       registrationEnabled: true,
       formFields: [
-        { blockType: 'headingField', text: 'Personal Information' },
-        { blockType: 'textField', label: 'Full Name', required: true },
-        { blockType: 'emailField', label: 'Email', required: true },
-        { blockType: 'countryField', label: 'Country', required: true },
-        { blockType: 'dateField', label: 'Date of Birth', required: true },
-        { blockType: 'headingField', text: 'Professional Background' },
+        { blockType: 'headingField', text: 'Professional Background', level: 'h3' },
         { blockType: 'numberField', label: 'Years of experience in youth work', required: true, min: 0, max: 40, unit: 'years' },
         { blockType: 'selectField', label: 'Current role', required: true, options: [
           { label: 'Youth Worker', value: 'youth-worker' },
@@ -194,7 +184,6 @@ async function seed() {
           { label: 'Other', value: 'other' },
         ]},
         { blockType: 'textareaField', label: 'Describe one facilitation challenge you have faced', required: true, rows: 4 },
-        { blockType: 'fileField', label: 'Upload your CV', required: true },
         { blockType: 'checkboxField', label: 'I confirm the information above is accurate', required: true },
       ],
     },
@@ -210,15 +199,9 @@ async function seed() {
       summary: '6-month ESC volunteering placement focused on environmental education and community gardening projects in Gyumri. Accommodation, travel and pocket money covered.',
       registrationEnabled: true,
       formFields: [
-        { blockType: 'textField', label: 'Full Name', required: true },
-        { blockType: 'emailField', label: 'Email', required: true },
-        { blockType: 'countryField', label: 'Country of Citizenship', required: true },
-        { blockType: 'dateField', label: 'Date of Birth', required: true },
         { blockType: 'textareaField', label: 'Why ESC & why Armenia?', required: true, rows: 5 },
         { blockType: 'textareaField', label: 'Relevant experience with environmental / community work', required: false, rows: 4 },
-        { blockType: 'fileField', label: 'CV (PDF)', required: true },
         { blockType: 'urlField', label: 'LinkedIn profile (optional)', required: false },
-        { blockType: 'checkboxField', label: 'I agree to the GDPR data processing terms', required: true },
       ],
     },
     {
@@ -233,10 +216,7 @@ async function seed() {
       summary: 'A regional seminar bringing together youth policy practitioners, NGO representatives and local authorities to explore youth participation mechanisms in the South Caucasus.',
       registrationEnabled: true,
       formFields: [
-        { blockType: 'textField', label: 'Full Name', required: true },
-        { blockType: 'emailField', label: 'Email', required: true },
         { blockType: 'textField', label: 'Organisation / Institution', required: true },
-        { blockType: 'countryField', label: 'Country', required: true },
         { blockType: 'radioField', label: 'I am participating as', required: true, options: [
           { label: 'NGO representative', value: 'ngo' },
           { label: 'Public institution representative', value: 'public' },
@@ -244,7 +224,6 @@ async function seed() {
           { label: 'Young person / activist', value: 'youth' },
         ]},
         { blockType: 'textareaField', label: 'What topic would you like to raise at the seminar?', required: false, rows: 3 },
-        { blockType: 'checkboxField', label: 'I consent to my data being used for event organisation purposes', required: true },
       ],
     },
     {
@@ -294,7 +273,6 @@ async function seed() {
       dateOfBirth: '2000-03-15',
       motivationLetter: 'I have always been passionate about intercultural exchange and believe art is the most universal language. I am currently studying Fine Arts in Berlin and would love to share my perspective with peers from other countries.',
       status: 'pending',
-      gdprConsent: true,
       answers: [],
     },
     {
@@ -306,7 +284,6 @@ async function seed() {
       dateOfBirth: '1999-07-22',
       motivationLetter: 'As a young designer from Yerevan I want to bring Armenian contemporary art to an international audience and learn from peers across Europe.',
       status: 'accepted',
-      gdprConsent: true,
       notes: 'Strong portfolio, local participant — confirmed by 2025-06-01.',
       answers: [],
     },
@@ -319,7 +296,6 @@ async function seed() {
       dateOfBirth: '2001-11-30',
       motivationLetter: 'Participating in international exchanges has changed my life. I want to contribute my experience in street art and mural painting to this project.',
       status: 'reviewing',
-      gdprConsent: true,
       answers: [],
     },
     {
@@ -330,8 +306,7 @@ async function seed() {
       country: 'Portugal',
       dateOfBirth: '1998-05-10',
       motivationLetter: 'I am a youth facilitator with 3 years of experience. I believe this exchange will help me grow both personally and professionally.',
-      status: 'waitlisted',
-      gdprConsent: true,
+      status: 'shortlisted',
       notes: 'Good application but country quota is full. On reserve list.',
       answers: [],
     },
@@ -344,7 +319,6 @@ async function seed() {
       dateOfBirth: '2002-08-03',
       motivationLetter: 'Art and culture are my passion. I would like to use this opportunity to explore how young people from different backgrounds express themselves.',
       status: 'rejected',
-      gdprConsent: true,
       notes: 'Age criterion not met for the partner sending organisation quota.',
       answers: [],
     },
@@ -357,7 +331,6 @@ async function seed() {
       dateOfBirth: '1993-04-18',
       motivationLetter: 'I have been working as a youth worker for 5 years and want to improve my facilitation methods with a more structured theoretical background.',
       status: 'accepted',
-      gdprConsent: true,
       answers: [],
     },
     {
@@ -369,7 +342,6 @@ async function seed() {
       dateOfBirth: '1995-12-05',
       motivationLetter: 'I coordinate a local youth centre and constantly look for new facilitation tools that I can bring back to my community.',
       status: 'pending',
-      gdprConsent: true,
       answers: [],
     },
     {
@@ -381,7 +353,6 @@ async function seed() {
       dateOfBirth: '1997-02-14',
       motivationLetter: 'Non-formal education changed my outlook. I want to share and improve what I have learned as a volunteer trainer in rural Armenia.',
       status: 'reviewing',
-      gdprConsent: true,
       answers: [],
     },
   ]

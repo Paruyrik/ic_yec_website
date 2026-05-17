@@ -1,6 +1,6 @@
 'use client'
 
-type Decision = 'accepted' | 'waitlisted' | 'rejected'
+type Decision = 'shortlisted' | 'accepted' | 'rejected'
 
 type Props = {
   count: number
@@ -10,9 +10,9 @@ type Props = {
 }
 
 const ACTIONS: { decision: Decision; label: string; bg: string; text: string }[] = [
-  { decision: 'accepted',   label: '✓ Accept',   bg: '#EAF3DE', text: '#3B6D11' },
-  { decision: 'waitlisted', label: '⏱ Waitlist', bg: '#FEF3C7', text: '#92400E' },
-  { decision: 'rejected',   label: '✕ Reject',   bg: '#FCEBEB', text: '#A32D2D' },
+  { decision: 'shortlisted', label: '★ Shortlist', bg: '#EEEDFE', text: '#3C3489' },
+  { decision: 'accepted',    label: '✓ Accept',    bg: '#EAF3DE', text: '#3B6D11' },
+  { decision: 'rejected',    label: '✕ Reject',    bg: '#FCEBEB', text: '#A32D2D' },
 ]
 
 export function BulkActionBar({ count, onDecision, onExport, onClear }: Props) {

@@ -247,7 +247,20 @@ export const OpenCalls: CollectionConfig = {
   },
   fields: [
     { name: 'title', type: 'text', required: true, localized: true },
-    { name: 'slug', type: 'text', required: true, unique: true },
+    {
+      name: 'slug',
+      type: 'text',
+      required: true,
+      unique: true,
+      admin: {
+        components: {
+          Field: {
+            path: '@/components/admin/SlugField',
+            exportName: 'SlugField',
+          },
+        },
+      },
+    },
     {
       name: 'type',
       type: 'select',
