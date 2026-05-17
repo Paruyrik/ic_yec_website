@@ -42,10 +42,17 @@ async function seed() {
   // ── Partners ───────────────────────────────────────────────────────────────
   console.log('  → partners')
   const partnerNames = [
-    { name: 'Erasmus+ National Agency Armenia', website: 'https://era.am' },
-    { name: 'Youth in Action Network', website: 'https://yia.eu' },
-    { name: 'European Youth Forum', website: 'https://youthforum.org' },
-    { name: 'Salto Youth Resource Centre', website: 'https://salto-youth.net' },
+    { name: 'Erasmus+ National Agency Armenia', website: 'https://era.am', type: 'partner' },
+    { name: 'Youth in Action Network', website: 'https://yia.eu', type: 'network' },
+    { name: 'European Youth Forum', website: 'https://youthforum.org', type: 'network' },
+    { name: 'Salto Youth Resource Centre', website: 'https://salto-youth.net', type: 'partner' },
+    {
+      name: 'Masterpeace',
+      website: 'https://masterpeace.org',
+      type: 'official-representative',
+      representativeRole: 'Official Armenian Representative',
+      description: 'IC-YEC is the official Armenian representative of Masterpeace — a global movement using the power of music and the arts to inspire people to connect across divides and build a more peaceful world.',
+    },
   ]
   const partners = []
   for (const p of partnerNames) {

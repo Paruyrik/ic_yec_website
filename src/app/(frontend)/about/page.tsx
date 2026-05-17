@@ -43,8 +43,13 @@ const ACTIVITIES = [
 export default async function AboutPage() {
   const payload = await getPayload({ config: await config })
 
-  const teamResult = await payload.find({ collection: 'team-members', limit: 20, sort: 'order', depth: 1 }).catch(() => ({ docs: [] }))
+  const [teamResult, affiliationsResult] = await Promise.all([
+    payload.find({ collection: 'team-members', limit: 20, sort: 'order', depth: 1 }).catch(() => ({ docs: [] })),
+    payload.find({ collection: 'partners', where: { type: { equals: 'official-representative' } }, limit: 10, depth: 1 }).catch(() => ({ docs: [] })),
+  ])
+
   const team = teamResult.docs
+  const affiliations = affiliationsResult.docs
 
   return (
     <>
@@ -116,6 +121,66 @@ export default async function AboutPage() {
           </div>
         </div>
       </section>
+
+      {/* ── Official Representation ───────────────────────────────────────── */}
+      {affiliations.length > 0 && (
+        <section className="section section--white" style={{ paddingTop: 0 }}>
+          <div className="container">
+            <div className="section-header" style={{ marginBottom: 28 }}>
+              <div>
+                <div className="section-header__label">Affiliations</div>
+                <h2 className="section-header__title">Official representation</h2>
+              </div>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 700 }}>
+              {affiliations.map((aff: any) => {
+                const logoUrl: string | null = aff.logo?.url ?? null
+                return (
+                  <div key={aff.id} style={{
+                    display: 'flex', gap: 28, alignItems: 'center',
+                    background: 'var(--color-tint)', borderRadius: 'var(--radius-lg)',
+                    padding: '28px 32px',
+                    border: '1.5px solid var(--color-border)',
+                  }}>
+                    {logoUrl ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={logoUrl} alt={aff.name} style={{ width: 64, height: 64, objectFit: 'contain', flexShrink: 0, borderRadius: 8 }} />
+                    ) : (
+                      <div style={{ fontSize: 48, flexShrink: 0, lineHeight: 1 }}>🌍</div>
+                    )}
+                    <div>
+                      {aff.representativeRole && (
+                        <div style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-primary)', marginBottom: 8 }}>
+                          {aff.representativeRole}
+                        </div>
+                      )}
+                      <h3 style={{ fontSize: 20, fontWeight: 600, marginBottom: 10, color: 'var(--color-text)' }}>
+                        {aff.website ? (
+                          <a href={aff.website} target="_blank" rel="noopener noreferrer"
+                             style={{ color: 'var(--color-primary)', textDecoration: 'none' }}>
+                            {aff.name}
+                          </a>
+                        ) : aff.name}
+                      </h3>
+                      {aff.description && (
+                        <p style={{ fontSize: 14, color: 'var(--color-text-muted)', lineHeight: 1.7, marginBottom: aff.website ? 14 : 0 }}>
+                          {aff.description}
+                        </p>
+                      )}
+                      {aff.website && (
+                        <a href={aff.website} target="_blank" rel="noopener noreferrer"
+                           style={{ fontSize: 13, fontWeight: 500, color: 'var(--color-primary)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                          Visit {new URL(aff.website).hostname} ↗
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ── Team ──────────────────────────────────────────────────────────── */}
       <section id="team" className="section section--white">

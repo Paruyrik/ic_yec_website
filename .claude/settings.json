@@ -22,7 +22,8 @@
       "Bash(pnpm generate:importmap)",
       "Bash(git remote *)",
       "Skill(payload)",
-      "Skill(payload:*)"
+      "Skill(payload:*)",
+      "Bash(expect -c ' *)"
     ],
     "additionalDirectories": [
       "/Users/paruyrtsaturyan/Public/projects/ic-yec-website/src/app/(payload)/admin/registrations"

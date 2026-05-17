@@ -324,9 +324,17 @@ export interface Project {
 export interface Partner {
   id: number;
   name: string;
-  logo?: (number | null) | Media;
+  type: 'partner' | 'funder' | 'network' | 'official-representative';
   website?: string | null;
-  type: 'partner' | 'funder' | 'network';
+  logo?: (number | null) | Media;
+  /**
+   * e.g. "Official Armenian Representative" — shown as a badge on the About page.
+   */
+  representativeRole?: string | null;
+  /**
+   * Short paragraph shown in the affiliations section on the About page.
+   */
+  description?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1453,9 +1461,11 @@ export interface TeamMembersSelect<T extends boolean = true> {
  */
 export interface PartnersSelect<T extends boolean = true> {
   name?: T;
-  logo?: T;
-  website?: T;
   type?: T;
+  website?: T;
+  logo?: T;
+  representativeRole?: T;
+  description?: T;
   updatedAt?: T;
   createdAt?: T;
 }

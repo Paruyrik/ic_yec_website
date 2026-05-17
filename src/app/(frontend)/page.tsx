@@ -163,6 +163,22 @@ function Hero({ projectCount, featuredCalls }: { projectCount: number; featuredC
                   </div>
                 ))}
               </div>
+
+              {/* Masterpeace affiliation */}
+              <div style={{ marginTop: 18, display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 500 }}>
+                  Official representative of
+                </span>
+                <a
+                  href="https://masterpeace.org"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ fontSize: 13, fontWeight: 600, color: 'var(--color-accent)', textDecoration: 'none', borderBottom: '1px solid rgba(232,160,160,0.4)', paddingBottom: 1 }}
+                >
+                  Masterpeace
+                </a>
+                <span style={{ fontSize: 13 }}>🌍</span>
+              </div>
             </div>
 
             {/* Right: featured call slider */}
@@ -204,6 +220,20 @@ function Hero({ projectCount, featuredCalls }: { projectCount: number; featuredC
               <Link href="/open-calls" className="btn btn-primary" style={{ boxShadow: '0 4px 20px rgba(232,160,160,0.35)' }}>
                 Open Calls →
               </Link>
+            </div>
+            <div style={{ marginTop: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+              <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 500 }}>
+                Official representative of
+              </span>
+              <a
+                href="https://masterpeace.org"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ fontSize: 13, fontWeight: 600, color: 'var(--color-accent)', textDecoration: 'none', borderBottom: '1px solid rgba(232,160,160,0.4)', paddingBottom: 1 }}
+              >
+                Masterpeace
+              </a>
+              <span style={{ fontSize: 13 }}>🌍</span>
             </div>
           </div>
         )}

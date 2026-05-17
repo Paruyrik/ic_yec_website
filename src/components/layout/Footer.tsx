@@ -67,7 +67,15 @@ export function Footer() {
             © {new Date().getFullYear()} IC-YEC. All rights reserved.
           </span>
           <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)' }}>
-            Co-funded by the Erasmus+ Programme of the European Union
+            Official representative of{' '}
+            <a
+              href="https://masterpeace.org"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: 'rgba(255,255,255,0.65)', textDecoration: 'none', fontWeight: 500 }}
+            >
+              Masterpeace
+            </a>
           </span>
         </div>
       </div>
