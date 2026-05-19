@@ -1,7 +1,6 @@
-import { getPayload } from 'payload'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import config from '@/payload.config'
+import { getPayloadClient } from '@/lib/payloadClient'
 import { RegistrationForm } from '@/components/registration/RegistrationForm'
 import type { FormFieldBlock } from '@/components/registration/types'
 import { EligibilityChecker } from '@/components/open-calls/EligibilityChecker'
@@ -26,9 +25,9 @@ function fmt(d: string, opts?: Intl.DateTimeFormatOptions) {
 
 export default async function OpenCallDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const payload  = await getPayload({ config: await config })
+  const payload  = await getPayloadClient()
 
-  const { docs } = await payload.find({
+  const { docs } = await payload.getCachedCollection<'open-calls'>({
     collection: 'open-calls',
     where: { slug: { equals: slug } },
     limit: 1,

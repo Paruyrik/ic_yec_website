@@ -1,4 +1,5 @@
 import type { Block, CollectionConfig } from 'payload'
+import { revalidateCollection } from '@/lib/revalidate'
 
 // ─── Form Field Blocks ────────────────────────────────────────────────────────
 // To add a new field type:
@@ -323,6 +324,8 @@ export const OpenCalls: CollectionConfig = {
     },
   ],
   hooks: {
+    afterChange: [({ collection }) => { revalidateCollection(collection.slug) }],
+    afterDelete: [({ collection }) => { revalidateCollection(collection.slug) }],
     beforeChange: [
       async ({ data, req, operation }) => {
         const templateId = data?.applyTemplate

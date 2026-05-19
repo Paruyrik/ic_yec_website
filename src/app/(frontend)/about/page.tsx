@@ -1,6 +1,5 @@
-import { getPayload } from 'payload'
 import Link from 'next/link'
-import config from '@/payload.config'
+import { getPayloadClient } from '@/lib/payloadClient'
 
 // Avatar colors cycle by first two initials
 const AVATAR_COLORS = ['#3D3785', '#4F9A5E', '#D97706', '#0891B2', '#7C3AED']
@@ -41,11 +40,11 @@ const ACTIVITIES = [
 ]
 
 export default async function AboutPage() {
-  const payload = await getPayload({ config: await config })
+  const payload = await getPayloadClient()
 
   const [teamResult, affiliationsResult] = await Promise.all([
-    payload.find({ collection: 'team-members', limit: 20, sort: 'order', depth: 1 }).catch(() => ({ docs: [] })),
-    payload.find({ collection: 'partners', where: { type: { equals: 'official-representative' } }, limit: 10, depth: 1 }).catch(() => ({ docs: [] })),
+    payload.getCachedCollection<'team-members'>({ collection: 'team-members', limit: 20, sort: 'order', depth: 1 }).catch(() => ({ docs: [] })),
+    payload.getCachedCollection<'partners'>({ collection: 'partners', where: { type: { equals: 'official-representative' } }, limit: 10, depth: 1 }).catch(() => ({ docs: [] })),
   ])
 
   const team = teamResult.docs

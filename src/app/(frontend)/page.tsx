@@ -1,7 +1,6 @@
-import { getPayload } from 'payload'
 import Link from 'next/link'
-import config from '@/payload.config'
 import type { Project, OpenCall } from '@/payload-types'
+import { getPayloadClient } from '@/lib/payloadClient'
 import { getLocale, localStr } from '@/lib/locale'
 import { ParticipantStories } from '@/components/stories/ParticipantStories'
 import { ApplicationTimeline } from '@/components/home/ApplicationTimeline'
@@ -332,44 +331,46 @@ function OpenCallRow({ call, urgentDays }: { call: OpenCall; urgentDays: number 
 
 export default async function HomePage() {
   const locale = await getLocale()
-  const payload = await getPayload({ config: await config })
+  const payload = await getPayloadClient()
 
   const [projectsResult, openCallsResult, storiesResult, newslettersResult, settings] =
     await Promise.all([
-      payload.find({
+      payload.getCachedCollection<'projects'>({
         collection: 'projects',
         limit: 3,
         where: { status: { in: ['ongoing', 'upcoming'] } },
         sort: '-createdAt',
       }).catch(() => ({ docs: [] as Project[] })),
 
-      payload.find({
+      payload.getCachedCollection<'open-calls'>({
         collection: 'open-calls',
         limit: 5,
         where: { status: { equals: 'open' } },
         sort: 'deadline',
       }).catch(() => ({ docs: [] as OpenCall[] })),
 
-      (payload.find as any)({
+      payload.getCachedCollection<'stories'>({
         collection: 'stories',
         where: { featured: { equals: true } },
         sort: 'order',
         limit: 8,
         locale,
-      }).catch(() => ({ docs: [] })),
+      } as any).catch(() => ({ docs: [] })),
 
-      (payload.find as any)({
+      payload.getCachedCollection<'newsletters'>({
         collection: 'newsletters',
         where: { published: { equals: true } },
         sort: '-publishedDate',
         limit: 3,
       }).catch(() => ({ docs: [] })),
 
-      (payload.findGlobal as any)({ slug: 'site-settings' }).catch(() => null),
+      payload.getCachedGlobal({ slug: 'site-settings' as any }).catch(() => null),
     ])
 
   const projects = projectsResult.docs
   const openCalls = openCallsResult.docs
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const s = settings as any
 
   const featuredCalls = openCalls.map((c: any) => {
     const fmt = (d: string, opts?: Intl.DateTimeFormatOptions) =>
@@ -403,14 +404,14 @@ export default async function HomePage() {
   const allCountries = Array.from(
     new Set(projects.flatMap((p: any) => (p.countries ?? []).map((c: any) => c.country).filter(Boolean)))
   ) as string[]
-  const urgentDays: number = settings?.badgeSettings?.urgentDaysThreshold ?? 7
-  const showLiveBadge: boolean = settings?.badgeSettings?.showLiveBadge ?? true
+  const urgentDays: number = s?.badgeSettings?.urgentDaysThreshold ?? 7
+  const showLiveBadge: boolean = s?.badgeSettings?.showLiveBadge ?? true
 
-  const timeline = settings?.timeline
-  const erasmus  = settings?.erasmusExplainer
-  const nl       = settings?.newsletter
+  const timeline = s?.timeline
+  const erasmus  = s?.erasmusExplainer
+  const nl       = s?.newsletter
 
-  const mapCfg             = (settings as any)?.mapConfig ?? {}
+  const mapCfg             = s?.mapConfig ?? {}
   const mapActiveColor     = mapCfg.activeCountryColor || '#3D3785'
   const mapHomeCityColor   = mapCfg.homeCityColor      || '#E8A0A0'
   const mapPartnerColor    = mapCfg.partnerCityColor   || '#8B85E8'

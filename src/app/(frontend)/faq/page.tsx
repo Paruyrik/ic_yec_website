@@ -1,6 +1,5 @@
-import { getPayload } from 'payload'
 import Link from 'next/link'
-import config from '@/payload.config'
+import { getPayloadClient } from '@/lib/payloadClient'
 import { getLocale, localStr } from '@/lib/locale'
 import { FaqAccordion } from '@/components/faq/FaqAccordion'
 
@@ -20,15 +19,15 @@ export const metadata = {
 
 export default async function FaqPage() {
   const locale  = await getLocale()
-  const payload = await getPayload({ config: await config })
+  const payload = await getPayloadClient()
 
-  const { docs } = await (payload.find as any)({
+  const { docs } = await payload.getCachedCollection<'faqs'>({
     collection: 'faqs',
     where:  { published: { equals: true } },
     sort:   'order',
     limit:  200,
     locale,
-  }).catch(() => ({ docs: [] }))
+  } as any).catch(() => ({ docs: [] }))
 
   // Group by category preserving the order defined in CATEGORY_META
   const grouped = new Map<string, typeof docs>()

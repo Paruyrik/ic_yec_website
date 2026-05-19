@@ -1,6 +1,5 @@
-import { getPayload } from 'payload'
 import Link from 'next/link'
-import config from '@/payload.config'
+import { getPayloadClient } from '@/lib/payloadClient'
 import { getLocale, localStr } from '@/lib/locale'
 
 export const metadata = {
@@ -10,12 +9,12 @@ export const metadata = {
 
 export default async function PartnersPage() {
   const locale = await getLocale()
-  const payload = await getPayload({ config: await config })
+  const payload = await getPayloadClient()
 
-  const settings = await (payload.findGlobal as any)({ slug: 'site-settings' }).catch(() => null)
-  const portal = settings?.partnerPortal ?? {}
+  const settings = await payload.getCachedGlobal({ slug: 'site-settings' as any }).catch(() => null)
+  const portal = (settings as any)?.partnerPortal ?? {}
 
-  const partnersResult = await payload.find({
+  const partnersResult = await payload.getCachedCollection<'partners'>({
     collection: 'partners',
     limit: 50,
     sort: 'name',

@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { revalidateCollection } from '@/lib/revalidate'
 
 export const Projects: CollectionConfig = {
   slug: 'projects',
@@ -99,4 +100,8 @@ export const Projects: CollectionConfig = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     { name: 'partners', type: 'relationship', relationTo: 'partners' as any, hasMany: true },
   ],
+  hooks: {
+    afterChange: [({ collection }) => { revalidateCollection(collection.slug) }],
+    afterDelete: [({ collection }) => { revalidateCollection(collection.slug) }],
+  },
 }

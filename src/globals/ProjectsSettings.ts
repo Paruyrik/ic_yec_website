@@ -1,4 +1,5 @@
 import type { GlobalConfig } from 'payload'
+import { revalidateGlobal } from '@/lib/revalidate'
 
 export const ProjectsSettings: GlobalConfig = {
   slug: 'projects-settings',
@@ -45,4 +46,7 @@ export const ProjectsSettings: GlobalConfig = {
       ],
     },
   ],
+  hooks: {
+    afterChange: [({ global }) => { revalidateGlobal(global.slug) }],
+  },
 }

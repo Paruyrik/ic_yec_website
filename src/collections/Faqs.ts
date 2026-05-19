@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { revalidateCollection } from '@/lib/revalidate'
 
 export const Faqs: CollectionConfig = {
   slug: 'faqs',
@@ -54,4 +55,8 @@ export const Faqs: CollectionConfig = {
       admin: { position: 'sidebar' },
     },
   ],
+  hooks: {
+    afterChange: [({ collection }) => { revalidateCollection(collection.slug) }],
+    afterDelete: [({ collection }) => { revalidateCollection(collection.slug) }],
+  },
 }

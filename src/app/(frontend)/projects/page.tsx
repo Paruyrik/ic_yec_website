@@ -1,7 +1,6 @@
-import { getPayload } from 'payload'
 import Link from 'next/link'
-import config from '@/payload.config'
 import type { Project } from '@/payload-types'
+import { getPayloadClient } from '@/lib/payloadClient'
 import { HomeMapClient as ProjectsMap } from '@/components/home/HomeMapClient'
 import { ThemeImpactGrid } from '@/components/projects/ThemeImpactGrid'
 import { LiveBadge } from '@/components/ui/LiveBadge'
@@ -41,13 +40,13 @@ const THEME_COLORS: Record<string, string> = {
 // ── page ──────────────────────────────────────────────────────────────────────
 
 export default async function ProjectsPage() {
-  const payload = await getPayload({ config: await config })
+  const payload = await getPayloadClient()
 
   const [{ docs: projects }, settings, siteSettings] = await Promise.all([
-    payload.find({ collection: 'projects', limit: 100, sort: '-startDate', depth: 1 })
+    payload.getCachedCollection<'projects'>({ collection: 'projects', limit: 100, sort: '-startDate', depth: 1 })
       .catch(() => ({ docs: [] as Project[] })),
-    payload.findGlobal({ slug: 'projects-settings' as any }).catch(() => null),
-    (payload.findGlobal as any)({ slug: 'site-settings' }).catch(() => null),
+    payload.getCachedGlobal({ slug: 'projects-settings' as any }).catch(() => null),
+    payload.getCachedGlobal({ slug: 'site-settings' as any }).catch(() => null),
   ])
 
   // ── derive map data ──────────────────────────────────────────────────────

@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { revalidateCollection } from '@/lib/revalidate'
 
 export const Partners: CollectionConfig = {
   slug: 'partners',
@@ -41,4 +42,8 @@ export const Partners: CollectionConfig = {
       },
     },
   ],
+  hooks: {
+    afterChange: [({ collection }) => { revalidateCollection(collection.slug) }],
+    afterDelete: [({ collection }) => { revalidateCollection(collection.slug) }],
+  },
 }

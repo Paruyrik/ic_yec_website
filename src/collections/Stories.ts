@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { revalidateCollection } from '@/lib/revalidate'
 
 export const Stories: CollectionConfig = {
   slug: 'stories',
@@ -23,4 +24,8 @@ export const Stories: CollectionConfig = {
     { name: 'featured',    type: 'checkbox', defaultValue: true,  admin: { position: 'sidebar' } },
     { name: 'order',       type: 'number',   defaultValue: 0,     admin: { position: 'sidebar', description: 'Lower = shown first' } },
   ],
+  hooks: {
+    afterChange: [({ collection }) => { revalidateCollection(collection.slug) }],
+    afterDelete: [({ collection }) => { revalidateCollection(collection.slug) }],
+  },
 }

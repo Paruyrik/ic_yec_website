@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { revalidateCollection } from '@/lib/revalidate'
 
 export const Newsletters: CollectionConfig = {
   slug: 'newsletters',
@@ -22,4 +23,8 @@ export const Newsletters: CollectionConfig = {
     { name: 'coverImage',    type: 'upload', relationTo: 'media' },
     { name: 'published',     type: 'checkbox', defaultValue: true, admin: { position: 'sidebar' } },
   ],
+  hooks: {
+    afterChange: [({ collection }) => { revalidateCollection(collection.slug) }],
+    afterDelete: [({ collection }) => { revalidateCollection(collection.slug) }],
+  },
 }

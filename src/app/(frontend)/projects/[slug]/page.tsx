@@ -1,7 +1,6 @@
-import { getPayload } from 'payload'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import config from '@/payload.config'
+import { getPayloadClient } from '@/lib/payloadClient'
 
 function fmt(d: string, opts?: Intl.DateTimeFormatOptions) {
   return new Date(d).toLocaleDateString('en-GB', opts ?? { day: 'numeric', month: 'long', year: 'numeric' })
@@ -32,9 +31,9 @@ const FUNDING_LABELS: Record<string, string> = {
 
 export default async function ProjectDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug }  = await params
-  const payload   = await getPayload({ config: await config })
+  const payload   = await getPayloadClient()
 
-  const { docs } = await payload.find({
+  const { docs } = await payload.getCachedCollection<'projects'>({
     collection: 'projects',
     where: { slug: { equals: slug } },
     limit: 1,

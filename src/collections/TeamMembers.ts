@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { revalidateCollection } from '@/lib/revalidate'
 
 export const TeamMembers: CollectionConfig = {
   slug: 'team-members',
@@ -12,4 +13,8 @@ export const TeamMembers: CollectionConfig = {
     { name: 'linkedin', type: 'text' },
     { name: 'order', type: 'number', defaultValue: 0 },
   ],
+  hooks: {
+    afterChange: [({ collection }) => { revalidateCollection(collection.slug) }],
+    afterDelete: [({ collection }) => { revalidateCollection(collection.slug) }],
+  },
 }

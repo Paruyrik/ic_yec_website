@@ -1,7 +1,6 @@
-import { getPayload } from 'payload'
 import Link from 'next/link'
-import config from '@/payload.config'
 import type { OpenCall } from '@/payload-types'
+import { getPayloadClient } from '@/lib/payloadClient'
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 
@@ -101,8 +100,8 @@ function CallCard({ call, muted }: { call: OpenCall; muted?: boolean }) {
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export default async function OpenCallsPage() {
-  const payload = await getPayload({ config: await config })
-  const { docs: calls } = await payload.find({
+  const payload = await getPayloadClient()
+  const { docs: calls } = await payload.getCachedCollection<'open-calls'>({
     collection: 'open-calls',
     limit: 50,
     sort: 'deadline',
