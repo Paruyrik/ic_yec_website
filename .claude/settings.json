@@ -23,7 +23,10 @@
       "Bash(git remote *)",
       "Skill(payload)",
       "Skill(payload:*)",
-      "Bash(expect -c ' *)"
+      "Bash(expect -c ' *)",
+      "Bash(git -C /Users/paruyrtsaturyan/Public/projects/ic-yec-website status)",
+      "Bash(git -C /Users/paruyrtsaturyan/Public/projects/ic-yec-website log --oneline -5)",
+      "Bash(git -C /Users/paruyrtsaturyan/Public/projects/ic-yec-website diff .claude/settings.json)"
     ],
     "additionalDirectories": [
       "/Users/paruyrtsaturyan/Public/projects/ic-yec-website/src/app/(payload)/admin/registrations"
