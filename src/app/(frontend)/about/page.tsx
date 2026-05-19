@@ -43,8 +43,8 @@ export default async function AboutPage() {
   const payload = await getPayloadClient()
 
   const [teamResult, affiliationsResult] = await Promise.all([
-    payload.getCachedCollection<'team-members'>({ collection: 'team-members', limit: 20, sort: 'order', depth: 1 }).catch(() => ({ docs: [] })),
-    payload.getCachedCollection<'partners'>({ collection: 'partners', where: { type: { equals: 'official-representative' } }, limit: 10, depth: 1 }).catch(() => ({ docs: [] })),
+    payload.getCachedCollection<'team-members'>({ collection: 'team-members', limit: 20, sort: 'order', depth: 1 }).catch(() => ({ docs: [] as any[] })),
+    payload.getCachedCollection<'partners'>({ collection: 'partners', where: { type: { equals: 'official-representative' } }, limit: 10, depth: 1 }).catch(() => ({ docs: [] as any[] })),
   ])
 
   const team = teamResult.docs

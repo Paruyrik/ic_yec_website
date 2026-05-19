@@ -18,7 +18,7 @@ export default async function PartnersPage() {
     collection: 'partners',
     limit: 50,
     sort: 'name',
-  }).catch(() => ({ docs: [] }))
+  }).catch(() => ({ docs: [] as any[] }))
 
   const partners = partnersResult.docs
 

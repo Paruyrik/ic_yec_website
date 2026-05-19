@@ -27,7 +27,7 @@ export default async function FaqPage() {
     sort:   'order',
     limit:  200,
     locale,
-  } as any).catch(() => ({ docs: [] }))
+  } as any).catch(() => ({ docs: [] as any[] }))
 
   // Group by category preserving the order defined in CATEGORY_META
   const grouped = new Map<string, typeof docs>()

@@ -31,7 +31,7 @@ export default async function OpenCallDetailPage({ params }: { params: Promise<{
     collection: 'open-calls',
     where: { slug: { equals: slug } },
     limit: 1,
-  }).catch(() => ({ docs: [] }))
+  }).catch(() => ({ docs: [] as any[] }))
 
   if (!docs.length) notFound()
   const call = docs[0]

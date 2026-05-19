@@ -37,7 +37,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
     collection: 'projects',
     where: { slug: { equals: slug } },
     limit: 1,
-  }).catch(() => ({ docs: [] }))
+  }).catch(() => ({ docs: [] as any[] }))
 
   if (!docs.length) notFound()
   const project = docs[0]

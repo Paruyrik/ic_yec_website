@@ -49,6 +49,9 @@ export default async function ProjectsPage() {
     payload.getCachedGlobal({ slug: 'site-settings' as any }).catch(() => null),
   ])
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const ss = siteSettings as any
+
   // ── derive map data ──────────────────────────────────────────────────────
   const allCountries = Array.from(
     new Set(projects.flatMap((p) => (p.countries ?? []).map((c: any) => c.country).filter(Boolean)))
@@ -61,7 +64,7 @@ export default async function ProjectsPage() {
   const showLiveBadge = true
 
   // ── map config from SiteSettings ─────────────────────────────────────────
-  const mapCfg             = (siteSettings as any)?.mapConfig ?? {}
+  const mapCfg             = ss?.mapConfig ?? {}
   const activeCountryColor = mapCfg.activeCountryColor  || '#3D3785'
   const homeCityColor      = mapCfg.homeCityColor        || '#E8A0A0'
   const partnerCityColor   = mapCfg.partnerCityColor     || '#8B85E8'
@@ -153,7 +156,7 @@ export default async function ProjectsPage() {
 
       {/* Theme impact grid */}
       {(() => {
-        const themes = siteSettings?.themeImpact?.themes ?? []
+        const themes = ss?.themeImpact?.themes ?? []
         return themes.length > 0 ? <ThemeImpactGrid themes={themes} /> : null
       })()}
 
