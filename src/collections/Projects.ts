@@ -100,10 +100,9 @@ export const Projects: CollectionConfig = {
     {
       name: 'order',
       type: 'number',
-      defaultValue: 0,
       admin: {
         position: 'sidebar',
-        description: 'Display order — lower numbers appear first. Leave 0 for default.',
+        description: 'Display order — set 1 to show first, 2 for second, etc. Leave blank to sort by date.',
       },
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

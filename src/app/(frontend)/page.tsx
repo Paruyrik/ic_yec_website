@@ -339,7 +339,7 @@ export default async function HomePage() {
         collection: 'projects',
         limit: 3,
         where: { status: { in: ['ongoing', 'upcoming'] } },
-        sort: 'order,-startDate',
+        sort: 'order',
       }).catch(() => ({ docs: [] as Project[] })),
 
       payload.getCachedCollection<'open-calls'>({

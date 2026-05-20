@@ -79,7 +79,7 @@ export default async function ProjectsPage({
     payload.getCachedCollection<'projects'>({
       collection: 'projects',
       limit: 200,
-      sort: 'order,-startDate',
+      sort: 'order',
       depth: 1,
     }).catch(() => ({ docs: [] as Project[] })),
 
@@ -91,7 +91,7 @@ export default async function ProjectsPage({
       collection: 'projects',
       limit: LIMIT,
       page: currentPage,
-      sort: 'order,-startDate',
+      sort: 'order',
       depth: 1,
       ...(hasFilter ? { where } : {}),
     }).catch(() => ({ docs: [] as Project[], totalDocs: 0, totalPages: 1 })),
