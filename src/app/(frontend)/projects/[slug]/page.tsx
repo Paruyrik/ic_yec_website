@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getPayloadClient } from '@/lib/payloadClient'
 import { RichText } from '@payloadcms/richtext-lexical/react'
-import { ProjectsMapClient } from '@/components/projects/ProjectsMapClient'
+import { GalleryGrid } from '@/components/projects/GalleryGrid'
 
 function fmt(d: string, opts?: Intl.DateTimeFormatOptions) {
   return new Date(d).toLocaleDateString('en-GB', opts ?? { day: 'numeric', month: 'long', year: 'numeric' })
@@ -52,12 +52,10 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   const sc       = STATUS_COLORS[status] ?? STATUS_COLORS.upcoming
   const themes   = Array.isArray(project.theme) ? project.theme as string[] : []
   const countries: string[] = project.countries?.map((c: any) => c.country).filter(Boolean) ?? []
-  const mapPoints: any[] = (project.mapPoints ?? []).filter((p: any) => p.lat && p.lng)
-  const gallery: any[]   = (project.gallery ?? []).map((g: any) => g.image).filter((img: any) => img?.url)
+  const gallery: any[]   =(project.gallery ?? []).map((g: any) => g.image).filter((img: any) => img?.url)
   const outcomes: string[] = (project.outcomes ?? []).map((o: any) => o.outcome).filter(Boolean)
   const testimonials: any[] = project.testimonials ?? []
   const embedUrl = project.videoUrl ? getEmbedUrl(project.videoUrl as string) : null
-  const hasMap   = countries.length > 0 || mapPoints.length > 0
 
   return (
     <>
@@ -103,34 +101,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               {gallery.length > 0 && (
                 <div>
                   <h2 style={{ fontSize: 17, fontWeight: 600, marginBottom: 14, color: 'var(--color-text)' }}>Gallery</h2>
-                  <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: gallery.length === 1 ? '1fr' : gallery.length === 2 ? '1fr 1fr' : 'repeat(3, 1fr)',
-                    gridTemplateRows: 'auto',
-                    gap: 6,
-                    borderRadius: 'var(--radius-lg)',
-                    overflow: 'hidden',
-                  }}>
-                    {gallery.map((img: any, i: number) => {
-                      const isFeatured = i === 0 && gallery.length >= 3
-                      return (
-                        <div key={i} style={{
-                          gridColumn: isFeatured ? 'span 2' : undefined,
-                          gridRow: isFeatured ? 'span 2' : undefined,
-                          aspectRatio: isFeatured ? '16/10' : '4/3',
-                          overflow: 'hidden',
-                          background: '#e0dff5',
-                        }}>
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img
-                            src={img.url}
-                            alt={img.alt || `Gallery image ${i + 1}`}
-                            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                          />
-                        </div>
-                      )
-                    })}
-                  </div>
+                  <GalleryGrid images={gallery} />
                 </div>
               )}
 
@@ -286,38 +257,6 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         </div>
       </section>
 
-      {/* ── Mini map section ─────────────────────────────────────────────────── */}
-      {hasMap && (
-        <section style={{ background: '#0f0e1a', padding: '48px 0 56px' }}>
-          <div className="container">
-            <div style={{ marginBottom: 24 }}>
-              <p style={{ fontSize: 12, fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.45)', marginBottom: 6 }}>
-                Where we worked
-              </p>
-              <h2 style={{ fontSize: 22, color: 'white' }}>Project locations</h2>
-            </div>
-            <ProjectsMapClient
-              activeCountries={countries}
-              mapPoints={mapPoints}
-              activeCountryColor="#3D3785"
-              pinColor="#E8A0A0"
-            />
-            {countries.length > 0 && (
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 18 }}>
-                {countries.sort().map((c) => (
-                  <span key={c} style={{
-                    padding: '4px 12px', borderRadius: 100,
-                    background: 'rgba(255,255,255,0.08)',
-                    color: 'rgba(255,255,255,0.75)',
-                    fontSize: 13, fontWeight: 500,
-                    border: '1px solid rgba(255,255,255,0.12)',
-                  }}>{c}</span>
-                ))}
-              </div>
-            )}
-          </div>
-        </section>
-      )}
     </>
   )
 }

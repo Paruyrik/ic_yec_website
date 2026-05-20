@@ -97,6 +97,15 @@ export const Projects: CollectionConfig = {
     { name: 'gallery', type: 'array', fields: [{ name: 'image', type: 'upload', relationTo: 'media' }] },
     { name: 'summary', type: 'textarea', localized: true },
     { name: 'content', type: 'richText', localized: true },
+    {
+      name: 'order',
+      type: 'number',
+      defaultValue: 0,
+      admin: {
+        position: 'sidebar',
+        description: 'Display order — lower numbers appear first. Leave 0 for default.',
+      },
+    },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     { name: 'partners', type: 'relationship', relationTo: 'partners' as any, hasMany: true },
   ],

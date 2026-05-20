@@ -1,9 +1,12 @@
 import Link from 'next/link'
+import { Suspense } from 'react'
 import type { Project } from '@/payload-types'
+import type { Where } from 'payload'
 import { getPayloadClient } from '@/lib/payloadClient'
 import { HomeMapClient as ProjectsMap } from '@/components/home/HomeMapClient'
 import { ThemeImpactGrid } from '@/components/projects/ThemeImpactGrid'
 import { LiveBadge } from '@/components/ui/LiveBadge'
+import { ProjectsFilterBar } from '@/components/projects/ProjectsFilterBar'
 
 // ── helpers ────────────────────────────────────────────────────────────────────
 
@@ -37,24 +40,68 @@ const THEME_COLORS: Record<string, string> = {
   environment:          '#3B6D11',
 }
 
+const LIMIT = 12
+
 // ── page ──────────────────────────────────────────────────────────────────────
 
-export default async function ProjectsPage() {
+export default async function ProjectsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+  const sp = await searchParams
+  const currentStatus = (sp.status as string) ?? ''
+  const currentTheme  = (sp.theme  as string) ?? ''
+  const currentQ      = (sp.q      as string) ?? ''
+  const currentPage   = Math.max(1, Number(sp.page ?? 1))
+
   const payload = await getPayloadClient()
 
-  const [{ docs: projects }, settings, siteSettings] = await Promise.all([
-    payload.getCachedCollection<'projects'>({ collection: 'projects', limit: 100, sort: '-startDate', depth: 1 })
-      .catch(() => ({ docs: [] as Project[] })),
+  // ── build where clause for filtered query ──────────────────────────────────
+  const where: Where = {}
+  if (currentStatus) where.status = { equals: currentStatus }
+  if (currentTheme)  where.theme  = { in: [currentTheme] }
+  if (currentQ)      where.or     = [
+    { title:   { like: currentQ } },
+    { summary: { like: currentQ } },
+  ]
+
+  const hasFilter = currentStatus || currentTheme || currentQ
+
+  // ── two parallel queries ───────────────────────────────────────────────────
+  const [
+    { docs: allProjects },
+    settings,
+    siteSettings,
+    { docs: projects, totalDocs, totalPages },
+  ] = await Promise.all([
+    // All projects: for map, stats, and country pills (unaffected by filters)
+    payload.getCachedCollection<'projects'>({
+      collection: 'projects',
+      limit: 200,
+      sort: 'order,-startDate',
+      depth: 1,
+    }).catch(() => ({ docs: [] as Project[] })),
+
     payload.getCachedGlobal({ slug: 'projects-settings' as any }).catch(() => null),
     payload.getCachedGlobal({ slug: 'site-settings' as any }).catch(() => null),
+
+    // Filtered + paginated: for the grid
+    payload.getCachedCollection<'projects'>({
+      collection: 'projects',
+      limit: LIMIT,
+      page: currentPage,
+      sort: 'order,-startDate',
+      depth: 1,
+      ...(hasFilter ? { where } : {}),
+    }).catch(() => ({ docs: [] as Project[], totalDocs: 0, totalPages: 1 })),
   ])
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const ss = siteSettings as any
 
-  // ── derive map data ──────────────────────────────────────────────────────
+  // ── derive map data from ALL projects ─────────────────────────────────────
   const allCountries = Array.from(
-    new Set(projects.flatMap((p) => (p.countries ?? []).map((c: any) => c.country).filter(Boolean)))
+    new Set(allProjects.flatMap((p) => (p.countries ?? []).map((c: any) => c.country).filter(Boolean)))
   ) as string[]
 
   const mapEnabled   = (settings as any)?.mapSection?.enabled !== false
@@ -63,18 +110,16 @@ export default async function ProjectsPage() {
   const stats: any[] = (settings as any)?.impactStats?.stats ?? []
   const showLiveBadge = true
 
-  // ── map config from SiteSettings ─────────────────────────────────────────
   const mapCfg             = ss?.mapConfig ?? {}
   const activeCountryColor = mapCfg.activeCountryColor  || '#3D3785'
   const homeCityColor      = mapCfg.homeCityColor        || '#E8A0A0'
   const partnerCityColor   = mapCfg.partnerCityColor     || '#8B85E8'
   const configuredCities   = (mapCfg.cities ?? []) as { city: string; country: string; lat: number; lng: number; isHome?: boolean }[]
 
-  // ── auto stats fallback if admin hasn't set them yet ─────────────────────
   const autoStats = stats.length ? stats : [
-    { icon: '📋', value: String(projects.length),       label: 'Projects' },
-    { icon: '🌍', value: String(allCountries.length),   label: 'Countries reached' },
-    { icon: '👥', value: String(projects.reduce((s, p: any) => s + (p.participants ?? 0), 0) || '—'), label: 'Participants' },
+    { icon: '📋', value: String(allProjects.length),       label: 'Projects' },
+    { icon: '🌍', value: String(allCountries.length),      label: 'Countries reached' },
+    { icon: '👥', value: String(allProjects.reduce((s, p: any) => s + (p.participants ?? 0), 0) || '—'), label: 'Participants' },
   ]
 
   return (
@@ -134,7 +179,6 @@ export default async function ProjectsPage() {
               homeCityColor={homeCityColor}
               partnerCityColor={partnerCityColor}
             />
-            {/* Country pills */}
             {allCountries.length > 0 && (
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 20 }}>
                 {allCountries.sort().map((c) => (
@@ -163,20 +207,34 @@ export default async function ProjectsPage() {
       {/* Projects grid */}
       <section className="section section--tint">
         <div className="container">
-          <div style={{ marginBottom: 32 }}>
-            <h2 style={{ fontSize: 26 }}>All Projects</h2>
+          <div style={{ marginBottom: 24 }}>
+            <h2 style={{ fontSize: 26, marginBottom: 20 }}>All Projects</h2>
+
+            {/* Filter bar — wrapped in Suspense because it uses useSearchParams */}
+            <Suspense fallback={
+              <div style={{ height: 42, background: 'rgba(255,255,255,0.5)', borderRadius: 8, animation: 'pulse 1.5s infinite' }} />
+            }>
+              <ProjectsFilterBar
+                total={totalDocs}
+                currentStatus={currentStatus}
+                currentTheme={currentTheme}
+                currentQ={currentQ}
+              />
+            </Suspense>
           </div>
 
           {projects.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '64px 0', color: 'var(--color-text-muted)' }}>
-              No projects yet. Check back soon.
+              {hasFilter
+                ? 'No projects match your filters. Try adjusting your search.'
+                : 'No projects yet. Check back soon.'}
             </div>
           ) : (
             <div className="grid-3">
               {projects.map((p: any) => {
-                const title   = localStr(p.title)
-                const summary = localStr(p.summary)
-                const status  = STATUS_STYLE[p.status] ?? STATUS_STYLE.completed
+                const title    = localStr(p.title)
+                const summary  = localStr(p.summary)
+                const status   = STATUS_STYLE[p.status] ?? STATUS_STYLE.completed
                 const themes: string[] = Array.isArray(p.theme) ? p.theme : p.theme ? [p.theme] : []
                 const countries: string[] = (p.countries ?? []).map((c: any) => c.country).filter(Boolean)
                 const coverUrl = p.coverImage?.url ?? null
@@ -186,7 +244,10 @@ export default async function ProjectsPage() {
                     <div className="card" style={{ height: '100%' }}>
                       {/* Cover image or theme-coloured placeholder */}
                       <div style={{
-                        height: 180, background: coverUrl ? `url(${coverUrl}) center/cover` : `linear-gradient(135deg, ${THEME_COLORS[themes[0]] ?? '#3D3785'}22 0%, ${THEME_COLORS[themes[0]] ?? '#3D3785'}44 100%)`,
+                        height: 180,
+                        background: coverUrl
+                          ? `url(${coverUrl}) center/cover`
+                          : `linear-gradient(135deg, ${THEME_COLORS[themes[0]] ?? '#3D3785'}22 0%, ${THEME_COLORS[themes[0]] ?? '#3D3785'}44 100%)`,
                         display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', padding: 12,
                       }}>
                         <span style={{
@@ -199,7 +260,6 @@ export default async function ProjectsPage() {
                       </div>
 
                       <div className="card__body">
-                        {/* Theme badges */}
                         {themes.length > 0 && (
                           <div className="card__meta">
                             {themes.slice(0, 3).map((t) => (
@@ -220,7 +280,6 @@ export default async function ProjectsPage() {
                           <p className="card__desc">{summary.slice(0, 110)}{summary.length > 110 ? '…' : ''}</p>
                         )}
 
-                        {/* Meta row */}
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, fontSize: 12, color: 'var(--color-text-muted)', marginTop: 'auto' }}>
                           {dateRange(p) && <span>🗓 {dateRange(p)}</span>}
                           {countries.length > 0 && <span>🌍 {countries.slice(0, 3).join(', ')}{countries.length > 3 ? ` +${countries.length - 3}` : ''}</span>}
@@ -235,8 +294,75 @@ export default async function ProjectsPage() {
               })}
             </div>
           )}
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 8, marginTop: 48 }}>
+              {currentPage > 1 && (
+                <PaginationLink page={currentPage - 1} sp={sp} label="← Previous" />
+              )}
+
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => {
+                const isActive = n === currentPage
+                return (
+                  <PaginationLink
+                    key={n}
+                    page={n}
+                    sp={sp}
+                    label={String(n)}
+                    active={isActive}
+                  />
+                )
+              })}
+
+              {currentPage < totalPages && (
+                <PaginationLink page={currentPage + 1} sp={sp} label="Next →" />
+              )}
+            </div>
+          )}
         </div>
       </section>
     </>
+  )
+}
+
+// ── Pagination link helper ─────────────────────────────────────────────────────
+
+function PaginationLink({
+  page,
+  sp,
+  label,
+  active,
+}: {
+  page: number
+  sp: Record<string, string | string[] | undefined>
+  label: string
+  active?: boolean
+}) {
+  const params = new URLSearchParams()
+  if (sp.status) params.set('status', sp.status as string)
+  if (sp.theme)  params.set('theme',  sp.theme  as string)
+  if (sp.q)      params.set('q',      sp.q      as string)
+  if (page > 1)  params.set('page',   String(page))
+
+  const href = `/projects${params.toString() ? `?${params.toString()}` : ''}`
+
+  return (
+    <Link
+      href={href}
+      style={{
+        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+        minWidth: 36, height: 36, padding: '0 10px',
+        borderRadius: 8, fontSize: 14, fontWeight: active ? 600 : 400,
+        textDecoration: 'none',
+        background: active ? 'var(--color-primary)' : 'white',
+        color: active ? 'white' : 'var(--color-text)',
+        border: `1px solid ${active ? 'var(--color-primary)' : 'var(--color-border)'}`,
+        boxShadow: active ? '0 2px 8px rgba(61,55,133,0.25)' : 'none',
+        transition: 'all 0.15s',
+      }}
+    >
+      {label}
+    </Link>
   )
 }
