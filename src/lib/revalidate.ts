@@ -1,9 +1,17 @@
 import { revalidateTag } from 'next/cache'
 
 export function revalidateCollection(slug: string) {
-  revalidateTag(`collection-${slug}`, 'default')
+  try {
+    revalidateTag(`collection-${slug}`, 'default')
+  } catch {
+    // no-op: revalidateTag is only valid inside a Next.js request context
+  }
 }
 
 export function revalidateGlobal(slug: string) {
-  revalidateTag(`globals-${slug}`, 'default')
+  try {
+    revalidateTag(`globals-${slug}`, 'default')
+  } catch {
+    // no-op: revalidateTag is only valid inside a Next.js request context
+  }
 }
