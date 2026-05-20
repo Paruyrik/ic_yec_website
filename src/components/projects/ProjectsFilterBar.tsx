@@ -9,6 +9,11 @@ const STATUSES = [
   { label: 'Upcoming',  value: 'upcoming' },
 ]
 
+const ROLES = [
+  { label: 'Coordinated by IC-YEC', value: 'coordinator' },
+  { label: 'Partnership project',   value: 'partner' },
+]
+
 const THEMES = [
   { label: 'Art',                    value: 'art' },
   { label: 'Sport',                  value: 'sport' },
@@ -23,10 +28,11 @@ interface Props {
   total: number
   currentStatus: string
   currentTheme: string
+  currentRole: string
   currentQ: string
 }
 
-export function ProjectsFilterBar({ total, currentStatus, currentTheme, currentQ }: Props) {
+export function ProjectsFilterBar({ total, currentStatus, currentTheme, currentRole, currentQ }: Props) {
   const router    = useRouter()
   const pathname  = usePathname()
   const params    = useSearchParams()
@@ -94,6 +100,19 @@ export function ProjectsFilterBar({ total, currentStatus, currentTheme, currentQ
         <option value="">All statuses</option>
         {STATUSES.map((s) => (
           <option key={s.value} value={s.value}>{s.label}</option>
+        ))}
+      </select>
+
+      {/* Role */}
+      <select
+        value={currentRole}
+        onChange={(e) => push({ role: e.target.value })}
+        style={selectStyle}
+        aria-label="Filter by role"
+      >
+        <option value="">All roles</option>
+        {ROLES.map((r) => (
+          <option key={r.value} value={r.value}>{r.label}</option>
         ))}
       </select>
 

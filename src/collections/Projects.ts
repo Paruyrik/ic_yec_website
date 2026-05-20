@@ -37,6 +37,18 @@ export const Projects: CollectionConfig = {
       options: ['erasmus-plus', 'other-eu', 'national', 'private'],
     },
     {
+      name: 'projectRole',
+      type: 'select',
+      options: [
+        { label: 'Coordinated by IC-YEC', value: 'coordinator' },
+        { label: 'Partnership project',   value: 'partner' },
+      ],
+      admin: {
+        position: 'sidebar',
+        description: 'IC-YEC\'s role — leave blank if not applicable.',
+      },
+    },
+    {
       name: 'theme',
       type: 'select',
       hasMany: true,

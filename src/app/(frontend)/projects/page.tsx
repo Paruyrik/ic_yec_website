@@ -30,6 +30,11 @@ const STATUS_STYLE: Record<string, { bg: string; text: string; label: string }> 
   upcoming:  { bg: '#FAEEDA', text: '#633806', label: 'Upcoming' },
 }
 
+const ROLE_BADGE: Record<string, { bg: string; text: string; label: string }> = {
+  coordinator: { bg: '#EDE9FE', text: '#5B21B6', label: '⭐ Coordinated' },
+  partner:     { bg: '#D1FAE5', text: '#065F46', label: '🤝 Partnership' },
+}
+
 const THEME_COLORS: Record<string, string> = {
   art:                  '#3D3785',
   sport:                '#4F9A5E',
@@ -52,6 +57,7 @@ export default async function ProjectsPage({
   const sp = await searchParams
   const currentStatus = (sp.status as string) ?? ''
   const currentTheme  = (sp.theme  as string) ?? ''
+  const currentRole   = (sp.role   as string) ?? ''
   const currentQ      = (sp.q      as string) ?? ''
   const currentPage   = Math.max(1, Number(sp.page ?? 1))
 
@@ -59,14 +65,15 @@ export default async function ProjectsPage({
 
   // ── build where clause for filtered query ──────────────────────────────────
   const where: Where = {}
-  if (currentStatus) where.status = { equals: currentStatus }
-  if (currentTheme)  where.theme  = { in: [currentTheme] }
-  if (currentQ)      where.or     = [
+  if (currentStatus) where.status      = { equals: currentStatus }
+  if (currentTheme)  where.theme       = { in: [currentTheme] }
+  if (currentRole)   where.projectRole = { equals: currentRole }
+  if (currentQ)      where.or          = [
     { title:   { like: currentQ } },
     { summary: { like: currentQ } },
   ]
 
-  const hasFilter = currentStatus || currentTheme || currentQ
+  const hasFilter = currentStatus || currentTheme || currentRole || currentQ
 
   // ── two parallel queries ───────────────────────────────────────────────────
   const [
@@ -218,6 +225,7 @@ export default async function ProjectsPage({
                 total={totalDocs}
                 currentStatus={currentStatus}
                 currentTheme={currentTheme}
+                currentRole={currentRole}
                 currentQ={currentQ}
               />
             </Suspense>
@@ -238,6 +246,7 @@ export default async function ProjectsPage({
                 const themes: string[] = Array.isArray(p.theme) ? p.theme : p.theme ? [p.theme] : []
                 const countries: string[] = (p.countries ?? []).map((c: any) => c.country).filter(Boolean)
                 const coverUrl = p.coverImage?.url ?? null
+                const roleBadge = ROLE_BADGE[p.projectRole as string] ?? null
 
                 return (
                   <Link key={p.id} href={`/projects/${p.slug}`} style={{ textDecoration: 'none' }}>
@@ -260,7 +269,7 @@ export default async function ProjectsPage({
                       </div>
 
                       <div className="card__body">
-                        {themes.length > 0 && (
+                        {(themes.length > 0 || roleBadge) && (
                           <div className="card__meta">
                             {themes.slice(0, 3).map((t) => (
                               <span key={t} style={{
@@ -272,6 +281,14 @@ export default async function ProjectsPage({
                                 {t}
                               </span>
                             ))}
+                            {roleBadge && (
+                              <span style={{
+                                padding: '2px 8px', borderRadius: 100, fontSize: 10, fontWeight: 600,
+                                background: roleBadge.bg, color: roleBadge.text,
+                              }}>
+                                {roleBadge.label}
+                              </span>
+                            )}
                           </div>
                         )}
 
@@ -342,6 +359,7 @@ function PaginationLink({
   const params = new URLSearchParams()
   if (sp.status) params.set('status', sp.status as string)
   if (sp.theme)  params.set('theme',  sp.theme  as string)
+  if (sp.role)   params.set('role',   sp.role   as string)
   if (sp.q)      params.set('q',      sp.q      as string)
   if (page > 1)  params.set('page',   String(page))
 
