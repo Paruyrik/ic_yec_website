@@ -148,6 +148,41 @@ export const SiteSettings: GlobalConfig = {
       ],
     },
 
+    // ── About IC-YEC section (homepage) ─────────────────────────────────────
+    {
+      name: 'aboutSection',
+      type: 'group',
+      label: 'About IC-YEC Section (Homepage)',
+      admin: { description: 'The "Who We Are" block shown on the homepage.' },
+      fields: [
+        { name: 'label',   type: 'text', defaultValue: 'Who we are', admin: { description: 'Small label above the heading (e.g. "WHO WE ARE")' } },
+        { name: 'heading', type: 'text', defaultValue: 'More than an NGO — a community of doers' },
+        { name: 'intro',   type: 'textarea', defaultValue: 'Founded in 2018 in Yerevan, IC-YEC brings together young people, educators, and organisations around a shared belief: that hands-on, intercultural learning changes lives. From street-art workshops in Armenia to sport-based inclusion projects in Portugal, every initiative we run is designed to leave a lasting impact.' },
+        { name: 'body',    type: 'textarea', defaultValue: 'We are accredited by the Erasmus+ programme, but our work goes far beyond it — we run local community projects, national youth initiatives, and long-term strategic partnerships with organisations across Europe and the South Caucasus.' },
+        { name: 'ctaLabel', type: 'text', defaultValue: 'Learn more about us →' },
+        { name: 'ctaUrl',   type: 'text', defaultValue: '/about' },
+        {
+          name: 'focusAreas',
+          type: 'array',
+          admin: { description: 'Focus area pills shown below the body text.' },
+          fields: [
+            { name: 'icon',  type: 'text', admin: { description: 'Emoji (e.g. 🎨 ⚽ 🌿)' } },
+            { name: 'label', type: 'text', required: true },
+          ],
+        },
+        {
+          name: 'stats',
+          type: 'array',
+          admin: { description: 'Stat cards shown in the right column.' },
+          fields: [
+            { name: 'value', type: 'text', required: true, admin: { description: 'e.g. "2018" or "500+"' } },
+            { name: 'label', type: 'text', required: true, admin: { description: 'e.g. "Year founded"' } },
+            { name: 'icon',  type: 'text', admin: { description: 'Emoji icon (e.g. 📅 🌍)' } },
+          ],
+        },
+      ],
+    },
+
     // ── Theme impact stats (overrides auto-calculated values) ────────────────
     {
       name: 'themeImpact',

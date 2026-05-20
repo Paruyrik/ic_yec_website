@@ -424,6 +424,34 @@ export default async function HomePage() {
   const erasmus  = s?.erasmusExplainer
   const nl       = s?.newsletter
 
+  const aboutCfg = s?.aboutSection ?? {}
+  const aboutLabel   = aboutCfg.label   || 'Who we are'
+  const aboutHeading = aboutCfg.heading || 'More than an NGO — a community of doers'
+  const aboutIntro   = aboutCfg.intro   || 'Founded in 2018 in Yerevan, IC-YEC brings together young people, educators, and organisations around a shared belief: that hands-on, intercultural learning changes lives. From street-art workshops in Armenia to sport-based inclusion projects in Portugal, every initiative we run is designed to leave a lasting impact.'
+  const aboutBody    = aboutCfg.body    || 'We are accredited by the Erasmus+ programme, but our work goes far beyond it — we run local community projects, national youth initiatives, and long-term strategic partnerships with organisations across Europe and the South Caucasus.'
+  const aboutCtaLabel = aboutCfg.ctaLabel || 'Learn more about us →'
+  const aboutCtaUrl   = aboutCfg.ctaUrl   || '/about'
+  const aboutFocusAreas: { icon?: string; label: string }[] = aboutCfg.focusAreas?.length
+    ? aboutCfg.focusAreas
+    : [
+        { icon: '🎨', label: 'Art & Culture' },
+        { icon: '⚽', label: 'Sport & Health' },
+        { icon: '🌿', label: 'Environment' },
+        { icon: '💻', label: 'Digital Skills' },
+        { icon: '🤝', label: 'Social Inclusion' },
+        { icon: '🎓', label: 'Non-formal Education' },
+      ]
+  const aboutStats: { value: string; label: string; icon?: string }[] = aboutCfg.stats?.length
+    ? aboutCfg.stats
+    : [
+        { value: '2018', label: 'Year founded',      icon: '📅' },
+        { value: '20+',  label: 'Partner countries', icon: '🌍' },
+        { value: '500+', label: 'Young participants', icon: '👥' },
+        { value: '15+',  label: 'Projects completed', icon: '📋' },
+        { value: '6',    label: 'Focus themes',       icon: '🎯' },
+        { value: '100%', label: 'Non-profit & free',  icon: '🎁' },
+      ]
+
   const mapCfg             = s?.mapConfig ?? {}
   const mapActiveColor     = mapCfg.activeCountryColor || '#3D3785'
   const mapHomeCityColor   = mapCfg.homeCityColor      || '#E8A0A0'
@@ -486,33 +514,20 @@ export default async function HomePage() {
 
             {/* Left: mission + values */}
             <div>
-              <div className="section-header__label" style={{ marginBottom: 12 }}>Who we are</div>
+              <div className="section-header__label" style={{ marginBottom: 12 }}>{aboutLabel}</div>
               <h2 style={{ fontSize: 32, fontWeight: 600, lineHeight: 1.2, marginBottom: 20, color: 'var(--color-text)' }}>
-                More than an NGO —<br />
-                <span style={{ color: 'var(--color-primary)' }}>a community of doers</span>
+                {aboutHeading}
               </h2>
               <p style={{ fontSize: 16, lineHeight: 1.75, color: 'var(--color-text-muted)', marginBottom: 28 }}>
-                Founded in 2018 in Yerevan, IC-YEC brings together young people, educators,
-                and organisations around a shared belief: that hands-on, intercultural learning
-                changes lives. From street-art workshops in Armenia to sport-based inclusion
-                projects in Portugal, every initiative we run is designed to leave a lasting impact.
+                {aboutIntro}
               </p>
               <p style={{ fontSize: 16, lineHeight: 1.75, color: 'var(--color-text-muted)', marginBottom: 36 }}>
-                We are accredited by the Erasmus+ programme, but our work goes far beyond it —
-                we run local community projects, national youth initiatives, and long-term
-                strategic partnerships with organisations across Europe and the South Caucasus.
+                {aboutBody}
               </p>
 
               {/* Focus areas */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                {[
-                  { icon: '🎨', label: 'Art & Culture' },
-                  { icon: '⚽', label: 'Sport & Health' },
-                  { icon: '🌿', label: 'Environment' },
-                  { icon: '💻', label: 'Digital Skills' },
-                  { icon: '🤝', label: 'Social Inclusion' },
-                  { icon: '🎓', label: 'Non-formal Education' },
-                ].map(({ icon, label }) => (
+                {aboutFocusAreas.map(({ icon, label }) => (
                   <div key={label} style={{
                     display: 'flex', alignItems: 'center', gap: 10,
                     padding: '10px 14px',
@@ -521,7 +536,7 @@ export default async function HomePage() {
                     fontSize: 14, fontWeight: 500,
                     color: 'var(--color-text)',
                   }}>
-                    <span style={{ fontSize: 18 }}>{icon}</span>
+                    {icon && <span style={{ fontSize: 18 }}>{icon}</span>}
                     {label}
                   </div>
                 ))}
@@ -529,7 +544,7 @@ export default async function HomePage() {
 
               <div style={{ marginTop: 32 }}>
                 <Link
-                  href="/about"
+                  href={aboutCtaUrl}
                   style={{
                     display: 'inline-flex', alignItems: 'center', gap: 8,
                     padding: '11px 24px',
@@ -539,21 +554,14 @@ export default async function HomePage() {
                     textDecoration: 'none', fontSize: 14,
                   }}
                 >
-                  Learn more about us →
+                  {aboutCtaLabel}
                 </Link>
               </div>
             </div>
 
             {/* Right: stats */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-              {[
-                { value: '2018', label: 'Year founded', icon: '📅' },
-                { value: '20+',  label: 'Partner countries', icon: '🌍' },
-                { value: '500+', label: 'Young participants', icon: '👥' },
-                { value: '15+',  label: 'Projects completed', icon: '📋' },
-                { value: '6',    label: 'Focus themes', icon: '🎯' },
-                { value: '100%', label: 'Non-profit & free', icon: '🎁' },
-              ].map(({ value, label, icon }) => (
+              {aboutStats.map(({ value, label, icon }) => (
                 <div key={label} style={{
                   padding: '28px 20px',
                   background: 'var(--color-tint)',
@@ -561,7 +569,7 @@ export default async function HomePage() {
                   border: '1px solid var(--color-border)',
                   textAlign: 'center',
                 }}>
-                  <div style={{ fontSize: 28, marginBottom: 6 }}>{icon}</div>
+                  {icon && <div style={{ fontSize: 28, marginBottom: 6 }}>{icon}</div>}
                   <div style={{ fontSize: 28, fontWeight: 700, color: 'var(--color-primary)', lineHeight: 1 }}>{value}</div>
                   <div style={{ fontSize: 13, color: 'var(--color-text-muted)', marginTop: 6 }}>{label}</div>
                 </div>
