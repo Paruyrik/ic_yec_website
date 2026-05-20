@@ -43,7 +43,7 @@ export function ProjectsFilterBar({ total, currentStatus, currentTheme, currentQ
       if (v) next.set(k, v); else next.delete(k)
     }
     next.delete('page') // reset to page 1 on any filter change
-    startTransition(() => router.push(`${pathname}?${next.toString()}`))
+    startTransition(() => router.push(`${pathname}?${next.toString()}`, { scroll: false }))
   }
 
   function handleSearch(value: string) {

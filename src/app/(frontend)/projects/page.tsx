@@ -205,7 +205,7 @@ export default async function ProjectsPage({
       })()}
 
       {/* Projects grid */}
-      <section className="section section--tint">
+      <section id="projects-grid" className="section section--tint">
         <div className="container">
           <div style={{ marginBottom: 24 }}>
             <h2 style={{ fontSize: 26, marginBottom: 20 }}>All Projects</h2>
@@ -347,9 +347,15 @@ function PaginationLink({
 
   const href = `/projects${params.toString() ? `?${params.toString()}` : ''}`
 
+  function scrollToGrid() {
+    document.getElementById('projects-grid')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
   return (
     <Link
       href={href}
+      scroll={false}
+      onClick={scrollToGrid}
       style={{
         display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
         minWidth: 36, height: 36, padding: '0 10px',
