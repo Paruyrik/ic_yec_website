@@ -313,6 +313,10 @@ export interface Project {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * Display order — lower numbers appear first. Leave 0 for default.
+   */
+  order?: number | null;
   partners?: (number | Partner)[] | null;
   updatedAt: string;
   createdAt: string;
@@ -1185,6 +1189,7 @@ export interface ProjectsSelect<T extends boolean = true> {
       };
   summary?: T;
   content?: T;
+  order?: T;
   partners?: T;
   updatedAt?: T;
   createdAt?: T;
