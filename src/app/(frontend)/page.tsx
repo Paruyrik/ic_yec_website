@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import type { Project, OpenCall } from '@/payload-types'
 import { getPayloadClient } from '@/lib/payloadClient'
 import { getLocale, localStr } from '@/lib/locale'
@@ -251,13 +252,24 @@ function ProjectCard({ project, showLiveBadge }: {
   const summary = typeof project.summary === 'string' ? project.summary : (project.summary as any)?.en ?? ''
   const status = project.status ?? 'upcoming'
   const isLive = status === 'ongoing'
+  const cover = project.coverImage as any
+  const coverUrl: string | null = typeof cover === 'object' && cover?.url ? cover.url : null
 
   return (
     <Link href={`/projects/${project.slug}`} style={{ textDecoration: 'none' }}>
       <div className="card">
-        <div className="card__img" style={{ background: 'var(--color-tint-mid)', position: 'relative' }}>
+        <div className="card__img" style={{ background: 'var(--color-tint-mid)', position: 'relative', overflow: 'hidden' }}>
+          {coverUrl && (
+            <Image
+              src={coverUrl}
+              alt={title}
+              fill
+              sizes="(max-width: 768px) 100vw, 33vw"
+              style={{ objectFit: 'cover' }}
+            />
+          )}
           {isLive && showLiveBadge && (
-            <div style={{ position: 'absolute', top: 10, left: 10 }}>
+            <div style={{ position: 'absolute', top: 10, left: 10, zIndex: 1 }}>
               <LiveBadge variant="live" />
             </div>
           )}
@@ -338,6 +350,7 @@ export default async function HomePage() {
       payload.getCachedCollection<'projects'>({
         collection: 'projects',
         limit: 3,
+        depth: 1,
         where: { status: { in: ['ongoing', 'upcoming'] } },
         sort: 'order',
       }).catch(() => ({ docs: [] as Project[] })),
