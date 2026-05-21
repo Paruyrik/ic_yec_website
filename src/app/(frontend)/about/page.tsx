@@ -24,7 +24,7 @@ const DEFAULT_PAGE_STATS = [
   { value: '20+',  label: 'Partner countries',     icon: '🌍', sub: 'in Europe & South Caucasus' },
   { value: '15+',  label: 'Projects delivered',    icon: '📋', sub: 'youth exchanges, trainings & ESC' },
   { value: '6',    label: 'Core themes',            icon: '🎯', sub: 'art, sport, digital & more' },
-  { value: '100%', label: 'Free for participants', icon: '🎁', sub: 'thanks to Erasmus+ funding' },
+  { value: '7+',   label: 'Years active',          icon: '🏅', sub: 'continuous operations since 2018' },
   { value: '2018', label: 'Founded in Yerevan',    icon: '📅', sub: 'operating continuously since' },
 ]
 

@@ -127,7 +127,7 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
       { i: 2, value: '20+',  label: 'Partner countries',     icon: '🌍', sub: 'in Europe & South Caucasus' },
       { i: 3, value: '15+',  label: 'Projects delivered',    icon: '📋', sub: 'youth exchanges, trainings & ESC' },
       { i: 4, value: '6',    label: 'Core themes',           icon: '🎯', sub: 'art, sport, digital & more' },
-      { i: 5, value: '100%', label: 'Free for participants', icon: '🎁', sub: 'thanks to Erasmus+ funding' },
+      { i: 5, value: '7+',   label: 'Years active',          icon: '🏅', sub: 'continuous operations since 2018' },
       { i: 6, value: '2018', label: 'Founded in Yerevan',    icon: '📅', sub: 'operating continuously since' },
     ]
     for (const { i, value, label, icon, sub } of stats) {
