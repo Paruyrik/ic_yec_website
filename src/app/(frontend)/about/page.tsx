@@ -79,8 +79,8 @@ export default async function AboutPage() {
   const missionBody    = ap.missionBody  || 'To support the personal development of young people through high-quality non-formal education programmes that transcend borders and build European citizenship.'
   const visionBody     = ap.visionBody   || 'A Europe where every young person has access to transformative learning experiences regardless of their background, geography, or financial situation.'
   const valuesBody     = ap.valuesBody   || 'Inclusivity · Empathy · Collaboration · Curiosity · Respect for diversity and the environment.'
-  const erasmusTitle   = ap.erasmusTitle || 'Erasmus+ accreditation — what it means for you'
-  const erasmusBody    = ap.erasmusBody  || 'IC-YEC holds a multi-annual Erasmus+ accreditation. This means every exchange and training course we run meets the European Union\'s quality standards for non-formal education — and that participation is always fully funded: travel, accommodation, meals, and activities are covered for participants.'
+  const erasmusTitle   = ap.erasmusTitle || 'Erasmus+ — what it means for participants'
+  const erasmusBody    = ap.erasmusBody  || 'IC-YEC is an active Erasmus+ partner organisation. All of our youth exchanges and training courses are co-funded through Erasmus+ project grants, which means participation costs are fully covered for selected participants — travel, accommodation, meals, and programme activities. No financial barrier should stand between a young person and a life-changing experience.'
   const ctaHeading     = ap.ctaHeading   || 'Get involved with IC-YEC'
   const ctaBody        = ap.ctaBody      || 'Whether you\'re a young person looking to join a project, an organisation wanting to partner with us, or someone who believes in our work — there\'s a place for you here.'
   const timeline       = ap.timeline?.length       ? ap.timeline       : DEFAULT_TIMELINE
@@ -307,7 +307,7 @@ export default async function AboutPage() {
                 fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.85)',
                 textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 16,
               }}>
-                🇪🇺 Erasmus+ Accredited Organisation
+                🇪🇺 Erasmus+ Partner Organisation
               </div>
               <h2 style={{ fontSize: 24, fontWeight: 700, color: 'white', marginBottom: 14, lineHeight: 1.3 }}>
                 {erasmusTitle}

@@ -91,8 +91,8 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
       "about_page_mission_body"    = COALESCE("about_page_mission_body",    'To support the personal development of young people through high-quality non-formal education programmes that transcend borders and build European citizenship.'),
       "about_page_vision_body"     = COALESCE("about_page_vision_body",     'A Europe where every young person has access to transformative learning experiences regardless of their background, geography, or financial situation.'),
       "about_page_values_body"     = COALESCE("about_page_values_body",     'Inclusivity · Empathy · Collaboration · Curiosity · Respect for diversity and the environment.'),
-      "about_page_erasmus_title"   = COALESCE("about_page_erasmus_title",   'Erasmus+ accreditation — what it means for you'),
-      "about_page_erasmus_body"    = COALESCE("about_page_erasmus_body",    'IC-YEC holds a multi-annual Erasmus+ accreditation. This means every exchange and training course we run meets the European Union''s quality standards for non-formal education — and that participation is always fully funded: travel, accommodation, meals, and activities are covered for participants.'),
+      "about_page_erasmus_title"   = COALESCE("about_page_erasmus_title",   'Erasmus+ — what it means for participants'),
+      "about_page_erasmus_body"    = COALESCE("about_page_erasmus_body",    'IC-YEC is an active Erasmus+ partner organisation. All of our youth exchanges and training courses are co-funded through Erasmus+ project grants, which means participation costs are fully covered for selected participants — travel, accommodation, meals, and programme activities. No financial barrier should stand between a young person and a life-changing experience.'),
       "about_page_cta_heading"     = COALESCE("about_page_cta_heading",     'Get involved with IC-YEC'),
       "about_page_cta_body"        = COALESCE("about_page_cta_body",        'Whether you''re a young person looking to join a project, an organisation wanting to partner with us, or someone who believes in our work — there''s a place for you here.');
   `)
