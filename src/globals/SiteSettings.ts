@@ -214,6 +214,8 @@ export const SiteSettings: GlobalConfig = {
         // Erasmus+ callout
         { name: 'erasmusTitle', type: 'text',     defaultValue: 'Erasmus+ accreditation — what it means for you' },
         { name: 'erasmusBody',  type: 'textarea', defaultValue: 'IC-YEC holds a multi-annual Erasmus+ accreditation. This means every exchange and training course we run meets the European Union\'s quality standards for non-formal education — and that participation is always fully funded: travel, accommodation, meals, and activities are covered for participants. No financial barrier should stand between a young person and a life-changing experience.' },
+        // Partners section visibility
+        { name: 'showPartnersSection', type: 'checkbox', defaultValue: false, admin: { description: 'Show the "Our partners" section on the About page.' } },
         // CTA
         { name: 'ctaHeading', type: 'text',     defaultValue: 'Get involved with IC-YEC' },
         { name: 'ctaBody',    type: 'textarea', defaultValue: 'Whether you\'re a young person looking to join a project, an organisation wanting to partner with us, or someone who believes in our work — there\'s a place for you here.' },

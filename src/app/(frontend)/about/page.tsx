@@ -86,7 +86,8 @@ export default async function AboutPage() {
   const timeline       = ap.timeline?.length       ? ap.timeline       : DEFAULT_TIMELINE
   const pageStats      = ap.pageStats?.length      ? ap.pageStats      : DEFAULT_PAGE_STATS
   const howWeWork      = ap.howWeWork?.length      ? ap.howWeWork      : DEFAULT_HOW_WE_WORK
-  const focusAreas     = ap.focusAreas?.length     ? ap.focusAreas     : DEFAULT_FOCUS_AREAS
+  const focusAreas          = ap.focusAreas?.length ? ap.focusAreas : DEFAULT_FOCUS_AREAS
+  const showPartnersSection = ap.showPartnersSection === true
 
   const missionCards = [
     { icon: '🎯', heading: 'Mission', body: missionBody, bg: 'var(--color-tint)', accent: 'var(--color-primary)' },
@@ -397,7 +398,7 @@ export default async function AboutPage() {
       )}
 
       {/* ── Partners ──────────────────────────────────────────────────────── */}
-      {partners.length > 0 && (
+      {showPartnersSection && partners.length > 0 && (
         <section className="section section--white">
           <div className="container">
             <div className="section-header" style={{ marginBottom: 32 }}>
