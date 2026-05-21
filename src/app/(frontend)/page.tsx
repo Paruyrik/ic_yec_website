@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import type { Project, OpenCall } from '@/payload-types'
 import { getPayloadClient } from '@/lib/payloadClient'
@@ -259,18 +258,12 @@ function ProjectCard({ project, showLiveBadge }: {
   return (
     <Link href={`/projects/${project.slug}`} style={{ textDecoration: 'none' }}>
       <div className="card">
-        <div className="card__img" style={{ background: 'var(--color-tint-mid)', position: 'relative', overflow: 'hidden' }}>
-          {coverUrl && (
-            <Image
-              src={coverUrl}
-              alt={title}
-              fill
-              sizes="(max-width: 768px) 100vw, 33vw"
-              style={{ objectFit: 'cover' }}
-            />
-          )}
+        <div className="card__img" style={{
+          background: coverUrl ? `url(${coverUrl}) center/cover` : 'var(--color-tint-mid)',
+          position: 'relative',
+        }}>
           {isLive && showLiveBadge && (
-            <div style={{ position: 'absolute', top: 10, left: 10, zIndex: 1 }}>
+            <div style={{ position: 'absolute', top: 10, left: 10 }}>
               <LiveBadge variant="live" />
             </div>
           )}
