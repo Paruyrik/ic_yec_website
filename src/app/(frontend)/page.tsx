@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { RichText } from '@payloadcms/richtext-lexical/react'
 import type { Project, OpenCall } from '@/payload-types'
 import { getPayloadClient } from '@/lib/payloadClient'
 import { getLocale, localStr } from '@/lib/locale'
@@ -428,7 +429,7 @@ export default async function HomePage() {
   const aboutLabel   = aboutCfg.label   || 'Who we are'
   const aboutHeading = aboutCfg.heading || 'More than an NGO — a community of doers'
   const aboutIntro   = aboutCfg.intro   || 'Founded in 2018 in Yerevan, IC-YEC brings together young people, educators, and organisations around a shared belief: that hands-on, intercultural learning changes lives. From street-art workshops in Armenia to sport-based inclusion projects in Portugal, every initiative we run is designed to leave a lasting impact.'
-  const aboutBody    = aboutCfg.body    || 'We are accredited by the Erasmus+ programme, but our work goes far beyond it — we run local community projects, national youth initiatives, and long-term strategic partnerships with organisations across Europe and the South Caucasus.'
+  const aboutBody    = aboutCfg.body    ?? null
   const aboutCtaLabel = aboutCfg.ctaLabel || 'Learn more about us →'
   const aboutCtaUrl   = aboutCfg.ctaUrl   || '/about'
   const aboutFocusAreas: { icon?: string; label: string }[] = aboutCfg.focusAreas?.length
@@ -521,9 +522,17 @@ export default async function HomePage() {
               <p style={{ fontSize: 16, lineHeight: 1.75, color: 'var(--color-text-muted)', marginBottom: 28 }}>
                 {aboutIntro}
               </p>
-              <p style={{ fontSize: 16, lineHeight: 1.75, color: 'var(--color-text-muted)', marginBottom: 36 }}>
-                {aboutBody}
-              </p>
+              {aboutBody ? (
+                <div className="rich-text" style={{ fontSize: 16, lineHeight: 1.75, color: 'var(--color-text-muted)', marginBottom: 36 }}>
+                  <RichText data={aboutBody as any} />
+                </div>
+              ) : (
+                <p style={{ fontSize: 16, lineHeight: 1.75, color: 'var(--color-text-muted)', marginBottom: 36 }}>
+                  We are accredited by the Erasmus+ programme, but our work goes far beyond it —
+                  we run local community projects, national youth initiatives, and long-term
+                  strategic partnerships with organisations across Europe and the South Caucasus.
+                </p>
+              )}
 
               {/* Focus areas */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
