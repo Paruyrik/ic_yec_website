@@ -19,7 +19,9 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'localhost' },
       // Uploadthing CDN (production)
       { protocol: 'https', hostname: '*.ufs.sh' },
+      { protocol: 'https', hostname: 'ufs.sh' },
       { protocol: 'https', hostname: '*.utfs.io' },
+      { protocol: 'https', hostname: 'utfs.io' },
     ],
   },
   webpack: (webpackConfig) => {
