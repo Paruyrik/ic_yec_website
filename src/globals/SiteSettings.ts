@@ -148,6 +148,78 @@ export const SiteSettings: GlobalConfig = {
       ],
     },
 
+    // ── About page content ───────────────────────────────────────────────────
+    {
+      name: 'aboutPage',
+      type: 'group',
+      label: 'About Page',
+      admin: { description: 'All editable text on the /about page.' },
+      fields: [
+        // Hero
+        { name: 'heroTitle',    type: 'text', defaultValue: 'International Center for Youth Empowerment Cooperation' },
+        { name: 'heroSubtitle', type: 'textarea', defaultValue: 'We are an Armenian youth NGO dedicated to creating spaces where young people from different countries meet, learn from each other, and return home with the skills and motivation to drive change in their own communities.' },
+        // Our Story
+        { name: 'storyHeading',    type: 'text', defaultValue: 'From a small team in Yerevan to a European network' },
+        { name: 'storyParagraph1', type: 'textarea', defaultValue: 'IC-YEC was founded in 2018 by a group of young Armenians who had participated in Erasmus+ exchanges and came back with a conviction: that non-formal learning across borders is one of the most powerful tools for personal growth that exists. They wanted to make that experience available to more young people in Armenia — and to put Armenian youth on the European map.' },
+        { name: 'storyParagraph2', type: 'textarea', defaultValue: 'Over the following years we built a network of partner organisations across Europe and the South Caucasus, obtained Erasmus+ accreditation, and ran projects on themes ranging from street art and graphic facilitation to sport inclusion and digital literacy. Each project brought together young people who would never otherwise have met, and sent them home with new friends, new skills, and a wider sense of what is possible.' },
+        {
+          name: 'timeline',
+          type: 'array',
+          admin: { description: 'Key milestones shown in the "Our Story" section.' },
+          fields: [
+            { name: 'year',  type: 'text', required: true },
+            { name: 'label', type: 'text', required: true },
+            { name: 'desc',  type: 'textarea' },
+          ],
+        },
+        // Mission / Vision / Values
+        { name: 'missionBody', type: 'textarea', defaultValue: 'To support the personal development of young people through high-quality non-formal education programmes that transcend borders and build European citizenship.' },
+        { name: 'visionBody',  type: 'textarea', defaultValue: 'A Europe where every young person has access to transformative learning experiences regardless of their background, geography, or financial situation.' },
+        { name: 'valuesBody',  type: 'textarea', defaultValue: 'Inclusivity · Empathy · Collaboration · Curiosity · Respect for diversity and the environment.' },
+        // Stats band
+        {
+          name: 'pageStats',
+          type: 'array',
+          label: 'Impact Stats',
+          admin: { description: 'Stats shown in the dark impact band.' },
+          fields: [
+            { name: 'value', type: 'text', required: true },
+            { name: 'label', type: 'text', required: true },
+            { name: 'icon',  type: 'text' },
+            { name: 'sub',   type: 'text', admin: { description: 'Small subtitle below the label' } },
+          ],
+        },
+        // How we work
+        {
+          name: 'howWeWork',
+          type: 'array',
+          admin: { description: 'Steps in the "How we work" section.' },
+          fields: [
+            { name: 'step',  type: 'text', required: true, admin: { description: 'Step number e.g. "01"' } },
+            { name: 'title', type: 'text', required: true },
+            { name: 'desc',  type: 'textarea' },
+          ],
+        },
+        // Focus areas (with description)
+        {
+          name: 'focusAreas',
+          type: 'array',
+          admin: { description: 'Focus area cards in the "What we work on" section.' },
+          fields: [
+            { name: 'icon',  type: 'text' },
+            { name: 'label', type: 'text', required: true },
+            { name: 'desc',  type: 'textarea' },
+          ],
+        },
+        // Erasmus+ callout
+        { name: 'erasmusTitle', type: 'text',     defaultValue: 'Erasmus+ accreditation — what it means for you' },
+        { name: 'erasmusBody',  type: 'textarea', defaultValue: 'IC-YEC holds a multi-annual Erasmus+ accreditation. This means every exchange and training course we run meets the European Union\'s quality standards for non-formal education — and that participation is always fully funded: travel, accommodation, meals, and activities are covered for participants. No financial barrier should stand between a young person and a life-changing experience.' },
+        // CTA
+        { name: 'ctaHeading', type: 'text',     defaultValue: 'Get involved with IC-YEC' },
+        { name: 'ctaBody',    type: 'textarea', defaultValue: 'Whether you\'re a young person looking to join a project, an organisation wanting to partner with us, or someone who believes in our work — there\'s a place for you here.' },
+      ],
+    },
+
     // ── About IC-YEC section (homepage) ─────────────────────────────────────
     {
       name: 'aboutSection',
