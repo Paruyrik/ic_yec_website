@@ -2,15 +2,17 @@ import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
 
 export async function up({ db }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
-    CREATE TYPE IF NOT EXISTS "public"."enum_partner_applications_org_type" AS ENUM(
-      'youth-ngo', 'school', 'youth-centre', 'cultural', 'municipality', 'other'
-    );
-    CREATE TYPE IF NOT EXISTS "public"."enum_partner_applications_status" AS ENUM(
-      'new', 'reviewing', 'contacted', 'approved', 'declined'
-    );
-    CREATE TYPE IF NOT EXISTS "public"."enum_partner_applications_project_interests" AS ENUM(
-      'youth-exchange', 'training-course', 'esc-volunteering', 'seminar', 'other'
-    );
+    DO $$ BEGIN
+      CREATE TYPE "public"."enum_partner_applications_org_type" AS ENUM('youth-ngo', 'school', 'youth-centre', 'cultural', 'municipality', 'other');
+    EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+
+    DO $$ BEGIN
+      CREATE TYPE "public"."enum_partner_applications_status" AS ENUM('new', 'reviewing', 'contacted', 'approved', 'declined');
+    EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+
+    DO $$ BEGIN
+      CREATE TYPE "public"."enum_partner_applications_project_interests" AS ENUM('youth-exchange', 'training-course', 'esc-volunteering', 'seminar', 'other');
+    EXCEPTION WHEN duplicate_object THEN NULL; END $$;
   `)
 
   await db.execute(sql`
@@ -58,8 +60,8 @@ export async function down({ db }: MigrateDownArgs): Promise<void> {
   await db.execute(sql`
     DROP TABLE IF EXISTS "partner_applications_project_interests" CASCADE;
     DROP TABLE IF EXISTS "partner_applications" CASCADE;
-    DROP TYPE IF EXISTS "public"."enum_partner_applications_org_type";
-    DROP TYPE IF EXISTS "public"."enum_partner_applications_status";
     DROP TYPE IF EXISTS "public"."enum_partner_applications_project_interests";
+    DROP TYPE IF EXISTS "public"."enum_partner_applications_status";
+    DROP TYPE IF EXISTS "public"."enum_partner_applications_org_type";
   `)
 }
