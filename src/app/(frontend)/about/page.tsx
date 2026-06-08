@@ -510,7 +510,7 @@ export default async function AboutPage() {
             </div>
             {[
               { icon: '🚀', title: 'Apply for a project', desc: 'Check our open calls and apply for a youth exchange, training course, or volunteering opportunity.', href: '/open-calls', label: 'View open calls →', bg: 'var(--color-primary)' },
-              { icon: '🤝', title: 'Partner with us',     desc: 'We are always looking for organisations in Europe and beyond who share our values and want to co-create projects.', href: '/partner', label: 'Become a partner →', bg: '#3B6D11' },
+              { icon: '🤝', title: 'Partner with us',     desc: 'We are always looking for organisations in Europe and beyond who share our values and want to co-create projects.', href: '/partners', label: 'Become a partner →', bg: '#3B6D11' },
             ].map(({ icon, title, desc, href, label, bg }) => (
               <div key={title} style={{
                 background: 'white', borderRadius: 'var(--radius-md)', padding: '28px 24px',
