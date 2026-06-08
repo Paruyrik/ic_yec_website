@@ -80,6 +80,7 @@ export interface Config {
     faqs: Faq;
     stories: Story;
     newsletters: Newsletter;
+    'partner-applications': PartnerApplication;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -100,6 +101,7 @@ export interface Config {
     faqs: FaqsSelect<false> | FaqsSelect<true>;
     stories: StoriesSelect<false> | StoriesSelect<true>;
     newsletters: NewslettersSelect<false> | NewslettersSelect<true>;
+    'partner-applications': PartnerApplicationsSelect<false> | PartnerApplicationsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -224,6 +226,10 @@ export interface Project {
   slug: string;
   status: 'ongoing' | 'completed' | 'upcoming';
   fundingSource?: ('erasmus-plus' | 'other-eu' | 'national' | 'private') | null;
+  /**
+   * IC-YEC's role — leave blank if not applicable.
+   */
+  projectRole?: ('coordinator' | 'partner') | null;
   theme?: ('art' | 'sport' | 'emotional-intelligence' | 'training' | 'inclusion' | 'digital' | 'environment')[] | null;
   startDate?: string | null;
   endDate?: string | null;
@@ -314,7 +320,7 @@ export interface Project {
     [k: string]: unknown;
   } | null;
   /**
-   * Display order — lower numbers appear first. Leave 0 for default.
+   * Display order — set 1 to show first, 2 for second, etc. Leave blank to sort by date.
    */
   order?: number | null;
   partners?: (number | Partner)[] | null;
@@ -953,6 +959,35 @@ export interface Newsletter {
   createdAt: string;
 }
 /**
+ * Organisations that have submitted a partnership request via the website.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "partner-applications".
+ */
+export interface PartnerApplication {
+  id: number;
+  orgName: string;
+  orgType: 'youth-ngo' | 'school' | 'youth-centre' | 'cultural' | 'municipality' | 'other';
+  country: string;
+  website?: string | null;
+  contactName: string;
+  email: string;
+  contactRole?: string | null;
+  projectInterests: ('youth-exchange' | 'training-course' | 'esc-volunteering' | 'seminar' | 'other')[];
+  /**
+   * Tell us about your organisation and what kind of collaboration you have in mind.
+   */
+  message: string;
+  howHeard?: string | null;
+  status: 'new' | 'reviewing' | 'contacted' | 'approved' | 'declined';
+  /**
+   * Only visible to admins.
+   */
+  adminNotes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -1027,6 +1062,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'newsletters';
         value: number | Newsletter;
+      } | null)
+    | ({
+        relationTo: 'partner-applications';
+        value: number | PartnerApplication;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -1141,6 +1180,7 @@ export interface ProjectsSelect<T extends boolean = true> {
   slug?: T;
   status?: T;
   fundingSource?: T;
+  projectRole?: T;
   theme?: T;
   startDate?: T;
   endDate?: T;
@@ -1727,6 +1767,26 @@ export interface NewslettersSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "partner-applications_select".
+ */
+export interface PartnerApplicationsSelect<T extends boolean = true> {
+  orgName?: T;
+  orgType?: T;
+  country?: T;
+  website?: T;
+  contactName?: T;
+  email?: T;
+  contactRole?: T;
+  projectInterests?: T;
+  message?: T;
+  howHeard?: T;
+  status?: T;
+  adminNotes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
@@ -1965,6 +2025,139 @@ export interface SiteSetting {
       | null;
   };
   /**
+   * All editable text on the /about page.
+   */
+  aboutPage?: {
+    heroTitle?: string | null;
+    heroSubtitle?: string | null;
+    storyHeading?: string | null;
+    storyParagraph1?: string | null;
+    storyParagraph2?: string | null;
+    /**
+     * Key milestones shown in the "Our Story" section.
+     */
+    timeline?:
+      | {
+          year: string;
+          label: string;
+          desc?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    missionBody?: string | null;
+    visionBody?: string | null;
+    valuesBody?: string | null;
+    /**
+     * Stats shown in the dark impact band.
+     */
+    pageStats?:
+      | {
+          value: string;
+          label: string;
+          icon?: string | null;
+          /**
+           * Small subtitle below the label
+           */
+          sub?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Steps in the "How we work" section.
+     */
+    howWeWork?:
+      | {
+          /**
+           * Step number e.g. "01"
+           */
+          step: string;
+          title: string;
+          desc?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Focus area cards in the "What we work on" section.
+     */
+    focusAreas?:
+      | {
+          icon?: string | null;
+          label: string;
+          desc?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    erasmusTitle?: string | null;
+    erasmusBody?: string | null;
+    /**
+     * Show the "Our partners" section on the About page.
+     */
+    showPartnersSection?: boolean | null;
+    ctaHeading?: string | null;
+    ctaBody?: string | null;
+  };
+  /**
+   * The "Who We Are" block shown on the homepage.
+   */
+  aboutSection?: {
+    /**
+     * Small label above the heading (e.g. "WHO WE ARE")
+     */
+    label?: string | null;
+    heading?: string | null;
+    intro?: string | null;
+    body?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    ctaLabel?: string | null;
+    ctaUrl?: string | null;
+    /**
+     * Focus area pills shown below the body text.
+     */
+    focusAreas?:
+      | {
+          /**
+           * Emoji (e.g. 🎨 ⚽ 🌿)
+           */
+          icon?: string | null;
+          label: string;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Stat cards shown in the right column.
+     */
+    stats?:
+      | {
+          /**
+           * e.g. "2018" or "500+"
+           */
+          value: string;
+          /**
+           * e.g. "Year founded"
+           */
+          label: string;
+          /**
+           * Emoji icon (e.g. 📅 🌍)
+           */
+          icon?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  /**
    * Per-theme breakdown shown on the Projects page. Leave blank to hide a theme.
    */
   themeImpact?: {
@@ -2124,6 +2317,81 @@ export interface SiteSettingsSelect<T extends boolean = true> {
               lat?: T;
               lng?: T;
               isHome?: T;
+              id?: T;
+            };
+      };
+  aboutPage?:
+    | T
+    | {
+        heroTitle?: T;
+        heroSubtitle?: T;
+        storyHeading?: T;
+        storyParagraph1?: T;
+        storyParagraph2?: T;
+        timeline?:
+          | T
+          | {
+              year?: T;
+              label?: T;
+              desc?: T;
+              id?: T;
+            };
+        missionBody?: T;
+        visionBody?: T;
+        valuesBody?: T;
+        pageStats?:
+          | T
+          | {
+              value?: T;
+              label?: T;
+              icon?: T;
+              sub?: T;
+              id?: T;
+            };
+        howWeWork?:
+          | T
+          | {
+              step?: T;
+              title?: T;
+              desc?: T;
+              id?: T;
+            };
+        focusAreas?:
+          | T
+          | {
+              icon?: T;
+              label?: T;
+              desc?: T;
+              id?: T;
+            };
+        erasmusTitle?: T;
+        erasmusBody?: T;
+        showPartnersSection?: T;
+        ctaHeading?: T;
+        ctaBody?: T;
+      };
+  aboutSection?:
+    | T
+    | {
+        label?: T;
+        heading?: T;
+        intro?: T;
+        body?: T;
+        ctaLabel?: T;
+        ctaUrl?: T;
+        focusAreas?:
+          | T
+          | {
+              icon?: T;
+              label?: T;
+              id?: T;
+            };
+        stats?:
+          | T
+          | {
+              value?: T;
+              label?: T;
+              icon?: T;
               id?: T;
             };
       };
