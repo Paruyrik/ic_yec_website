@@ -494,7 +494,6 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      {/* ── Get involved CTA ──────────────────────────────────────────────── */}
       <section className="section section--white">
         <div className="container">
           <div className="cta-grid" style={{
