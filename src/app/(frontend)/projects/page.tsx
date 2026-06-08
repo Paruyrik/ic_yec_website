@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { Suspense } from 'react'
-
 import type { Project } from '@/payload-types'
 import type { Where } from 'payload'
 import { getPayloadClient } from '@/lib/payloadClient'
