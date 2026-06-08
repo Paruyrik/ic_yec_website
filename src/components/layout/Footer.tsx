@@ -25,7 +25,7 @@ export function Footer() {
     <footer style={{ background: 'var(--color-dark)', color: 'rgba(255,255,255,0.75)', paddingTop: 60, paddingBottom: 32 }}>
       <div className="container">
         {/* Top row */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1.6fr 1fr 1fr 1fr', gap: 40, marginBottom: 48 }}>
+        <div className="footer-grid">
           {/* Brand column */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>

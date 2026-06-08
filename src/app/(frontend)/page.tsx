@@ -66,12 +66,7 @@ function Hero({ projectCount, featuredCalls }: { projectCount: number; featuredC
       <div className="container" style={{ position: 'relative' }}>
         {hasCalls ? (
           /* 2-column split: text left, card right */
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr auto',
-            gap: 56,
-            alignItems: 'center',
-          }}>
+          <div className="hero-grid">
             {/* Left: headline + CTAs */}
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
@@ -504,7 +499,7 @@ export default async function HomePage() {
       {/* ── About IC-YEC ─────────────────────────────────────────────────── */}
       <section className="section section--white">
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
+          <div className="col-2">
 
             {/* Left: mission + values */}
             <div>

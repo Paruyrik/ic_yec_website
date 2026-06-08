@@ -78,7 +78,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
       {/* ── 2-col body ───────────────────────────────────────────────────────── */}
       <section className="section section--tint" style={{ paddingTop: 48, paddingBottom: 64 }}>
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: 40, alignItems: 'start' }}>
+          <div className="layout-content-sidebar">
 
             {/* ── Left: content ────────────────────────────────────────────── */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>

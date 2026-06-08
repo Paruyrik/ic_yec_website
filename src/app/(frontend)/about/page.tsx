@@ -148,7 +148,7 @@ export default async function AboutPage() {
       {/* ── Our Story ──────────────────────────────────────────────────────── */}
       <section className="section section--white">
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 72, alignItems: 'start' }}>
+          <div className="col-2-start">
             <div>
               <div className="section-header__label" style={{ marginBottom: 12 }}>Our story</div>
               <h2 style={{ fontSize: 28, fontWeight: 600, lineHeight: 1.25, marginBottom: 24, color: 'var(--color-text)' }}>
@@ -228,7 +228,7 @@ export default async function AboutPage() {
             <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.45)', marginBottom: 10 }}>By the numbers</div>
             <h2 style={{ fontSize: 28, fontWeight: 600, color: 'white' }}>Our impact since 2018</h2>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 2 }}>
+          <div className="grid-stats">
             {pageStats.map((stat: any) => (
               <div key={stat.label} style={{
                 padding: '36px 28px', background: 'rgba(255,255,255,0.06)', textAlign: 'center',
@@ -252,7 +252,7 @@ export default async function AboutPage() {
               <h2 className="section-header__title">How we work</h2>
             </div>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 24 }}>
+          <div className="grid-4">
             {howWeWork.map((item: any) => (
               <div key={item.step}>
                 <div style={{ fontSize: 48, fontWeight: 800, lineHeight: 1, color: 'var(--color-tint-mid)', marginBottom: 16 }}>
@@ -275,7 +275,7 @@ export default async function AboutPage() {
               <h2 className="section-header__title">What we work on</h2>
             </div>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
+          <div className="grid-3" style={{ gap: 16 }}>
             {focusAreas.map((area: any) => (
               <div key={area.label} style={{
                 background: 'white', borderRadius: 'var(--radius-lg)', padding: '24px',
@@ -295,10 +295,9 @@ export default async function AboutPage() {
       {/* ── Erasmus+ callout ────────────────────────────────────────────────── */}
       <section className="section section--white">
         <div className="container">
-          <div style={{
+          <div className="col-text-aside" style={{
             background: 'linear-gradient(135deg, #003399 0%, #0055cc 100%)',
             borderRadius: 'var(--radius-lg)', padding: '48px 56px',
-            display: 'grid', gridTemplateColumns: '1fr auto', gap: 48, alignItems: 'center',
           }}>
             <div>
               <div style={{
@@ -498,10 +497,9 @@ export default async function AboutPage() {
       {/* ── Get involved CTA ──────────────────────────────────────────────── */}
       <section className="section section--white">
         <div className="container">
-          <div style={{
+          <div className="cta-grid" style={{
             background: 'var(--color-tint)', borderRadius: 'var(--radius-lg)',
-            padding: '56px 48px', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr',
-            gap: 32, border: '1px solid var(--color-border)',
+            padding: '48px 40px', border: '1px solid var(--color-border)',
           }}>
             <div>
               <div className="section-header__label" style={{ marginBottom: 12 }}>Join us</div>
