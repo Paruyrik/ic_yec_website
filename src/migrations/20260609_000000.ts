@@ -172,6 +172,22 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
     CREATE INDEX IF NOT EXISTS "partner_applications_created_at_idx" ON "partner_applications" USING btree ("created_at");
   `)
 
+  // ── payload_locked_documents_rels: partner_applications_id column ────────
+  await db.execute(sql`
+    ALTER TABLE "payload_locked_documents_rels"
+      ADD COLUMN IF NOT EXISTS "partner_applications_id" integer;
+  `)
+  await db.execute(sql`
+    DO $$ BEGIN
+      ALTER TABLE "payload_locked_documents_rels"
+        ADD CONSTRAINT "payload_locked_documents_rels_partner_applications_fk"
+        FOREIGN KEY ("partner_applications_id") REFERENCES "public"."partner_applications"("id")
+        ON DELETE cascade ON UPDATE no action;
+    EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+    CREATE INDEX IF NOT EXISTS "payload_locked_documents_rels_partner_applications_id_idx"
+      ON "payload_locked_documents_rels" USING btree ("partner_applications_id");
+  `)
+
   // ── projects order + projectRole columns (20260520_131726 / 200000) ──────
   await db.execute(sql`
     ALTER TABLE "projects"

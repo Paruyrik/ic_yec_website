@@ -54,6 +54,22 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
     CREATE INDEX IF NOT EXISTS "partner_applications_created_at_idx"
       ON "partner_applications" USING btree ("created_at");
   `)
+
+  // Add partner_applications_id to payload_locked_documents_rels (required for every new collection)
+  await db.execute(sql`
+    ALTER TABLE "payload_locked_documents_rels"
+      ADD COLUMN IF NOT EXISTS "partner_applications_id" integer;
+  `)
+  await db.execute(sql`
+    DO $$ BEGIN
+      ALTER TABLE "payload_locked_documents_rels"
+        ADD CONSTRAINT "payload_locked_documents_rels_partner_applications_fk"
+        FOREIGN KEY ("partner_applications_id") REFERENCES "public"."partner_applications"("id")
+        ON DELETE cascade ON UPDATE no action;
+    EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+    CREATE INDEX IF NOT EXISTS "payload_locked_documents_rels_partner_applications_id_idx"
+      ON "payload_locked_documents_rels" USING btree ("partner_applications_id");
+  `)
 }
 
 export async function down({ db }: MigrateDownArgs): Promise<void> {
