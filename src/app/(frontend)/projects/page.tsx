@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import { Suspense } from 'react'
 import type { Project } from '@/payload-types'
-import type { Where } from 'payload'
 import { getPayloadClient } from '@/lib/payloadClient'
+import { buildProjectWhere } from '@/lib/projects'
 import { HomeMapClient as ProjectsMap } from '@/components/home/HomeMapClient'
 import { ThemeImpactGrid } from '@/components/projects/ThemeImpactGrid'
 import { ProjectsFilterBar } from '@/components/projects/ProjectsFilterBar'
@@ -34,14 +34,12 @@ export default async function ProjectsPage({
   const payload = await getPayloadClient()
 
   // ── build where clause for filtered query ──────────────────────────────────
-  const where: Where = {}
-  if (currentStatus) where.status      = { equals: currentStatus }
-  if (currentTheme)  where.theme       = { in: [currentTheme] }
-  if (currentRole)   where.projectRole = { equals: currentRole }
-  if (currentQ)      where.or          = [
-    { title:   { like: currentQ } },
-    { summary: { like: currentQ } },
-  ]
+  const where = buildProjectWhere({
+    status: currentStatus || undefined,
+    theme:  currentTheme  || undefined,
+    role:   currentRole   || undefined,
+    q:      currentQ      || undefined,
+  })
 
   const hasFilter = currentStatus || currentTheme || currentRole || currentQ
 
@@ -70,7 +68,7 @@ export default async function ProjectsPage({
       page: 1,
       sort: 'order',
       depth: 1,
-      ...(hasFilter ? { where } : {}),
+      ...(where ? { where } : {}),
     }).catch(() => ({ docs: [] as Project[], totalDocs: 0, totalPages: 1 })),
   ])
 

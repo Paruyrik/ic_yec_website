@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { revalidateCollection } from '@/lib/revalidate'
+import { deriveProjectStatus } from '@/lib/projects'
 
 export const Projects: CollectionConfig = {
   slug: 'projects',
@@ -28,8 +29,17 @@ export const Projects: CollectionConfig = {
       name: 'status',
       type: 'select',
       options: ['ongoing', 'completed', 'upcoming'],
-      required: true,
-      admin: { position: 'sidebar' },
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+        description: 'Set automatically from the start and end dates.',
+      },
+      hooks: {
+        beforeChange: [
+          ({ siblingData }) =>
+            deriveProjectStatus(siblingData?.startDate, siblingData?.endDate),
+        ],
+      },
     },
     {
       name: 'fundingSource',

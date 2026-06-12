@@ -4,7 +4,8 @@ import Link from 'next/link'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { Project } from '@/payload-types'
 import { LiveBadge } from '@/components/ui/LiveBadge'
-import { loadMoreProjects, type ProjectFilters } from '@/app/(frontend)/projects/actions'
+import { deriveProjectStatus, type ProjectFilters } from '@/lib/projects'
+import { loadMoreProjects } from '@/app/(frontend)/projects/actions'
 
 // ── helpers ────────────────────────────────────────────────────────────────────
 
@@ -48,7 +49,8 @@ const THEME_COLORS: Record<string, string> = {
 function ProjectCard({ p }: { p: any }) {
   const title    = localStr(p.title)
   const summary  = localStr(p.summary)
-  const status   = STATUS_STYLE[p.status] ?? STATUS_STYLE.completed
+  const statusKey = deriveProjectStatus(p.startDate, p.endDate)
+  const status   = STATUS_STYLE[statusKey]
   const themes: string[] = Array.isArray(p.theme) ? p.theme : p.theme ? [p.theme] : []
   const countries: string[] = (p.countries ?? []).map((c: any) => c.country).filter(Boolean)
   const coverUrl = p.coverImage?.url ?? null
@@ -70,7 +72,7 @@ function ProjectCard({ p }: { p: any }) {
           }}>
             {status.label}
           </span>
-          {p.status === 'ongoing' && <LiveBadge variant="live" />}
+          {statusKey === 'ongoing' && <LiveBadge variant="live" />}
         </div>
 
         <div className="card__body">

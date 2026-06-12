@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getPayloadClient } from '@/lib/payloadClient'
+import { deriveProjectStatus } from '@/lib/projects'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import { GalleryGrid } from '@/components/projects/GalleryGrid'
 
@@ -48,7 +49,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
   const title    = typeof project.title   === 'string' ? project.title   : (project.title as any)?.en   ?? 'Untitled'
   const summary  = typeof project.summary === 'string' ? project.summary : (project.summary as any)?.en ?? ''
-  const status   = project.status ?? 'upcoming'
+  const status   = deriveProjectStatus(project.startDate, project.endDate)
   const sc       = STATUS_COLORS[status] ?? STATUS_COLORS.upcoming
   const themes   = Array.isArray(project.theme) ? project.theme as string[] : []
   const countries: string[] = project.countries?.map((c: any) => c.country).filter(Boolean) ?? []

@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import type { Project, OpenCall } from '@/payload-types'
 import { getPayloadClient } from '@/lib/payloadClient'
+import { deriveProjectStatus, notCompletedWhere } from '@/lib/projects'
 import { getLocale, localStr } from '@/lib/locale'
 import { ParticipantStories } from '@/components/stories/ParticipantStories'
 import { ApplicationTimeline } from '@/components/home/ApplicationTimeline'
@@ -245,7 +246,7 @@ function ProjectCard({ project, showLiveBadge }: {
 }) {
   const title = typeof project.title === 'string' ? project.title : (project.title as any)?.en ?? 'Untitled'
   const summary = typeof project.summary === 'string' ? project.summary : (project.summary as any)?.en ?? ''
-  const status = project.status ?? 'upcoming'
+  const status = deriveProjectStatus(project.startDate, project.endDate)
   const isLive = status === 'ongoing'
   const cover = project.coverImage as any
   const coverUrl: string | null = typeof cover === 'object' && cover?.url ? cover.url : null
@@ -340,7 +341,7 @@ export default async function HomePage() {
         collection: 'projects',
         limit: 3,
         depth: 1,
-        where: { status: { in: ['ongoing', 'upcoming'] } },
+        where: notCompletedWhere(),
         sort: 'order',
       }).catch(() => ({ docs: [] as Project[] })),
 
