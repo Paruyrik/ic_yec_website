@@ -5,8 +5,8 @@ import type { Where } from 'payload'
 import { getPayloadClient } from '@/lib/payloadClient'
 import { HomeMapClient as ProjectsMap } from '@/components/home/HomeMapClient'
 import { ThemeImpactGrid } from '@/components/projects/ThemeImpactGrid'
-import { LiveBadge } from '@/components/ui/LiveBadge'
 import { ProjectsFilterBar } from '@/components/projects/ProjectsFilterBar'
+import { ProjectsGrid } from '@/components/projects/ProjectsGrid'
 
 // ── helpers ────────────────────────────────────────────────────────────────────
 
@@ -14,35 +14,6 @@ function localStr(val: unknown): string {
   if (!val) return ''
   if (typeof val === 'string') return val
   return (val as any)?.en ?? ''
-}
-
-function dateRange(p: Project): string {
-  const fmt = (d: string) =>
-    new Date(d).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })
-  if (p.startDate && p.endDate) return `${fmt(p.startDate as string)} – ${fmt(p.endDate as string)}`
-  if (p.startDate) return `From ${fmt(p.startDate as string)}`
-  return ''
-}
-
-const STATUS_STYLE: Record<string, { bg: string; text: string; label: string }> = {
-  ongoing:   { bg: '#EAF3DE', text: '#3B6D11', label: 'Ongoing' },
-  completed: { bg: '#E6F1FB', text: '#0C447C', label: 'Completed' },
-  upcoming:  { bg: '#FAEEDA', text: '#633806', label: 'Upcoming' },
-}
-
-const ROLE_BADGE: Record<string, { bg: string; text: string; label: string }> = {
-  coordinator: { bg: '#EDE9FE', text: '#5B21B6', label: '⭐ Coordinated' },
-  partner:     { bg: '#D1FAE5', text: '#065F46', label: '🤝 Partnership' },
-}
-
-const THEME_COLORS: Record<string, string> = {
-  art:                  '#3D3785',
-  sport:                '#4F9A5E',
-  'emotional-intelligence': '#0891B2',
-  training:             '#D97706',
-  inclusion:            '#7C3AED',
-  digital:              '#0C447C',
-  environment:          '#3B6D11',
 }
 
 const LIMIT = 12
@@ -59,7 +30,6 @@ export default async function ProjectsPage({
   const currentTheme  = (sp.theme  as string) ?? ''
   const currentRole   = (sp.role   as string) ?? ''
   const currentQ      = (sp.q      as string) ?? ''
-  const currentPage   = Math.max(1, Number(sp.page ?? 1))
 
   const payload = await getPayloadClient()
 
@@ -97,7 +67,7 @@ export default async function ProjectsPage({
     payload.getCachedCollection<'projects'>({
       collection: 'projects',
       limit: LIMIT,
-      page: currentPage,
+      page: 1,
       sort: 'order',
       depth: 1,
       ...(hasFilter ? { where } : {}),
@@ -115,7 +85,6 @@ export default async function ProjectsPage({
   const mapTitle     = localStr((settings as any)?.mapSection?.title) || 'Where we work'
   const mapSubtitle  = localStr((settings as any)?.mapSection?.subtitle)
   const stats: any[] = (settings as any)?.impactStats?.stats ?? []
-  const showLiveBadge = true
 
   const mapCfg             = ss?.mapConfig ?? {}
   const activeCountryColor = mapCfg.activeCountryColor  || '#3D3785'
@@ -231,162 +200,19 @@ export default async function ProjectsPage({
             </Suspense>
           </div>
 
-          {projects.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '64px 0', color: 'var(--color-text-muted)' }}>
-              {hasFilter
-                ? 'No projects match your filters. Try adjusting your search.'
-                : 'No projects yet. Check back soon.'}
-            </div>
-          ) : (
-            <div className="grid-3">
-              {projects.map((p: any) => {
-                const title    = localStr(p.title)
-                const summary  = localStr(p.summary)
-                const status   = STATUS_STYLE[p.status] ?? STATUS_STYLE.completed
-                const themes: string[] = Array.isArray(p.theme) ? p.theme : p.theme ? [p.theme] : []
-                const countries: string[] = (p.countries ?? []).map((c: any) => c.country).filter(Boolean)
-                const coverUrl = p.coverImage?.url ?? null
-                const roleBadge = ROLE_BADGE[p.projectRole as string] ?? null
-
-                return (
-                  <Link key={p.id} href={`/projects/${p.slug}`} style={{ textDecoration: 'none' }}>
-                    <div className="card" style={{ height: '100%' }}>
-                      {/* Cover image or theme-coloured placeholder */}
-                      <div style={{
-                        height: 180,
-                        background: coverUrl
-                          ? `url(${coverUrl}) center/cover`
-                          : `linear-gradient(135deg, ${THEME_COLORS[themes[0]] ?? '#3D3785'}22 0%, ${THEME_COLORS[themes[0]] ?? '#3D3785'}44 100%)`,
-                        display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', padding: 12,
-                      }}>
-                        <span style={{
-                          padding: '3px 10px', borderRadius: 100, fontSize: 11, fontWeight: 500,
-                          background: status.bg, color: status.text,
-                        }}>
-                          {status.label}
-                        </span>
-                        {p.status === 'ongoing' && showLiveBadge && <LiveBadge variant="live" />}
-                      </div>
-
-                      <div className="card__body">
-                        {(themes.length > 0 || roleBadge) && (
-                          <div className="card__meta">
-                            {themes.slice(0, 3).map((t) => (
-                              <span key={t} style={{
-                                padding: '2px 8px', borderRadius: 100, fontSize: 10, fontWeight: 500,
-                                textTransform: 'uppercase', letterSpacing: '0.06em',
-                                background: `${THEME_COLORS[t] ?? '#3D3785'}18`,
-                                color: THEME_COLORS[t] ?? '#3D3785',
-                              }}>
-                                {t}
-                              </span>
-                            ))}
-                            {roleBadge && (
-                              <span style={{
-                                padding: '2px 8px', borderRadius: 100, fontSize: 10, fontWeight: 600,
-                                background: roleBadge.bg, color: roleBadge.text,
-                              }}>
-                                {roleBadge.label}
-                              </span>
-                            )}
-                          </div>
-                        )}
-
-                        <h3 className="card__title">{title}</h3>
-                        {summary && (
-                          <p className="card__desc">{summary.slice(0, 110)}{summary.length > 110 ? '…' : ''}</p>
-                        )}
-
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, fontSize: 12, color: 'var(--color-text-muted)', marginTop: 'auto' }}>
-                          {dateRange(p) && <span>🗓 {dateRange(p)}</span>}
-                          {countries.length > 0 && <span>🌍 {countries.slice(0, 3).join(', ')}{countries.length > 3 ? ` +${countries.length - 3}` : ''}</span>}
-                          {p.participants > 0 && <span>👥 {p.participants}</span>}
-                        </div>
-
-                        <span className="card__link" style={{ marginTop: 12 }}>View project →</span>
-                      </div>
-                    </div>
-                  </Link>
-                )
-              })}
-            </div>
-          )}
-
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 8, marginTop: 48 }}>
-              {currentPage > 1 && (
-                <PaginationLink page={currentPage - 1} sp={sp} label="← Previous" />
-              )}
-
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => {
-                const isActive = n === currentPage
-                return (
-                  <PaginationLink
-                    key={n}
-                    page={n}
-                    sp={sp}
-                    label={String(n)}
-                    active={isActive}
-                  />
-                )
-              })}
-
-              {currentPage < totalPages && (
-                <PaginationLink page={currentPage + 1} sp={sp} label="Next →" />
-              )}
-            </div>
-          )}
+          <ProjectsGrid
+            initialProjects={projects}
+            initialTotalPages={totalPages}
+            filters={{
+              status: currentStatus || undefined,
+              theme:  currentTheme  || undefined,
+              role:   currentRole   || undefined,
+              q:      currentQ      || undefined,
+            }}
+            hasFilter={Boolean(hasFilter)}
+          />
         </div>
       </section>
     </>
-  )
-}
-
-// ── Pagination link helper ─────────────────────────────────────────────────────
-
-function PaginationLink({
-  page,
-  sp,
-  label,
-  active,
-}: {
-  page: number
-  sp: Record<string, string | string[] | undefined>
-  label: string
-  active?: boolean
-}) {
-  const params = new URLSearchParams()
-  if (sp.status) params.set('status', sp.status as string)
-  if (sp.theme)  params.set('theme',  sp.theme  as string)
-  if (sp.role)   params.set('role',   sp.role   as string)
-  if (sp.q)      params.set('q',      sp.q      as string)
-  if (page > 1)  params.set('page',   String(page))
-
-  const href = `/projects${params.toString() ? `?${params.toString()}` : ''}`
-
-  function scrollToGrid() {
-    document.getElementById('projects-grid')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
-
-  return (
-    <Link
-      href={href}
-      scroll={false}
-      onClick={scrollToGrid}
-      style={{
-        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-        minWidth: 36, height: 36, padding: '0 10px',
-        borderRadius: 8, fontSize: 14, fontWeight: active ? 600 : 400,
-        textDecoration: 'none',
-        background: active ? 'var(--color-primary)' : 'white',
-        color: active ? 'white' : 'var(--color-text)',
-        border: `1px solid ${active ? 'var(--color-primary)' : 'var(--color-border)'}`,
-        boxShadow: active ? '0 2px 8px rgba(61,55,133,0.25)' : 'none',
-        transition: 'all 0.15s',
-      }}
-    >
-      {label}
-    </Link>
   )
 }
