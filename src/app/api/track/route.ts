@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getPayload } from 'payload'
 import config from '@/payload.config'
 
-// Simple rate limiting — max 5 lookups per IP per minute (in-memory, resets on cold start)
+// Simple rate limiting - max 5 lookups per IP per minute (in-memory, resets on cold start)
 const ratemap = new Map<string, { count: number; reset: number }>()
 
 function checkRate(ip: string): boolean {
@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
     sort: '-createdAt',
     limit: 20,
     depth: 1,
-    // Only return safe public fields — never expose notes or full answers
+    // Only return safe public fields - never expose notes or full answers
     select: {
       id:         true,
       status:     true,
@@ -49,7 +49,7 @@ export async function GET(req: NextRequest) {
     id:           r.id,
     status:       r.status,
     submittedAt:  r.createdAt,
-    openCallTitle: typeof r.openCall === 'object' ? r.openCall?.title ?? '—' : '—',
+    openCallTitle: typeof r.openCall === 'object' ? r.openCall?.title ?? '-' : '-',
     openCallSlug:  typeof r.openCall === 'object' ? r.openCall?.slug  ?? null : null,
   }))
 

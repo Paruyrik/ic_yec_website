@@ -68,7 +68,7 @@ export function FeaturedCallSlider({ calls }: Props) {
         boxShadow: '0 20px 60px rgba(0,0,0,0.25)',
         width: 420,
       }}>
-        {/* Solid purple header — matches screenshot */}
+        {/* Solid purple header - matches screenshot */}
         <div style={{
           background: '#3D3785',
           padding: '26px 28px 24px',

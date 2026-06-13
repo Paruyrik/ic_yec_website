@@ -55,7 +55,7 @@ export const Projects: CollectionConfig = {
       ],
       admin: {
         position: 'sidebar',
-        description: 'IC-YEC\'s role — leave blank if not applicable.',
+        description: 'IC-YEC\'s role - leave blank if not applicable.',
       },
     },
     {
@@ -124,7 +124,7 @@ export const Projects: CollectionConfig = {
       type: 'number',
       admin: {
         position: 'sidebar',
-        description: 'Display order — set 1 to show first, 2 for second, etc. Leave blank to sort by date.',
+        description: 'Display order - set 1 to show first, 2 for second, etc. Leave blank to sort by date.',
       },
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

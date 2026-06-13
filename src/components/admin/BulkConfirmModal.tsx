@@ -48,7 +48,7 @@ export function BulkConfirmModal({ decision, count, sendEmail, onToggleEmail, on
           </h3>
           <p style={{ fontSize: 14, color: c.text, opacity: 0.8, marginTop: 6 }}>
             {c.noEmail
-              ? 'Internal only — applicants will not be notified.'
+              ? 'Internal only - applicants will not be notified.'
               : 'This will update the status for all selected registrations.'}
           </p>
         </div>

@@ -22,7 +22,7 @@ export function InternalNotification({
   return (
     <Html>
       <Head />
-      <Preview>New application: {applicantName} — {openCallTitle}</Preview>
+      <Preview>New application: {applicantName} - {openCallTitle}</Preview>
       <Body style={{ fontFamily: 'system-ui, sans-serif', background: '#F8F8FC', padding: '32px 0' }}>
         <Container style={{ background: 'white', borderRadius: 8, maxWidth: 560, margin: '0 auto', overflow: 'hidden' }}>
           <Section style={{ background: '#1A1833', padding: '20px 32px' }}>

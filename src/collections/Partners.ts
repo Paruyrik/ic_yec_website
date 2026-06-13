@@ -28,7 +28,7 @@ export const Partners: CollectionConfig = {
       type: 'text',
       localized: true,
       admin: {
-        description: 'e.g. "Official Armenian Representative" — shown as a badge on the About page.',
+        description: 'e.g. "Official Armenian Representative" - shown as a badge on the About page.',
         condition: (data) => data?.type === 'official-representative',
       },
     },

@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
     calendarId: 'primary',
     conferenceDataVersion: 1,
     requestBody: {
-      summary:     `IC-YEC Interview — ${reg.applicantName}`,
+      summary:     `IC-YEC Interview - ${reg.applicantName}`,
       description: `Interview for: ${callTitle}`,
       start: { dateTime: startDT.toISOString(), timeZone: 'UTC' },
       end:   { dateTime: endDT.toISOString(),   timeZone: 'UTC' },
@@ -101,7 +101,7 @@ export async function POST(req: NextRequest) {
       from:    FROM,
       to:      reg.email,
       cc:      ccCoordinator ? [CC_DEFAULT] : undefined,
-      subject: `Your application to ${callTitle} — Interview invitation`,
+      subject: `Your application to ${callTitle} - Interview invitation`,
       html,
     })
   } catch (err: any) {

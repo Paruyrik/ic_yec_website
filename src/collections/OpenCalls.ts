@@ -218,7 +218,7 @@ const dividerFieldBlock: Block = {
   fields: [],
 }
 
-// All available form field blocks — add new ones here
+// All available form field blocks - add new ones here
 export const FORM_FIELD_BLOCKS: Block[] = [
   textFieldBlock,
   textareaFieldBlock,
@@ -311,7 +311,7 @@ export const OpenCalls: CollectionConfig = {
     { name: 'registrationEnabled', type: 'checkbox', defaultValue: true },
     {
       // Selecting a template and saving stamps its formFields into this open call.
-      // The field is cleared after the hook runs — it's a one-time "copy" action.
+      // The field is cleared after the hook runs - it's a one-time "copy" action.
       name: 'applyTemplate',
       type: 'relationship',
       relationTo: 'form-templates' as any,

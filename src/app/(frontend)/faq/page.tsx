@@ -13,7 +13,7 @@ const CATEGORY_META: Record<string, { label: string; icon: string }> = {
 }
 
 export const metadata = {
-  title: 'FAQ — IC-YEC',
+  title: 'FAQ - IC-YEC',
   description: 'Frequently asked questions about IC-YEC programmes, Erasmus+, and how to apply.',
 }
 

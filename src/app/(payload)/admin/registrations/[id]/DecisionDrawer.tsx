@@ -24,7 +24,7 @@ type RegistrationData = {
 }
 
 const DECISION_CONFIG: Record<Decision, { label: string; desc: string; icon: string; bg: string; border: string; text: string }> = {
-  shortlisted: { label: 'Shortlist',          desc: 'Internal only — no email sent',              icon: '★',  bg: '#EEEDFE', border: '#7C6FCD', text: '#3C3489' },
+  shortlisted: { label: 'Shortlist',          desc: 'Internal only - no email sent',              icon: '★',  bg: '#EEEDFE', border: '#7C6FCD', text: '#3C3489' },
   interview:   { label: 'Schedule Interview',  desc: 'Creates Google Meet · emails candidate',    icon: '📅', bg: '#FEF3C7', border: '#D97706', text: '#92400E' },
   accepted:    { label: 'Accept',              desc: 'Send acceptance + agreement to sign',        icon: '✓',  bg: '#EAF3DE', border: '#4F9A5E', text: '#3B6D11' },
   rejected:    { label: 'Reject',              desc: 'Send rejection email',                       icon: '✕',  bg: '#FCEBEB', border: '#D14242', text: '#A32D2D' },
@@ -102,7 +102,7 @@ export default function DecisionDrawer({ registration: reg }: { registration: Re
         if (!res.ok) throw new Error('Failed to update')
         setCurrentStatus('shortlisted')
         setDecision(null)
-        showToast('Added to internal shortlist — candidate not notified', true)
+        showToast('Added to internal shortlist - candidate not notified', true)
         return
       }
 
@@ -125,7 +125,7 @@ export default function DecisionDrawer({ registration: reg }: { registration: Re
         return
       }
 
-      // ── Accepted / Rejected — hook sends the email automatically ───────────
+      // ── Accepted / Rejected - hook sends the email automatically ───────────
       const res = await fetch(`/api/registrations/${reg.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
@@ -195,7 +195,7 @@ export default function DecisionDrawer({ registration: reg }: { registration: Re
                   ['Email',     <a key="e" href={`mailto:${reg.email}`} style={{ color: '#3D3785' }}>{reg.email}</a>],
                   ['Submitted', reg.submittedAt],
                   ['Country',   reg.country],
-                  ['Age',       reg.age != null ? `${reg.age} years` : '—'],
+                  ['Age',       reg.age != null ? `${reg.age} years` : '-'],
                 ].map(([label, value]) => (
                   <div key={String(label)} style={{ display: 'flex', flexDirection: 'column', gap: 2, padding: '10px 0', borderBottom: '1px solid #F0EFF8' }}>
                     <span style={{ fontSize: 11, fontWeight: 500, letterSpacing: '0.07em', textTransform: 'uppercase', color: '#6B6B8D' }}>{label}</span>
@@ -235,7 +235,7 @@ export default function DecisionDrawer({ registration: reg }: { registration: Re
 
                   {reg.cvMimeType !== 'application/pdf' && (
                     <p style={{ fontSize: 12, color: '#6B6B8D', margin: 0 }}>
-                      Word document — download to open in your editor
+                      Word document - download to open in your editor
                     </p>
                   )}
 
@@ -342,16 +342,16 @@ export default function DecisionDrawer({ registration: reg }: { registration: Re
                 <div style={{ padding: '0 18px 16px', display: 'flex', flexDirection: 'column', gap: 10 }}>
                   <div style={{ height: 1, background: '#F0EFF8', margin: '0 0 2px' }} />
 
-                  {/* Shortlist — info only */}
+                  {/* Shortlist - info only */}
                   {decision === 'shortlisted' && (
                     <div style={{ background: '#EEEDFE', borderRadius: 8, padding: '12px 14px' }}>
                       <p style={{ fontSize: 13, color: '#3C3489', margin: 0 }}>
-                        Internal shortlist only — the applicant will <strong>not</strong> be notified.
+                        Internal shortlist only - the applicant will <strong>not</strong> be notified.
                       </p>
                     </div>
                   )}
 
-                  {/* Interview — date + time */}
+                  {/* Interview - date + time */}
                   {decision === 'interview' && (
                     <div style={{ background: '#FEF3C7', borderRadius: 8, padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 8 }}>
                       <p style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.07em', color: '#92400E', margin: 0 }}>
@@ -377,7 +377,7 @@ export default function DecisionDrawer({ registration: reg }: { registration: Re
                     </div>
                   )}
 
-                  {/* Accepted — agreement URL */}
+                  {/* Accepted - agreement URL */}
                   {decision === 'accepted' && (
                     <div style={{ background: '#EAF3DE', borderRadius: 8, padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 8 }}>
                       <p style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.07em', color: '#3B6D11', margin: 0 }}>
@@ -391,12 +391,12 @@ export default function DecisionDrawer({ registration: reg }: { registration: Re
                         style={{ padding: '7px 10px', borderRadius: 6, border: '1.5px solid #4F9A5E', fontSize: 13, color: '#1A1833', outline: 'none' }}
                       />
                       <p style={{ fontSize: 11, color: '#3B6D11', margin: 0 }}>
-                        Google Form or Doc — included as a button in the acceptance email.
+                        Google Form or Doc - included as a button in the acceptance email.
                       </p>
                     </div>
                   )}
 
-                  {/* Toggles — not for shortlist (no email) or interview (always sends) */}
+                  {/* Toggles - not for shortlist (no email) or interview (always sends) */}
                   {decision !== 'shortlisted' && (
                     <>
                       {decision !== 'interview' && (
@@ -411,7 +411,7 @@ export default function DecisionDrawer({ registration: reg }: { registration: Re
                     disabled={saving}
                     style={{ marginTop: 4, padding: '13px', borderRadius: 8, border: 'none', cursor: saving ? 'not-allowed' : 'pointer', background: decCfg.border, color: 'white', fontSize: 14, fontWeight: 500, opacity: saving ? 0.7 : 1 }}
                   >
-                    {saving ? 'Saving…' : `Confirm — ${decCfg.label}`}
+                    {saving ? 'Saving…' : `Confirm - ${decCfg.label}`}
                   </button>
                   <button
                     onClick={() => setDecision(null)}

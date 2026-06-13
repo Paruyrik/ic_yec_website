@@ -100,7 +100,7 @@ export function GalleryGrid({ images }: Props) {
             padding: 20,
           }}
         >
-          {/* Content — stop clicks bubbling to backdrop */}
+          {/* Content - stop clicks bubbling to backdrop */}
           <div
             onClick={(e) => e.stopPropagation()}
             style={{

@@ -151,7 +151,7 @@ export function RegistrationForm({ openCallId, openCallTitle, formFields, spotsA
             {...register('motivationLetter')} />
         </Field>
 
-        {/* CV — dashed drop zone */}
+        {/* CV - dashed drop zone */}
         <Field label="CV / Résumé" error={errors.cv ? String(errors.cv.message) : undefined}>
           <label className="upload-zone">
             <input
@@ -170,7 +170,7 @@ export function RegistrationForm({ openCallId, openCallTitle, formFields, spotsA
                     Click to upload CV
                   </span>
                   <span style={{ fontSize: 11, color: 'var(--color-text-muted)', display: 'block', marginTop: 3 }}>
-                    PDF, DOC or DOCX — max 5 MB
+                    PDF, DOC or DOCX - max 5 MB
                   </span>
                 </>
             }
@@ -189,7 +189,7 @@ export function RegistrationForm({ openCallId, openCallTitle, formFields, spotsA
           </>
         )}
 
-        {/* GDPR — purple accent checkbox, starts unchecked */}
+        {/* GDPR - purple accent checkbox, starts unchecked */}
         <div style={{ background: 'var(--color-tint)', borderRadius: 'var(--radius-md)', padding: '14px 16px' }}>
           <label style={{ display: 'flex', alignItems: 'flex-start', gap: 10, cursor: 'pointer' }}>
             <input

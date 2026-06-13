@@ -2,7 +2,7 @@ import { config as dotenv } from 'dotenv'
 import { resolve } from 'path'
 import { fileURLToPath } from 'url'
 
-// Must load .env BEFORE payload is imported — static imports are hoisted in ESM,
+// Must load .env BEFORE payload is imported - static imports are hoisted in ESM,
 // so payload and config are loaded via dynamic import() below instead.
 dotenv({ path: resolve(fileURLToPath(import.meta.url), '../../.env') })
 
@@ -51,7 +51,7 @@ async function seed() {
       website: 'https://masterpeace.org',
       type: 'official-representative',
       representativeRole: 'Official Armenian Representative',
-      description: 'IC-YEC is the official Armenian representative of Masterpeace — a global movement using the power of music and the arts to inspire people to connect across divides and build a more peaceful world.',
+      description: 'IC-YEC is the official Armenian representative of Masterpeace - a global movement using the power of music and the arts to inspire people to connect across divides and build a more peaceful world.',
     },
   ]
   const partners = []
@@ -242,7 +242,7 @@ async function seed() {
       location: 'Vanadzor, Armenia',
       dates: { from: '2025-05-01', to: '2025-05-10' },
       eligibility: { ageMin: 18, ageMax: 28, spotsAvailable: 6, countries: [{ country: 'Armenia' }, { country: 'Portugal' }, { country: 'Czechia' }] },
-      summary: 'A past youth exchange using sport and team activities to promote social inclusion — now closed for applications.',
+      summary: 'A past youth exchange using sport and team activities to promote social inclusion - now closed for applications.',
       registrationEnabled: false,
       formFields: [],
     },
@@ -261,7 +261,7 @@ async function seed() {
 
   // ── Registrations ─────────────────────────────────────────────────────────
   if (openCalls.length === 0) {
-    console.log('  → registrations  (skipped — no open calls)')
+    console.log('  → registrations  (skipped - no open calls)')
     console.log('\n✅  Seed complete.')
     process.exit(0)
   }
@@ -291,7 +291,7 @@ async function seed() {
       dateOfBirth: '1999-07-22',
       motivationLetter: 'As a young designer from Yerevan I want to bring Armenian contemporary art to an international audience and learn from peers across Europe.',
       status: 'accepted',
-      notes: 'Strong portfolio, local participant — confirmed by 2025-06-01.',
+      notes: 'Strong portfolio, local participant - confirmed by 2025-06-01.',
       answers: [],
     },
     {
@@ -448,15 +448,15 @@ async function seed() {
   console.log('  → newsletters')
   const newslettersData = [
     {
-      title: 'IC-YEC Newsletter — Spring 2025',
+      title: 'IC-YEC Newsletter - Spring 2025',
       issueName: 'Spring 2025',
       publishedDate: '2025-04-01',
-      preview: 'This spring we celebrated the launch of two new Erasmus+ projects — Voices for Inclusion and Move Together. We also welcomed 6 new ESC volunteers to Armenia and opened applications for our summer youth exchanges.',
+      preview: 'This spring we celebrated the launch of two new Erasmus+ projects - Voices for Inclusion and Move Together. We also welcomed 6 new ESC volunteers to Armenia and opened applications for our summer youth exchanges.',
       archiveUrl: 'https://example.com/newsletter/spring-2025',
       published: true,
     },
     {
-      title: 'IC-YEC Newsletter — Winter 2024',
+      title: 'IC-YEC Newsletter - Winter 2024',
       issueName: 'Winter 2024',
       publishedDate: '2024-12-15',
       preview: 'A year-end recap of all IC-YEC activities: 3 completed projects, 120+ participants, 12 countries involved. Plus: highlights from the Digital Futures training course in October.',
@@ -464,10 +464,10 @@ async function seed() {
       published: true,
     },
     {
-      title: 'IC-YEC Newsletter — Autumn 2024',
+      title: 'IC-YEC Newsletter - Autumn 2024',
       issueName: 'Autumn 2024',
       publishedDate: '2024-10-01',
-      preview: 'The Green Minds in Action project is in full swing with workshops in all three partner countries. We also announce new open calls for spring 2025 — don\'t miss the early application deadline.',
+      preview: 'The Green Minds in Action project is in full swing with workshops in all three partner countries. We also announce new open calls for spring 2025 - don\'t miss the early application deadline.',
       archiveUrl: 'https://example.com/newsletter/autumn-2024',
       published: true,
     },
@@ -507,7 +507,7 @@ async function seed() {
           items: [
             { question: 'Is Erasmus+ only for students?', answer: 'No! While many people associate it with university exchanges, Erasmus+ also funds youth exchanges, volunteering (ESC), training courses, and seminars for anyone aged 13–30 (or youth workers up to any age).' },
             { question: 'Does it cost anything to participate?', answer: 'For most activities, costs like travel, accommodation and food are fully covered by the project grant. You may need a valid passport and travel insurance, which are usually also covered.' },
-            { question: 'Do I need to speak a foreign language?', answer: 'The working language is typically English, but you don\'t need to be fluent — projects are designed to be inclusive and non-formal. The experience itself will improve your language skills!' },
+            { question: 'Do I need to speak a foreign language?', answer: 'The working language is typically English, but you don\'t need to be fluent - projects are designed to be inclusive and non-formal. The experience itself will improve your language skills!' },
             { question: 'Who can apply?', answer: 'Young people aged 18–30 residing in Armenia or one of the partner countries listed for each specific project. Youth workers can be older. Check each open call for exact eligibility criteria.' },
           ],
         },
@@ -532,7 +532,7 @@ async function seed() {
         newsletter: {
           enabled: true,
           title: 'Stay in the loop',
-          subtitle: 'Get updates on new open calls, project news, and opportunities for young people — straight to your inbox. No spam, unsubscribe anytime.',
+          subtitle: 'Get updates on new open calls, project news, and opportunities for young people - straight to your inbox. No spam, unsubscribe anytime.',
           buttonLabel: 'Subscribe',
           showArchive: true,
         },

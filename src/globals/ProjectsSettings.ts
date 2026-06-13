@@ -3,7 +3,7 @@ import { revalidateGlobal } from '@/lib/revalidate'
 
 export const ProjectsSettings: GlobalConfig = {
   slug: 'projects-settings',
-  label: 'Projects — Map & Stats',
+  label: 'Projects - Map & Stats',
   admin: { group: 'Configuration' },
   fields: [
     {

@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
   const callTitle  = typeof openCall?.title === 'string' ? openCall.title : (openCall?.title as any)?.en ?? 'Open Call'
 
   const subject: Record<string, string> = {
-    accepted: `Congratulations — you've been accepted to ${callTitle}`,
+    accepted: `Congratulations - you've been accepted to ${callTitle}`,
     rejected: `Your application to ${callTitle}`,
   }
 
@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
       from:    FROM,
       to:      reg.email,
       cc:      ccCoordinator ? [CC_DEFAULT] : undefined,
-      subject: subject[decision] ?? `Application update — ${callTitle}`,
+      subject: subject[decision] ?? `Application update - ${callTitle}`,
       html,
     })
   } catch (err: any) {

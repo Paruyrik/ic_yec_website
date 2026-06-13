@@ -29,7 +29,7 @@ export async function PATCH(req: NextRequest) {
     try {
       await payload.update({ collection: 'registrations', id, data: { status } })
 
-      // shortlisted is internal — never send email
+      // shortlisted is internal - never send email
       if (sendEmail && status !== 'shortlisted') {
         await fetch(
           `${process.env.NEXT_PUBLIC_SERVER_URL ?? 'http://localhost:3000'}/api/send-decision-email`,

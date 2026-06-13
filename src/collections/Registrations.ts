@@ -56,14 +56,14 @@ export const Registrations: CollectionConfig = {
       type: 'text',
       admin: {
         position: 'sidebar',
-        description: 'Google Form/Doc link — included in the acceptance email',
+        description: 'Google Form/Doc link - included in the acceptance email',
         condition: (data) => data?.status === 'accepted',
       },
     },
     {
       name: 'notes',
       type: 'textarea',
-      admin: { position: 'sidebar', description: 'Internal notes — not visible to applicant' },
+      admin: { position: 'sidebar', description: 'Internal notes - not visible to applicant' },
     },
   ],
   hooks: {
@@ -90,7 +90,7 @@ export const Registrations: CollectionConfig = {
           )
 
           const subject = doc.status === 'accepted'
-            ? `Congratulations — you've been accepted to ${callTitle}`
+            ? `Congratulations - you've been accepted to ${callTitle}`
             : `Your application to ${callTitle}`
 
           await sendEmail({ from: FROM(), to: doc.email, subject, html })

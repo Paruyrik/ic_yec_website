@@ -123,7 +123,7 @@ export function ProjectsMap({ activeCountries, mapPoints, activeCountryColor = '
                 setTooltip({
                   x: e.clientX - rect.left,
                   y: e.clientY - rect.top - 10,
-                  content: `${point.city}${point.description ? ` — ${point.description}` : ''}`,
+                  content: `${point.city}${point.description ? ` - ${point.description}` : ''}`,
                 })
               }}
               onMouseLeave={() => setTooltip(null)}

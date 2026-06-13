@@ -5,7 +5,7 @@
 // 1. Add a Block definition to src/collections/OpenCalls.ts (FORM_FIELD_BLOCKS)
 // 2. Add a TypeScript type to src/components/registration/types.ts (FormFieldBlock union)
 // 3. Create a renderer in src/components/registration/renderers/YourField.tsx
-// 4. Import and register it in FIELD_RENDERERS below — that's all.
+// 4. Import and register it in FIELD_RENDERERS below - that's all.
 //
 // The RegistrationForm component never needs to change.
 

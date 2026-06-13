@@ -1,4 +1,4 @@
-// Shared locale utilities — safe to import in both Server and Client components.
+// Shared locale utilities - safe to import in both Server and Client components.
 
 export type Locale = 'en' | 'hy' | 'ru'
 

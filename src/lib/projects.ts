@@ -66,7 +66,7 @@ export function statusWhere(status: string, now: Date = new Date()): Where {
   }
 }
 
-/** Projects that are ongoing or upcoming — i.e. not yet completed. */
+/** Projects that are ongoing or upcoming - i.e. not yet completed. */
 export function notCompletedWhere(now: Date = new Date()): Where {
   const { todayStart } = dayBoundaries(now)
   return { or: [{ endDate: { greater_than_equal: todayStart } }, { endDate: { exists: false } }] }

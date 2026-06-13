@@ -1,4 +1,4 @@
-// Server-only — uses next/headers (cookies). Do NOT import from Client Components.
+// Server-only - uses next/headers (cookies). Do NOT import from Client Components.
 // For shared types/helpers, import from '@/lib/locale-shared' instead.
 
 import { cookies } from 'next/headers'

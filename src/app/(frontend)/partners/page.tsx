@@ -10,9 +10,9 @@ export const metadata = {
 
 const WHY_PARTNER = [
   { icon: '🌍', title: 'European network', desc: 'Join a growing network of youth organisations across Europe and the South Caucasus.' },
-  { icon: '💶', title: 'Co-funded projects', desc: 'Access Erasmus+ grants together — all participant costs fully covered through project funding.' },
+  { icon: '💶', title: 'Co-funded projects', desc: 'Access Erasmus+ grants together - all participant costs fully covered through project funding.' },
   { icon: '🎓', title: 'Non-formal expertise', desc: 'Benefit from IC-YEC\'s experience designing and facilitating intercultural non-formal education.' },
-  { icon: '🤝', title: 'Long-term collaboration', desc: 'We build lasting partnerships — not one-off projects, but ongoing strategic relationships.' },
+  { icon: '🤝', title: 'Long-term collaboration', desc: 'We build lasting partnerships - not one-off projects, but ongoing strategic relationships.' },
 ]
 
 export default async function PartnersPage() {

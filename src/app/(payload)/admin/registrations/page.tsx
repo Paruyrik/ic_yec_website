@@ -40,7 +40,7 @@ function openCallId(r: Registration): string {
 }
 
 function openCallTitle(r: Registration): string {
-  if (!r.openCall) return '—'
+  if (!r.openCall) return '-'
   if (typeof r.openCall === 'string') return r.openCall
   return r.openCall.title
 }
@@ -354,7 +354,7 @@ export default function RegistrationsPage() {
                         <Link href={`/admin/collections/open-calls/${callId}`} style={{ color: '#3D3785', fontWeight: 500 }} onClick={(e) => e.stopPropagation()}>
                           {openCallTitle(r)}
                         </Link>
-                      ) : '—'}
+                      ) : '-'}
                     </td>
                     <td style={{ padding: '12px 16px', color: '#6B6B8D' }}>{r.country}</td>
                     <td style={{ padding: '12px 16px' }}>

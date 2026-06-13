@@ -9,7 +9,7 @@ export default async function RegistrationDecisionPage({ params }: { params: Pro
   const payload   = await getPayload({ config: await config })
   const headersList = await getHeaders()
 
-  // Auth check — must be logged-in admin
+  // Auth check - must be logged-in admin
   const { user } = await payload.auth({ headers: headersList })
   if (!user) return notFound()
 

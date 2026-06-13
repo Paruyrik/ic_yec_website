@@ -93,7 +93,7 @@ export default async function ProjectsPage({
   const autoStats = stats.length ? stats : [
     { icon: '📋', value: String(allProjects.length),       label: 'Projects' },
     { icon: '🌍', value: String(allCountries.length),      label: 'Countries reached' },
-    { icon: '👥', value: String(allProjects.reduce((s, p: any) => s + (p.participants ?? 0), 0) || '—'), label: 'Participants' },
+    { icon: '👥', value: String(allProjects.reduce((s, p: any) => s + (p.participants ?? 0), 0) || '-'), label: 'Participants' },
   ]
 
   return (
@@ -184,7 +184,7 @@ export default async function ProjectsPage({
           <div style={{ marginBottom: 24 }}>
             <h2 style={{ fontSize: 26, marginBottom: 20 }}>All Projects</h2>
 
-            {/* Filter bar — wrapped in Suspense because it uses useSearchParams */}
+            {/* Filter bar - wrapped in Suspense because it uses useSearchParams */}
             <Suspense fallback={
               <div style={{ height: 42, background: 'rgba(255,255,255,0.5)', borderRadius: 8, animation: 'pulse 1.5s infinite' }} />
             }>

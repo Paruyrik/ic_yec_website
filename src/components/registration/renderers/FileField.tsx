@@ -14,7 +14,7 @@ export function FileField({ block, fieldName, register, errors }: FieldRendererP
       <HelpText text={b.helpText} />
       {b.accept && (
         <span style={{ fontSize: 12, color: '#888' }}>
-          Accepted formats: {b.accept} — max {b.maxSizeMB ?? 5} MB
+          Accepted formats: {b.accept} - max {b.maxSizeMB ?? 5} MB
         </span>
       )}
       <input

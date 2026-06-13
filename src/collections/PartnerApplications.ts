@@ -13,7 +13,7 @@ export const PartnerApplications: CollectionConfig = {
   },
   access: {
     read:   isAdmin,
-    create: () => true,  // public — the form submits here
+    create: () => true,  // public - the form submits here
     update: isAdmin,
     delete: isAdmin,
   },

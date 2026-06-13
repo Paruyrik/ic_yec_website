@@ -16,7 +16,7 @@ export function SelectField({ block, fieldName, register, errors }: FieldRendere
           required: b.required ? `${b.label} is required` : false,
         })}
       >
-        {!b.multiple && <option value="">— Select —</option>}
+        {!b.multiple && <option value="">- Select -</option>}
         {b.options.map((opt) => (
           <option key={opt.value} value={opt.value}>{opt.label}</option>
         ))}

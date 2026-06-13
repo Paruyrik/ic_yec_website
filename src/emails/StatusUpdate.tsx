@@ -37,7 +37,7 @@ type Props = {
 
 const CONTENT: Record<Decision, ContentEntry> = {
   accepted: {
-    subject: (title) => `Congratulations — you have been accepted to ${title}!`,
+    subject: (title) => `Congratulations - you have been accepted to ${title}!`,
     headline: '🎉 You have been accepted!',
     body: (name, title) => `Hi ${name},
 
@@ -50,7 +50,7 @@ Please sign the participation agreement using the link below to confirm your pla
     accent: '#3B6D11',
   },
   interview: {
-    subject: (title) => `Your application to ${title} — Interview invitation`,
+    subject: (title) => `Your application to ${title} - Interview invitation`,
     headline: '📅 You are invited for an interview',
     body: (name, title, opts) => `Hi ${name},
 
@@ -64,11 +64,11 @@ The interview will last approximately 30 minutes. If you are unable to attend at
     accent: '#633806',
   },
   rejected: {
-    subject: (title) => `Your application to ${title} — IC-YEC`,
+    subject: (title) => `Your application to ${title} - IC-YEC`,
     headline: 'Thank you for applying',
     body: (name, title, opts) => `Hi ${name},
 
-Thank you for applying to ${title}. We had many applicants for only ${opts?.spots ?? 'a limited number of'} place${opts?.spots === 1 ? '' : 's'} — this was a genuinely difficult decision and not a reflection of the quality of your application.
+Thank you for applying to ${title}. We had many applicants for only ${opts?.spots ?? 'a limited number of'} place${opts?.spots === 1 ? '' : 's'} - this was a genuinely difficult decision and not a reflection of the quality of your application.
 
 We would love to see you apply to our upcoming activities. Your profile is exactly the kind we look for, and we hope to work with you soon.`,
     cta: () => {

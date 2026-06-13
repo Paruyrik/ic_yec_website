@@ -152,7 +152,7 @@ export type DividerFieldBlock = {
   id?: string
 }
 
-// Union of all block types — extend this when adding new field types
+// Union of all block types - extend this when adding new field types
 export type FormFieldBlock =
   | TextFieldBlock
   | TextareaFieldBlock

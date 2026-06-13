@@ -31,13 +31,13 @@ const DEFAULT_PAGE_STATS = [
 const DEFAULT_HOW_WE_WORK = [
   { step: '01', title: 'Identify needs',      desc: 'We listen to youth workers, community leaders, and young people to find where non-formal education can have the most impact.' },
   { step: '02', title: 'Build partnerships',  desc: 'Every project connects organisations from multiple countries. We curate partnerships where each side brings unique expertise and perspective.' },
-  { step: '03', title: 'Design for learning', desc: 'Our activities are grounded in non-formal education methodology — experiential, participatory, and focused on transferable competences.' },
+  { step: '03', title: 'Design for learning', desc: 'Our activities are grounded in non-formal education methodology - experiential, participatory, and focused on transferable competences.' },
   { step: '04', title: 'Deliver & document',  desc: 'We run intensive residential programmes and follow up with tools that participants can take home and apply in their own communities.' },
 ]
 
 const DEFAULT_FOCUS_AREAS = [
   { icon: '🎨', label: 'Art & Culture',          desc: 'Visual art, street art, theatre, and creative storytelling as vehicles for self-expression and intercultural dialogue.' },
-  { icon: '⚽', label: 'Sport & Inclusion',       desc: 'Sport as a universal language — building teamwork, respect, and resilience while breaking down social barriers.' },
+  { icon: '⚽', label: 'Sport & Inclusion',       desc: 'Sport as a universal language - building teamwork, respect, and resilience while breaking down social barriers.' },
   { icon: '🧠', label: 'Emotional Intelligence',  desc: 'Workshops on empathy, self-awareness, conflict resolution, and mental health literacy for young people and youth workers.' },
   { icon: '💻', label: 'Digital Skills',          desc: 'Digital literacy, online safety, creative media, and tools that empower youth in a fast-changing world.' },
   { icon: '🌿', label: 'Environment',             desc: 'Eco-activism, climate education, and sustainable living as part of responsible European citizenship.' },
@@ -74,15 +74,15 @@ export default async function AboutPage() {
   const heroTitle      = ap.heroTitle    || 'International Center for Youth Empowerment Cooperation'
   const heroSubtitle   = ap.heroSubtitle || 'We are an Armenian youth NGO dedicated to creating spaces where young people from different countries meet, learn from each other, and return home with the skills and motivation to drive change in their own communities.'
   const storyHeading   = ap.storyHeading   || 'From a small team in Yerevan to a European network'
-  const storyP1        = ap.storyParagraph1 || 'IC-YEC was founded in 2018 by a group of young Armenians who had participated in Erasmus+ exchanges and came back with a conviction: that non-formal learning across borders is one of the most powerful tools for personal growth that exists. They wanted to make that experience available to more young people in Armenia — and to put Armenian youth on the European map.'
+  const storyP1        = ap.storyParagraph1 || 'IC-YEC was founded in 2018 by a group of young Armenians who had participated in Erasmus+ exchanges and came back with a conviction: that non-formal learning across borders is one of the most powerful tools for personal growth that exists. They wanted to make that experience available to more young people in Armenia - and to put Armenian youth on the European map.'
   const storyP2        = ap.storyParagraph2 || 'Over the following years we built a network of partner organisations across Europe and the South Caucasus, obtained Erasmus+ accreditation, and ran projects on themes ranging from street art and graphic facilitation to sport inclusion and digital literacy. Each project brought together young people who would never otherwise have met, and sent them home with new friends, new skills, and a wider sense of what is possible.'
   const missionBody    = ap.missionBody  || 'To support the personal development of young people through high-quality non-formal education programmes that transcend borders and build European citizenship.'
   const visionBody     = ap.visionBody   || 'A Europe where every young person has access to transformative learning experiences regardless of their background, geography, or financial situation.'
   const valuesBody     = ap.valuesBody   || 'Inclusivity · Empathy · Collaboration · Curiosity · Respect for diversity and the environment.'
-  const erasmusTitle   = ap.erasmusTitle || 'Erasmus+ — what it means for participants'
-  const erasmusBody    = ap.erasmusBody  || 'IC-YEC is an active Erasmus+ partner organisation. All of our youth exchanges and training courses are co-funded through Erasmus+ project grants, which means participation costs are fully covered for selected participants — travel, accommodation, meals, and programme activities. No financial barrier should stand between a young person and a life-changing experience.'
+  const erasmusTitle   = ap.erasmusTitle || 'Erasmus+ - what it means for participants'
+  const erasmusBody    = ap.erasmusBody  || 'IC-YEC is an active Erasmus+ partner organisation. All of our youth exchanges and training courses are co-funded through Erasmus+ project grants, which means participation costs are fully covered for selected participants - travel, accommodation, meals, and programme activities. No financial barrier should stand between a young person and a life-changing experience.'
   const ctaHeading     = ap.ctaHeading   || 'Get involved with IC-YEC'
-  const ctaBody        = ap.ctaBody      || 'Whether you\'re a young person looking to join a project, an organisation wanting to partner with us, or someone who believes in our work — there\'s a place for you here.'
+  const ctaBody        = ap.ctaBody      || 'Whether you\'re a young person looking to join a project, an organisation wanting to partner with us, or someone who believes in our work - there\'s a place for you here.'
   const timeline       = ap.timeline?.length       ? ap.timeline       : DEFAULT_TIMELINE
   const pageStats      = ap.pageStats?.length      ? ap.pageStats      : DEFAULT_PAGE_STATS
   const howWeWork      = ap.howWeWork?.length      ? ap.howWeWork      : DEFAULT_HOW_WE_WORK
@@ -162,7 +162,7 @@ export default async function AboutPage() {
                    style={{ color: 'var(--color-primary)', fontWeight: 500, textDecoration: 'none' }}>
                   Masterpeace
                 </a>{' '}
-                in Armenia — a global NGO using art and sport to build a culture of peace.
+                in Armenia - a global NGO using art and sport to build a culture of peace.
                 It is a partnership that reflects everything we believe in.
               </p>
             </div>
@@ -186,7 +186,7 @@ export default async function AboutPage() {
                   <div style={{ paddingBottom: i < timeline.length - 1 ? 24 : 0, paddingTop: 4 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
                       <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--color-primary)' }}>{item.year}</span>
-                      <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--color-text)' }}>— {item.label}</span>
+                      <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--color-text)' }}>- {item.label}</span>
                     </div>
                     <p style={{ fontSize: 13, color: 'var(--color-text-muted)', lineHeight: 1.6, margin: 0 }}>{item.desc}</p>
                   </div>

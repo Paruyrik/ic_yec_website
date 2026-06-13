@@ -59,7 +59,7 @@ export function SlugField({ path }: { path: string }) {
 
         <button
           type="button"
-          title={locked ? 'Unlock to edit manually' : 'Lock — auto-sync with title'}
+          title={locked ? 'Unlock to edit manually' : 'Lock - auto-sync with title'}
           onClick={() => setLocked((v) => !v)}
           style={{
             padding: '8px 12px',
@@ -97,7 +97,7 @@ export function SlugField({ path }: { path: string }) {
 
       {!locked && (
         <p style={{ fontSize: 11, color: '#856404', margin: '5px 0 0' }}>
-          Manual mode — click 🔒 to re-lock and auto-sync with title
+          Manual mode - click 🔒 to re-lock and auto-sync with title
         </p>
       )}
     </div>

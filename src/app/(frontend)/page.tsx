@@ -104,7 +104,7 @@ function Hero({ projectCount, featuredCalls }: { projectCount: number; featuredC
                 marginBottom: 36,
                 maxWidth: 460,
               }}>
-                Art, sport, digital skills, intercultural dialogue —
+                Art, sport, digital skills, intercultural dialogue -
                 we design and run projects that create real change
                 for young people in Armenia and across Europe.
               </p>
@@ -141,7 +141,7 @@ function Hero({ projectCount, featuredCalls }: { projectCount: number; featuredC
                 </Link>
               </div>
 
-              {/* Pill stats — below buttons */}
+              {/* Pill stats - below buttons */}
               <div style={{ marginTop: 40, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
                 {[
                   { n: projectCount, label: 'Projects' },
@@ -208,7 +208,7 @@ function Hero({ projectCount, featuredCalls }: { projectCount: number; featuredC
               borders
             </h1>
             <p style={{ fontSize: 18, color: 'rgba(255,255,255,0.72)', maxWidth: 540, margin: '0 auto 40px', lineHeight: 1.6 }}>
-              Art, sport, digital skills, intercultural dialogue — we design and run
+              Art, sport, digital skills, intercultural dialogue - we design and run
               projects that create real change for young people in Armenia and across Europe.
             </p>
             <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -416,7 +416,7 @@ export default async function HomePage() {
 
   const aboutCfg = s?.aboutSection ?? {}
   const aboutLabel   = aboutCfg.label   || 'Who we are'
-  const aboutHeading = aboutCfg.heading || 'More than an NGO — a community of doers'
+  const aboutHeading = aboutCfg.heading || 'More than an NGO - a community of doers'
   const aboutIntro   = aboutCfg.intro   || 'Founded in 2018 in Yerevan, IC-YEC brings together young people, educators, and organisations around a shared belief: that hands-on, intercultural learning changes lives. From street-art workshops in Armenia to sport-based inclusion projects in Portugal, every initiative we run is designed to leave a lasting impact.'
   const aboutBody    = aboutCfg.body    ?? null
   const aboutCtaLabel = aboutCfg.ctaLabel || 'Learn more about us →'
@@ -517,7 +517,7 @@ export default async function HomePage() {
                 </div>
               ) : (
                 <p style={{ fontSize: 16, lineHeight: 1.75, color: 'var(--color-text-muted)', marginBottom: 36 }}>
-                  We are accredited by the Erasmus+ programme, but our work goes far beyond it —
+                  We are accredited by the Erasmus+ programme, but our work goes far beyond it -
                   we run local community projects, national youth initiatives, and long-term
                   strategic partnerships with organisations across Europe and the South Caucasus.
                 </p>

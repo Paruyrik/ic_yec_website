@@ -42,7 +42,7 @@ export function CountryField({ block, fieldName, register, errors }: FieldRender
           required: b.required ? `${b.label} is required` : false,
         })}
       >
-        {!b.multiple && <option value="">— Select country —</option>}
+        {!b.multiple && <option value="">- Select country -</option>}
         {COUNTRIES.map((c) => (
           <option key={c} value={c}>{c}</option>
         ))}

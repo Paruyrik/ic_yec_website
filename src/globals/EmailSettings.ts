@@ -16,7 +16,7 @@ export const EmailSettings: GlobalConfig = {
       type: 'checkbox',
       label: 'Send email to applicant on rejection',
       defaultValue: false,
-      admin: { description: 'Off by default — staff choose manually per decision' },
+      admin: { description: 'Off by default - staff choose manually per decision' },
     },
     {
       name: 'emailOnWaitlist',

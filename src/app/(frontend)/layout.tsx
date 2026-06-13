@@ -5,7 +5,7 @@ import { CookieBanner } from '@/components/ui/CookieBanner'
 import './styles.css'
 
 export const metadata = {
-  title: 'IC-YEC — International Center for Youth Empowerment Cooperation',
+  title: 'IC-YEC - International Center for Youth Empowerment Cooperation',
   description:
     'Erasmus+ accredited NGO supporting non-formal education, youth mobility, and European cooperation.',
   icons: {

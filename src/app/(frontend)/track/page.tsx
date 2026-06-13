@@ -199,7 +199,7 @@ export default function TrackPage() {
               <ul style={{ paddingLeft: 18, display: 'flex', flexDirection: 'column', gap: 4 }}>
                 <li>Enter the email you used when submitting your application.</li>
                 <li>All your applications across different open calls will be shown.</li>
-                <li>Status updates are sent by email as well — check your inbox and spam folder.</li>
+                <li>Status updates are sent by email as well - check your inbox and spam folder.</li>
                 <li>For questions, <Link href="/contact" style={{ color: 'var(--color-primary)' }}>contact us</Link>.</li>
               </ul>
             </div>

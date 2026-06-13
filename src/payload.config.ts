@@ -55,15 +55,15 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URI || process.env.DATABASE_URL || '',
     },
-    push: false, // never auto-push schema in dev — always use migrations
+    push: false, // never auto-push schema in dev - always use migrations
   }),
   sharp,
   plugins: [
     uploadthingStorage({
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       collections: {
-        media:     true,   // public images — project photos, team photos, logos
-        documents: true,   // private documents — applicant CVs
+        media:     true,   // public images - project photos, team photos, logos
+        documents: true,   // private documents - applicant CVs
       } as any,
       options: {
         token: process.env.UPLOADTHING_TOKEN ?? '',
