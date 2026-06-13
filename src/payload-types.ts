@@ -224,10 +224,13 @@ export interface Project {
   id: number;
   title: string;
   slug: string;
-  status: 'ongoing' | 'completed' | 'upcoming';
+  /**
+   * Set automatically from the start and end dates.
+   */
+  status?: ('ongoing' | 'completed' | 'upcoming') | null;
   fundingSource?: ('erasmus-plus' | 'other-eu' | 'national' | 'private') | null;
   /**
-   * IC-YEC's role — leave blank if not applicable.
+   * IC-YEC's role - leave blank if not applicable.
    */
   projectRole?: ('coordinator' | 'partner') | null;
   theme?: ('art' | 'sport' | 'emotional-intelligence' | 'training' | 'inclusion' | 'digital' | 'environment')[] | null;
@@ -320,7 +323,7 @@ export interface Project {
     [k: string]: unknown;
   } | null;
   /**
-   * Display order — set 1 to show first, 2 for second, etc. Leave blank to sort by date.
+   * Display order - set 1 to show first, 2 for second, etc. Leave blank to sort by date.
    */
   order?: number | null;
   partners?: (number | Partner)[] | null;
@@ -338,7 +341,7 @@ export interface Partner {
   website?: string | null;
   logo?: (number | null) | Media;
   /**
-   * e.g. "Official Armenian Representative" — shown as a badge on the About page.
+   * e.g. "Official Armenian Representative" - shown as a badge on the About page.
    */
   representativeRole?: string | null;
   /**
@@ -829,11 +832,11 @@ export interface Registration {
     | null;
   status?: ('pending' | 'reviewing' | 'shortlisted' | 'interview' | 'accepted' | 'rejected') | null;
   /**
-   * Google Form/Doc link — included in the acceptance email
+   * Google Form/Doc link - included in the acceptance email
    */
   agreementUrl?: string | null;
   /**
-   * Internal notes — not visible to applicant
+   * Internal notes - not visible to applicant
    */
   notes?: string | null;
   updatedAt: string;
@@ -1833,7 +1836,7 @@ export interface EmailSetting {
   id: number;
   emailOnAccept?: boolean | null;
   /**
-   * Off by default — staff choose manually per decision
+   * Off by default - staff choose manually per decision
    */
   emailOnReject?: boolean | null;
   emailOnWaitlist?: boolean | null;
@@ -1894,6 +1897,80 @@ export interface ProjectsSetting {
  */
 export interface SiteSetting {
   id: number;
+  /**
+   * Contact details and social links shown in the footer and on the Contact page.
+   */
+  contact?: {
+    /**
+     * Main contact email (shown on the Contact page and in the footer).
+     */
+    email?: string | null;
+    /**
+     * Phone number, e.g. +374 00 000 000.
+     */
+    phone?: string | null;
+    /**
+     * Postal address shown on the Contact page.
+     */
+    address?: string | null;
+    /**
+     * Paste the full profile URL. Leave a field blank to hide that link.
+     */
+    social?: {
+      /**
+       * e.g. https://instagram.com/ic.yec
+       */
+      instagram?: string | null;
+      /**
+       * Full profile URL.
+       */
+      facebook?: string | null;
+      /**
+       * Full profile URL.
+       */
+      linkedin?: string | null;
+      /**
+       * Full channel URL.
+       */
+      youtube?: string | null;
+      /**
+       * Full profile URL.
+       */
+      tiktok?: string | null;
+    };
+  };
+  /**
+   * Footer tagline and navigation columns.
+   */
+  footer?: {
+    /**
+     * Short paragraph under the logo. Leave blank to use the default.
+     */
+    tagline?: string | null;
+    /**
+     * Footer navigation columns. Leave empty to use the built-in defaults.
+     */
+    columns?:
+      | {
+          heading: string;
+          links?:
+            | {
+                label: string;
+                /**
+                 * Internal path (e.g. /about) or full URL.
+                 */
+                url: string;
+                /**
+                 * Open in a new tab.
+                 */
+                external?: boolean | null;
+                id?: string | null;
+              }[]
+            | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
   timeline?: {
     enabled?: boolean | null;
     title?: string | null;
@@ -2235,6 +2312,41 @@ export interface ProjectsSettingsSelect<T extends boolean = true> {
  * via the `definition` "site-settings_select".
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
+  contact?:
+    | T
+    | {
+        email?: T;
+        phone?: T;
+        address?: T;
+        social?:
+          | T
+          | {
+              instagram?: T;
+              facebook?: T;
+              linkedin?: T;
+              youtube?: T;
+              tiktok?: T;
+            };
+      };
+  footer?:
+    | T
+    | {
+        tagline?: T;
+        columns?:
+          | T
+          | {
+              heading?: T;
+              links?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                    external?: T;
+                    id?: T;
+                  };
+              id?: T;
+            };
+      };
   timeline?:
     | T
     | {

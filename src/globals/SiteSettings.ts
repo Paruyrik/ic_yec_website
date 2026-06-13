@@ -7,6 +7,66 @@ export const SiteSettings: GlobalConfig = {
   admin: { group: 'Configuration' },
   fields: [
 
+    // ── Contact & social ─────────────────────────────────────────────────────
+    {
+      name: 'contact',
+      type: 'group',
+      label: 'Contact & Social',
+      admin: { description: 'Contact details and social links shown in the footer and on the Contact page.' },
+      fields: [
+        { name: 'email',   type: 'email', admin: { description: 'Main contact email (shown on the Contact page and in the footer).' } },
+        { name: 'phone',   type: 'text',  admin: { description: 'Phone number, e.g. +374 00 000 000.' } },
+        { name: 'address', type: 'textarea', localized: true, admin: { description: 'Postal address shown on the Contact page.' } },
+        {
+          name: 'social',
+          type: 'group',
+          label: 'Social links',
+          admin: { description: 'Paste the full profile URL. Leave a field blank to hide that link.' },
+          fields: [
+            { name: 'instagram', type: 'text', admin: { description: 'e.g. https://instagram.com/ic.yec' } },
+            { name: 'facebook',  type: 'text', admin: { description: 'Full profile URL.' } },
+            { name: 'linkedin',  type: 'text', admin: { description: 'Full profile URL.' } },
+            { name: 'youtube',   type: 'text', admin: { description: 'Full channel URL.' } },
+            { name: 'tiktok',    type: 'text', admin: { description: 'Full profile URL.' } },
+          ],
+        },
+      ],
+    },
+
+    // ── Footer ───────────────────────────────────────────────────────────────
+    {
+      name: 'footer',
+      type: 'group',
+      label: 'Footer',
+      admin: { description: 'Footer tagline and navigation columns.' },
+      fields: [
+        {
+          name: 'tagline',
+          type: 'textarea',
+          localized: true,
+          admin: { description: 'Short paragraph under the logo. Leave blank to use the default.' },
+        },
+        {
+          name: 'columns',
+          type: 'array',
+          label: 'Link columns',
+          admin: { description: 'Footer navigation columns. Leave empty to use the built-in defaults.' },
+          fields: [
+            { name: 'heading', type: 'text', required: true, localized: true },
+            {
+              name: 'links',
+              type: 'array',
+              fields: [
+                { name: 'label',    type: 'text', required: true, localized: true },
+                { name: 'url',      type: 'text', required: true, admin: { description: 'Internal path (e.g. /about) or full URL.' } },
+                { name: 'external', type: 'checkbox', defaultValue: false, admin: { description: 'Open in a new tab.' } },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+
     // ── Application timeline ─────────────────────────────────────────────────
     {
       name: 'timeline',
@@ -160,7 +220,7 @@ export const SiteSettings: GlobalConfig = {
         { name: 'heroSubtitle', type: 'textarea', defaultValue: 'We are an Armenian youth NGO dedicated to creating spaces where young people from different countries meet, learn from each other, and return home with the skills and motivation to drive change in their own communities.' },
         // Our Story
         { name: 'storyHeading',    type: 'text', defaultValue: 'From a small team in Yerevan to a European network' },
-        { name: 'storyParagraph1', type: 'textarea', defaultValue: 'IC-YEC was founded in 2018 by a group of young Armenians who had participated in Erasmus+ exchanges and came back with a conviction: that non-formal learning across borders is one of the most powerful tools for personal growth that exists. They wanted to make that experience available to more young people in Armenia — and to put Armenian youth on the European map.' },
+        { name: 'storyParagraph1', type: 'textarea', defaultValue: 'IC-YEC was founded in 2018 by a group of young Armenians who had participated in Erasmus+ exchanges and came back with a conviction: that non-formal learning across borders is one of the most powerful tools for personal growth that exists. They wanted to make that experience available to more young people in Armenia - and to put Armenian youth on the European map.' },
         { name: 'storyParagraph2', type: 'textarea', defaultValue: 'Over the following years we built a network of partner organisations across Europe and the South Caucasus, obtained Erasmus+ accreditation, and ran projects on themes ranging from street art and graphic facilitation to sport inclusion and digital literacy. Each project brought together young people who would never otherwise have met, and sent them home with new friends, new skills, and a wider sense of what is possible.' },
         {
           name: 'timeline',
@@ -212,13 +272,13 @@ export const SiteSettings: GlobalConfig = {
           ],
         },
         // Erasmus+ callout
-        { name: 'erasmusTitle', type: 'text',     defaultValue: 'Erasmus+ accreditation — what it means for you' },
-        { name: 'erasmusBody',  type: 'textarea', defaultValue: 'IC-YEC holds a multi-annual Erasmus+ accreditation. This means every exchange and training course we run meets the European Union\'s quality standards for non-formal education — and that participation is always fully funded: travel, accommodation, meals, and activities are covered for participants. No financial barrier should stand between a young person and a life-changing experience.' },
+        { name: 'erasmusTitle', type: 'text',     defaultValue: 'Erasmus+ accreditation - what it means for you' },
+        { name: 'erasmusBody',  type: 'textarea', defaultValue: 'IC-YEC holds a multi-annual Erasmus+ accreditation. This means every exchange and training course we run meets the European Union\'s quality standards for non-formal education - and that participation is always fully funded: travel, accommodation, meals, and activities are covered for participants. No financial barrier should stand between a young person and a life-changing experience.' },
         // Partners section visibility
         { name: 'showPartnersSection', type: 'checkbox', defaultValue: false, admin: { description: 'Show the "Our partners" section on the About page.' } },
         // CTA
         { name: 'ctaHeading', type: 'text',     defaultValue: 'Get involved with IC-YEC' },
-        { name: 'ctaBody',    type: 'textarea', defaultValue: 'Whether you\'re a young person looking to join a project, an organisation wanting to partner with us, or someone who believes in our work — there\'s a place for you here.' },
+        { name: 'ctaBody',    type: 'textarea', defaultValue: 'Whether you\'re a young person looking to join a project, an organisation wanting to partner with us, or someone who believes in our work - there\'s a place for you here.' },
       ],
     },
 
@@ -230,7 +290,7 @@ export const SiteSettings: GlobalConfig = {
       admin: { description: 'The "Who We Are" block shown on the homepage.' },
       fields: [
         { name: 'label',   type: 'text', defaultValue: 'Who we are', admin: { description: 'Small label above the heading (e.g. "WHO WE ARE")' } },
-        { name: 'heading', type: 'text', defaultValue: 'More than an NGO — a community of doers' },
+        { name: 'heading', type: 'text', defaultValue: 'More than an NGO - a community of doers' },
         { name: 'intro',   type: 'textarea', defaultValue: 'Founded in 2018 in Yerevan, IC-YEC brings together young people, educators, and organisations around a shared belief: that hands-on, intercultural learning changes lives. From street-art workshops in Armenia to sport-based inclusion projects in Portugal, every initiative we run is designed to leave a lasting impact.' },
         { name: 'body',    type: 'richText' },
         { name: 'ctaLabel', type: 'text', defaultValue: 'Learn more about us →' },

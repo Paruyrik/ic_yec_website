@@ -12,6 +12,7 @@ import * as migration_20260521_120000 from './20260521_120000';
 import * as migration_20260521_130000 from './20260521_130000';
 import * as migration_20260521_140000 from './20260521_140000';
 import * as migration_20260609_000000 from './20260609_000000';
+import * as migration_20260613_053207_contact_and_footer_settings from './20260613_053207_contact_and_footer_settings';
 
 export const migrations = [
   {
@@ -83,5 +84,10 @@ export const migrations = [
     up: migration_20260609_000000.up,
     down: migration_20260609_000000.down,
     name: '20260609_000000',
+  },
+  {
+    up: migration_20260613_053207_contact_and_footer_settings.up,
+    down: migration_20260613_053207_contact_and_footer_settings.down,
+    name: '20260613_053207_contact_and_footer_settings'
   },
 ];

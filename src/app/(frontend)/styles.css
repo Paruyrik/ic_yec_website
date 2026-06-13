@@ -218,6 +218,9 @@ p { margin: 0; }
 @media (max-width: 768px) { .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; } }
 @media (max-width: 480px) { .footer-grid { grid-template-columns: 1fr; } }
 
+.contact-grid { display: grid; grid-template-columns: 280px 1fr; gap: 48px; align-items: start; }
+@media (max-width: 768px) { .contact-grid { grid-template-columns: 1fr; gap: 32px; } }
+
 /* Mobile nav */
 .nav-desktop { display: flex; align-items: center; gap: 4px; }
 .nav-hamburger { display: none; background: none; border: none; cursor: pointer; padding: 8px; }
