@@ -279,6 +279,75 @@ export const SiteSettings: GlobalConfig = {
         // CTA
         { name: 'ctaHeading', type: 'text',     defaultValue: 'Get involved with IC-YEC' },
         { name: 'ctaBody',    type: 'textarea', defaultValue: 'Whether you\'re a young person looking to join a project, an organisation wanting to partner with us, or someone who believes in our work - there\'s a place for you here.' },
+
+        // ── Section eyebrow labels & titles ─────────────────────────────────
+        { name: 'heroBadge',   type: 'text', defaultValue: 'Youth NGO · Yerevan, Armenia · Est. 2018', admin: { description: 'Small pill above the hero heading.' } },
+        { name: 'storyLabel',  type: 'text', defaultValue: 'Our story' },
+        { name: 'storyExtra',  type: 'textarea', defaultValue: 'Today IC-YEC is also the official representative of Masterpeace in Armenia - a global NGO using art and sport to build a culture of peace. It is a partnership that reflects everything we believe in.', admin: { description: 'Third "Our story" paragraph. Leave blank to hide.' } },
+
+        { name: 'missionVisionLabel', type: 'text', defaultValue: 'What drives us' },
+        { name: 'missionVisionTitle', type: 'text', defaultValue: 'Mission, Vision & Values' },
+        { name: 'missionHeading', type: 'text', defaultValue: 'Mission' },
+        { name: 'missionIcon',    type: 'text', defaultValue: '🎯' },
+        { name: 'visionHeading',  type: 'text', defaultValue: 'Vision' },
+        { name: 'visionIcon',     type: 'text', defaultValue: '👁️' },
+        { name: 'valuesHeading',  type: 'text', defaultValue: 'Values' },
+        { name: 'valuesIcon',     type: 'text', defaultValue: '💛' },
+
+        { name: 'impactLabel', type: 'text', defaultValue: 'By the numbers' },
+        { name: 'impactTitle', type: 'text', defaultValue: 'Our impact since 2018' },
+
+        { name: 'howWeWorkLabel', type: 'text', defaultValue: 'Our approach' },
+        { name: 'howWeWorkTitle', type: 'text', defaultValue: 'How we work' },
+
+        { name: 'focusAreasLabel', type: 'text', defaultValue: 'Our programmes' },
+        { name: 'focusAreasTitle', type: 'text', defaultValue: 'What we work on' },
+
+        { name: 'erasmusBadge', type: 'text', defaultValue: '🇪🇺 Erasmus+ Partner Organisation' },
+
+        { name: 'affiliationsLabel', type: 'text', defaultValue: 'Affiliations' },
+        { name: 'affiliationsTitle', type: 'text', defaultValue: 'Official representation' },
+
+        { name: 'partnersLabel', type: 'text', defaultValue: 'Network' },
+        { name: 'partnersTitle', type: 'text', defaultValue: 'Our partners' },
+
+        { name: 'teamLabel',     type: 'text', defaultValue: 'The people' },
+        { name: 'teamTitle',     type: 'text', defaultValue: 'Meet our team' },
+        { name: 'teamEmptyText', type: 'text', defaultValue: 'Team profiles coming soon.', admin: { description: 'Shown when no team members are published.' } },
+
+        { name: 'ctaLabel', type: 'text', defaultValue: 'Join us' },
+
+        // ── Repeatable content ──────────────────────────────────────────────
+        {
+          name: 'heroStats',
+          type: 'array',
+          admin: { description: 'Pills shown in the hero. Leave empty for the built-in defaults.' },
+          fields: [
+            { name: 'value', type: 'text', required: true },
+            { name: 'label', type: 'text', required: true },
+          ],
+        },
+        {
+          name: 'erasmusBenefits',
+          type: 'array',
+          admin: { description: 'Benefit chips beside the Erasmus+ text. Leave empty for the built-in defaults.' },
+          fields: [
+            { name: 'icon',  type: 'text' },
+            { name: 'label', type: 'text', required: true },
+          ],
+        },
+        {
+          name: 'ctaCards',
+          type: 'array',
+          admin: { description: 'Action cards in the final CTA section. Leave empty for the built-in defaults.' },
+          fields: [
+            { name: 'icon',      type: 'text' },
+            { name: 'title',     type: 'text', required: true },
+            { name: 'desc',      type: 'textarea' },
+            { name: 'href',      type: 'text', required: true, admin: { description: 'Internal path (e.g. /open-calls) or full URL.' } },
+            { name: 'linkLabel', type: 'text', required: true },
+          ],
+        },
       ],
     },
 

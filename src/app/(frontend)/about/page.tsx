@@ -44,13 +44,28 @@ const DEFAULT_FOCUS_AREAS = [
   { icon: '🤝', label: 'Social Inclusion',        desc: 'Projects that amplify marginalised voices and build bridges between communities with different backgrounds.' },
 ]
 
-const HERO_STATS = [
+const DEFAULT_HERO_STATS = [
   { value: '2018', label: 'Est.' },
   { value: '20+',  label: 'Countries' },
   { value: '500+', label: 'Participants' },
   { value: '15+',  label: 'Projects' },
   { value: '100%', label: 'Free' },
 ]
+
+const DEFAULT_ERASMUS_BENEFITS = [
+  { icon: '✈️', label: 'Travel covered' },
+  { icon: '🏠', label: 'Accommodation included' },
+  { icon: '🍽️', label: 'Meals provided' },
+  { icon: '📜', label: 'Youthpass certificate' },
+]
+
+const DEFAULT_CTA_CARDS = [
+  { icon: '🚀', title: 'Apply for a project', desc: 'Check our open calls and apply for a youth exchange, training course, or volunteering opportunity.', href: '/open-calls', linkLabel: 'View open calls →' },
+  { icon: '🤝', title: 'Partner with us',     desc: 'We are always looking for organisations in Europe and beyond who share our values and want to co-create projects.', href: '/partners', linkLabel: 'Become a partner →' },
+]
+
+// Background colours cycled across the CTA cards (design, not content).
+const CTA_CARD_BG = ['var(--color-primary)', '#3B6D11']
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 
@@ -89,10 +104,37 @@ export default async function AboutPage() {
   const focusAreas          = ap.focusAreas?.length ? ap.focusAreas : DEFAULT_FOCUS_AREAS
   const showPartnersSection = ap.showPartnersSection === true
 
+  // Section eyebrow labels & titles
+  const heroBadge          = ap.heroBadge          || 'Youth NGO · Yerevan, Armenia · Est. 2018'
+  const storyLabel         = ap.storyLabel         || 'Our story'
+  const storyExtra         = ap.storyExtra ?? ''
+  const missionVisionLabel = ap.missionVisionLabel || 'What drives us'
+  const missionVisionTitle = ap.missionVisionTitle || 'Mission, Vision & Values'
+  const impactLabel        = ap.impactLabel        || 'By the numbers'
+  const impactTitle        = ap.impactTitle        || 'Our impact since 2018'
+  const howWeWorkLabel     = ap.howWeWorkLabel     || 'Our approach'
+  const howWeWorkTitle     = ap.howWeWorkTitle     || 'How we work'
+  const focusAreasLabel    = ap.focusAreasLabel    || 'Our programmes'
+  const focusAreasTitle    = ap.focusAreasTitle    || 'What we work on'
+  const erasmusBadge       = ap.erasmusBadge       || '🇪🇺 Erasmus+ Partner Organisation'
+  const affiliationsLabel  = ap.affiliationsLabel  || 'Affiliations'
+  const affiliationsTitle  = ap.affiliationsTitle  || 'Official representation'
+  const partnersLabel      = ap.partnersLabel      || 'Network'
+  const partnersTitle      = ap.partnersTitle      || 'Our partners'
+  const teamLabel          = ap.teamLabel          || 'The people'
+  const teamTitle          = ap.teamTitle          || 'Meet our team'
+  const teamEmptyText      = ap.teamEmptyText      || 'Team profiles coming soon.'
+  const ctaLabel           = ap.ctaLabel           || 'Join us'
+
+  // Repeatable content
+  const heroStats       = ap.heroStats?.length       ? ap.heroStats       : DEFAULT_HERO_STATS
+  const erasmusBenefits = ap.erasmusBenefits?.length ? ap.erasmusBenefits : DEFAULT_ERASMUS_BENEFITS
+  const ctaCards        = ap.ctaCards?.length        ? ap.ctaCards        : DEFAULT_CTA_CARDS
+
   const missionCards = [
-    { icon: '🎯', heading: 'Mission', body: missionBody, bg: 'var(--color-tint)', accent: 'var(--color-primary)' },
-    { icon: '👁️', heading: 'Vision',  body: visionBody,  bg: '#EAF3DE', accent: '#3B6D11' },
-    { icon: '💛', heading: 'Values',  body: valuesBody,  bg: '#FEF3C7', accent: '#92400E' },
+    { icon: ap.missionIcon || '🎯', heading: ap.missionHeading || 'Mission', body: missionBody, bg: 'var(--color-tint)', accent: 'var(--color-primary)' },
+    { icon: ap.visionIcon  || '👁️', heading: ap.visionHeading  || 'Vision',  body: visionBody,  bg: '#EAF3DE', accent: '#3B6D11' },
+    { icon: ap.valuesIcon  || '💛', heading: ap.valuesHeading  || 'Values',  body: valuesBody,  bg: '#FEF3C7', accent: '#92400E' },
   ]
 
   return (
@@ -120,7 +162,7 @@ export default async function AboutPage() {
               marginBottom: 20,
             }}>
               <span style={{ width: 5, height: 5, borderRadius: '50%', background: 'var(--color-accent)', display: 'inline-block' }} />
-              Youth NGO · Yerevan, Armenia · Est. 2018
+              {heroBadge}
             </span>
             <h1 style={{ color: 'white', fontSize: 'clamp(26px, 3.5vw, 44px)', fontWeight: 700, lineHeight: 1.15, marginBottom: 18 }}>
               {heroTitle}
@@ -129,7 +171,7 @@ export default async function AboutPage() {
               {heroSubtitle}
             </p>
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-              {HERO_STATS.map(({ value, label }) => (
+              {heroStats.map(({ value, label }: any) => (
                 <div key={label} style={{
                   padding: '8px 16px',
                   background: 'rgba(255,255,255,0.1)',
@@ -150,21 +192,15 @@ export default async function AboutPage() {
         <div className="container">
           <div className="col-2-start">
             <div>
-              <div className="section-header__label" style={{ marginBottom: 12 }}>Our story</div>
+              <div className="section-header__label" style={{ marginBottom: 12 }}>{storyLabel}</div>
               <h2 style={{ fontSize: 28, fontWeight: 600, lineHeight: 1.25, marginBottom: 24, color: 'var(--color-text)' }}>
                 {storyHeading}
               </h2>
               <p style={{ fontSize: 16, lineHeight: 1.8, color: 'var(--color-text-muted)', marginBottom: 18 }}>{storyP1}</p>
-              <p style={{ fontSize: 16, lineHeight: 1.8, color: 'var(--color-text-muted)', marginBottom: 18 }}>{storyP2}</p>
-              <p style={{ fontSize: 16, lineHeight: 1.8, color: 'var(--color-text-muted)' }}>
-                Today IC-YEC is also the official representative of{' '}
-                <a href="https://masterpeace.org" target="_blank" rel="noopener noreferrer"
-                   style={{ color: 'var(--color-primary)', fontWeight: 500, textDecoration: 'none' }}>
-                  Masterpeace
-                </a>{' '}
-                in Armenia - a global NGO using art and sport to build a culture of peace.
-                It is a partnership that reflects everything we believe in.
-              </p>
+              <p style={{ fontSize: 16, lineHeight: 1.8, color: 'var(--color-text-muted)', marginBottom: storyExtra ? 18 : 0 }}>{storyP2}</p>
+              {storyExtra && (
+                <p style={{ fontSize: 16, lineHeight: 1.8, color: 'var(--color-text-muted)' }}>{storyExtra}</p>
+              )}
             </div>
 
             {/* Timeline */}
@@ -202,8 +238,8 @@ export default async function AboutPage() {
         <div className="container">
           <div className="section-header" style={{ marginBottom: 32 }}>
             <div>
-              <div className="section-header__label">What drives us</div>
-              <h2 className="section-header__title">Mission, Vision & Values</h2>
+              <div className="section-header__label">{missionVisionLabel}</div>
+              <h2 className="section-header__title">{missionVisionTitle}</h2>
             </div>
           </div>
           <div className="grid-3">
@@ -225,8 +261,8 @@ export default async function AboutPage() {
       <section style={{ background: 'var(--color-primary)', padding: '64px 0' }}>
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: 48 }}>
-            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.45)', marginBottom: 10 }}>By the numbers</div>
-            <h2 style={{ fontSize: 28, fontWeight: 600, color: 'white' }}>Our impact since 2018</h2>
+            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.45)', marginBottom: 10 }}>{impactLabel}</div>
+            <h2 style={{ fontSize: 28, fontWeight: 600, color: 'white' }}>{impactTitle}</h2>
           </div>
           <div className="grid-stats">
             {pageStats.map((stat: any) => (
@@ -248,8 +284,8 @@ export default async function AboutPage() {
         <div className="container">
           <div className="section-header" style={{ marginBottom: 48 }}>
             <div>
-              <div className="section-header__label">Our approach</div>
-              <h2 className="section-header__title">How we work</h2>
+              <div className="section-header__label">{howWeWorkLabel}</div>
+              <h2 className="section-header__title">{howWeWorkTitle}</h2>
             </div>
           </div>
           <div className="grid-4">
@@ -271,8 +307,8 @@ export default async function AboutPage() {
         <div className="container">
           <div className="section-header" style={{ marginBottom: 36 }}>
             <div>
-              <div className="section-header__label">Our programmes</div>
-              <h2 className="section-header__title">What we work on</h2>
+              <div className="section-header__label">{focusAreasLabel}</div>
+              <h2 className="section-header__title">{focusAreasTitle}</h2>
             </div>
           </div>
           <div className="grid-3" style={{ gap: 16 }}>
@@ -307,7 +343,7 @@ export default async function AboutPage() {
                 fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.85)',
                 textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 16,
               }}>
-                🇪🇺 Erasmus+ Partner Organisation
+                {erasmusBadge}
               </div>
               <h2 style={{ fontSize: 24, fontWeight: 700, color: 'white', marginBottom: 14, lineHeight: 1.3 }}>
                 {erasmusTitle}
@@ -317,18 +353,13 @@ export default async function AboutPage() {
               </p>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12, flexShrink: 0 }}>
-              {[
-                { icon: '✈️', label: 'Travel covered' },
-                { icon: '🏠', label: 'Accommodation included' },
-                { icon: '🍽️', label: 'Meals provided' },
-                { icon: '📜', label: 'Youthpass certificate' },
-              ].map(({ icon, label }) => (
+              {erasmusBenefits.map(({ icon, label }: any) => (
                 <div key={label} style={{
                   display: 'flex', alignItems: 'center', gap: 10,
                   padding: '10px 16px', background: 'rgba(255,255,255,0.12)',
                   borderRadius: 8, fontSize: 13, color: 'white', fontWeight: 500,
                 }}>
-                  <span style={{ fontSize: 18 }}>{icon}</span>
+                  {icon && <span style={{ fontSize: 18 }}>{icon}</span>}
                   {label}
                 </div>
               ))}
@@ -343,8 +374,8 @@ export default async function AboutPage() {
           <div className="container">
             <div className="section-header" style={{ marginBottom: 28 }}>
               <div>
-                <div className="section-header__label">Affiliations</div>
-                <h2 className="section-header__title">Official representation</h2>
+                <div className="section-header__label">{affiliationsLabel}</div>
+                <h2 className="section-header__title">{affiliationsTitle}</h2>
               </div>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 760 }}>
@@ -402,8 +433,8 @@ export default async function AboutPage() {
           <div className="container">
             <div className="section-header" style={{ marginBottom: 32 }}>
               <div>
-                <div className="section-header__label">Network</div>
-                <h2 className="section-header__title">Our partners</h2>
+                <div className="section-header__label">{partnersLabel}</div>
+                <h2 className="section-header__title">{partnersTitle}</h2>
               </div>
             </div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16 }}>
@@ -441,12 +472,12 @@ export default async function AboutPage() {
         <div className="container">
           <div className="section-header" style={{ marginBottom: 36 }}>
             <div>
-              <div className="section-header__label">The people</div>
-              <h2 className="section-header__title">Meet our team</h2>
+              <div className="section-header__label">{teamLabel}</div>
+              <h2 className="section-header__title">{teamTitle}</h2>
             </div>
           </div>
           {team.length === 0 ? (
-            <p style={{ color: 'var(--color-text-muted)', fontSize: 14 }}>Team profiles coming soon.</p>
+            <p style={{ color: 'var(--color-text-muted)', fontSize: 14 }}>{teamEmptyText}</p>
           ) : (
             <div className="grid-3">
               {team.map((member: any) => {
@@ -502,29 +533,26 @@ export default async function AboutPage() {
             padding: '48px 40px', border: '1px solid var(--color-border)',
           }}>
             <div>
-              <div className="section-header__label" style={{ marginBottom: 12 }}>Join us</div>
+              <div className="section-header__label" style={{ marginBottom: 12 }}>{ctaLabel}</div>
               <h2 style={{ fontSize: 24, fontWeight: 600, marginBottom: 16, color: 'var(--color-text)', lineHeight: 1.3 }}>
                 {ctaHeading}
               </h2>
               <p style={{ fontSize: 14, color: 'var(--color-text-muted)', lineHeight: 1.75 }}>{ctaBody}</p>
             </div>
-            {[
-              { icon: '🚀', title: 'Apply for a project', desc: 'Check our open calls and apply for a youth exchange, training course, or volunteering opportunity.', href: '/open-calls', label: 'View open calls →', bg: 'var(--color-primary)' },
-              { icon: '🤝', title: 'Partner with us',     desc: 'We are always looking for organisations in Europe and beyond who share our values and want to co-create projects.', href: '/partners', label: 'Become a partner →', bg: '#3B6D11' },
-            ].map(({ icon, title, desc, href, label, bg }) => (
-              <div key={title} style={{
+            {ctaCards.map((card: any, i: number) => (
+              <div key={card.title} style={{
                 background: 'white', borderRadius: 'var(--radius-md)', padding: '28px 24px',
                 border: '1px solid var(--color-border)', display: 'flex', flexDirection: 'column',
               }}>
-                <span style={{ fontSize: 32, marginBottom: 14 }}>{icon}</span>
-                <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 10, color: 'var(--color-text)' }}>{title}</h3>
-                <p style={{ fontSize: 13, color: 'var(--color-text-muted)', lineHeight: 1.7, flex: 1, marginBottom: 20 }}>{desc}</p>
-                <Link href={href} style={{
+                {card.icon && <span style={{ fontSize: 32, marginBottom: 14 }}>{card.icon}</span>}
+                <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 10, color: 'var(--color-text)' }}>{card.title}</h3>
+                {card.desc && <p style={{ fontSize: 13, color: 'var(--color-text-muted)', lineHeight: 1.7, flex: 1, marginBottom: 20 }}>{card.desc}</p>}
+                <Link href={card.href} style={{
                   display: 'inline-flex', alignItems: 'center', padding: '10px 18px',
-                  background: bg, color: 'white', borderRadius: 8,
+                  background: CTA_CARD_BG[i % CTA_CARD_BG.length], color: 'white', borderRadius: 8,
                   fontWeight: 500, fontSize: 13, textDecoration: 'none', width: 'fit-content',
                 }}>
-                  {label}
+                  {card.linkLabel}
                 </Link>
               </div>
             ))}

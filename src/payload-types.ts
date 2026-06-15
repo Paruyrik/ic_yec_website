@@ -2172,6 +2172,77 @@ export interface SiteSetting {
     showPartnersSection?: boolean | null;
     ctaHeading?: string | null;
     ctaBody?: string | null;
+    /**
+     * Small pill above the hero heading.
+     */
+    heroBadge?: string | null;
+    storyLabel?: string | null;
+    /**
+     * Third "Our story" paragraph. Leave blank to hide.
+     */
+    storyExtra?: string | null;
+    missionVisionLabel?: string | null;
+    missionVisionTitle?: string | null;
+    missionHeading?: string | null;
+    missionIcon?: string | null;
+    visionHeading?: string | null;
+    visionIcon?: string | null;
+    valuesHeading?: string | null;
+    valuesIcon?: string | null;
+    impactLabel?: string | null;
+    impactTitle?: string | null;
+    howWeWorkLabel?: string | null;
+    howWeWorkTitle?: string | null;
+    focusAreasLabel?: string | null;
+    focusAreasTitle?: string | null;
+    erasmusBadge?: string | null;
+    affiliationsLabel?: string | null;
+    affiliationsTitle?: string | null;
+    partnersLabel?: string | null;
+    partnersTitle?: string | null;
+    teamLabel?: string | null;
+    teamTitle?: string | null;
+    /**
+     * Shown when no team members are published.
+     */
+    teamEmptyText?: string | null;
+    ctaLabel?: string | null;
+    /**
+     * Pills shown in the hero. Leave empty for the built-in defaults.
+     */
+    heroStats?:
+      | {
+          value: string;
+          label: string;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Benefit chips beside the Erasmus+ text. Leave empty for the built-in defaults.
+     */
+    erasmusBenefits?:
+      | {
+          icon?: string | null;
+          label: string;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Action cards in the final CTA section. Leave empty for the built-in defaults.
+     */
+    ctaCards?:
+      | {
+          icon?: string | null;
+          title: string;
+          desc?: string | null;
+          /**
+           * Internal path (e.g. /open-calls) or full URL.
+           */
+          href: string;
+          linkLabel: string;
+          id?: string | null;
+        }[]
+      | null;
   };
   /**
    * The "Who We Are" block shown on the homepage.
@@ -2481,6 +2552,56 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         showPartnersSection?: T;
         ctaHeading?: T;
         ctaBody?: T;
+        heroBadge?: T;
+        storyLabel?: T;
+        storyExtra?: T;
+        missionVisionLabel?: T;
+        missionVisionTitle?: T;
+        missionHeading?: T;
+        missionIcon?: T;
+        visionHeading?: T;
+        visionIcon?: T;
+        valuesHeading?: T;
+        valuesIcon?: T;
+        impactLabel?: T;
+        impactTitle?: T;
+        howWeWorkLabel?: T;
+        howWeWorkTitle?: T;
+        focusAreasLabel?: T;
+        focusAreasTitle?: T;
+        erasmusBadge?: T;
+        affiliationsLabel?: T;
+        affiliationsTitle?: T;
+        partnersLabel?: T;
+        partnersTitle?: T;
+        teamLabel?: T;
+        teamTitle?: T;
+        teamEmptyText?: T;
+        ctaLabel?: T;
+        heroStats?:
+          | T
+          | {
+              value?: T;
+              label?: T;
+              id?: T;
+            };
+        erasmusBenefits?:
+          | T
+          | {
+              icon?: T;
+              label?: T;
+              id?: T;
+            };
+        ctaCards?:
+          | T
+          | {
+              icon?: T;
+              title?: T;
+              desc?: T;
+              href?: T;
+              linkLabel?: T;
+              id?: T;
+            };
       };
   aboutSection?:
     | T
