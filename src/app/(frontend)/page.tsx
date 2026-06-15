@@ -673,6 +673,7 @@ export default async function HomePage() {
           showArchive={nl?.showArchive !== false}
           recentNewsletters={newsletters.map((n: any) => ({
             id: n.id,
+            slug: n.slug,
             title: n.title,
             issueName: n.issueName,
             publishedDate: n.publishedDate,

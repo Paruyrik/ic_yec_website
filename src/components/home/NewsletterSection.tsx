@@ -3,6 +3,7 @@ import Link from 'next/link'
 
 interface Newsletter {
   id: string
+  slug: string
   title: string
   issueName?: string | null
   publishedDate: string
@@ -25,7 +26,7 @@ function formatDate(d: string) {
 
 export function NewsletterSection({ title, subtitle, signupUrl, buttonLabel, showArchive, recentNewsletters }: Props) {
   return (
-    <section style={{ background: 'var(--color-primary)', padding: '72px 0' }}>
+    <section id="newsletter" style={{ background: 'var(--color-primary)', padding: '72px 0' }}>
       <div className="container">
         {/* Top: signup */}
         <div style={{ textAlign: 'center', maxWidth: 560, margin: '0 auto', marginBottom: showArchive && recentNewsletters.length > 0 ? 64 : 0 }}>
@@ -103,59 +104,51 @@ export function NewsletterSection({ title, subtitle, signupUrl, buttonLabel, sho
 
         {/* Archive previews */}
         {showArchive && recentNewsletters.length > 0 && (
-          <div>
-            <p style={{
-              textAlign: 'center',
-              fontSize: 12, fontWeight: 600,
-              textTransform: 'uppercase', letterSpacing: '0.1em',
-              color: 'rgba(255,255,255,0.5)',
-              marginBottom: 24,
-            }}>Recent issues</p>
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: `repeat(${Math.min(recentNewsletters.length, 3)}, 1fr)`,
-              gap: 16,
-            }}>
-              {recentNewsletters.map(nl => (
-                <div key={nl.id} style={{
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: `repeat(${Math.min(recentNewsletters.length, 3)}, 1fr)`,
+            gap: 16,
+          }}>
+            {recentNewsletters.map(nl => (
+              <Link
+                key={nl.id}
+                href={`/newsletters/${nl.slug}`}
+                className="newsletter-card"
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
                   background: 'rgba(255,255,255,0.08)',
                   borderRadius: 12,
                   padding: '20px 22px',
                   backdropFilter: 'blur(4px)',
                   border: '1px solid rgba(255,255,255,0.12)',
-                }}>
-                  <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', marginBottom: 8 }}>
-                    {nl.issueName ?? formatDate(nl.publishedDate)}
-                  </div>
-                  <div style={{ fontSize: 15, fontWeight: 500, color: 'white', marginBottom: 10 }}>
-                    {nl.title}
-                  </div>
-                  <p style={{
-                    fontSize: 13, color: 'rgba(255,255,255,0.65)',
-                    lineHeight: 1.55, marginBottom: 16,
-                    display: '-webkit-box',
-                    WebkitLineClamp: 3,
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden',
-                  } as React.CSSProperties}>
-                    {nl.preview}
-                  </p>
-                  {nl.archiveUrl && (
-                    <a
-                      href={nl.archiveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        fontSize: 13, color: 'var(--color-accent)',
-                        textDecoration: 'none', fontWeight: 500,
-                      }}
-                    >
-                      Read issue →
-                    </a>
-                  )}
+                  textDecoration: 'none',
+                }}
+              >
+                <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', marginBottom: 8 }}>
+                  {nl.issueName ?? formatDate(nl.publishedDate)}
                 </div>
-              ))}
-            </div>
+                <div style={{ fontSize: 15, fontWeight: 500, color: 'white', marginBottom: 10 }}>
+                  {nl.title}
+                </div>
+                <p style={{
+                  fontSize: 13, color: 'rgba(255,255,255,0.65)',
+                  lineHeight: 1.55, marginBottom: 16,
+                  display: '-webkit-box',
+                  WebkitLineClamp: 3,
+                  WebkitBoxOrient: 'vertical',
+                  overflow: 'hidden',
+                } as React.CSSProperties}>
+                  {nl.preview}
+                </p>
+                <span style={{
+                  marginTop: 'auto',
+                  fontSize: 13, color: 'var(--color-accent)', fontWeight: 500,
+                }}>
+                  Read issue →
+                </span>
+              </Link>
+            ))}
           </div>
         )}
       </div>

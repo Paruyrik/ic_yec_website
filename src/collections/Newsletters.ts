@@ -16,6 +16,21 @@ export const Newsletters: CollectionConfig = {
   },
   fields: [
     { name: 'title',         type: 'text', required: true },
+    {
+      name: 'slug',
+      type: 'text',
+      required: true,
+      unique: true,
+      admin: {
+        position: 'sidebar',
+        components: {
+          Field: {
+            path: '@/components/admin/SlugField',
+            exportName: 'SlugField',
+          },
+        },
+      },
+    },
     { name: 'issueName',     type: 'text', admin: { description: 'e.g. "Spring 2024", "Issue #3"' } },
     { name: 'publishedDate', type: 'date', required: true },
     { name: 'preview',       type: 'textarea', required: true, admin: { description: 'Short summary shown in the archive preview (2–3 sentences).' } },

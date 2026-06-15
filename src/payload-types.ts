@@ -943,6 +943,7 @@ export interface Story {
 export interface Newsletter {
   id: number;
   title: string;
+  slug: string;
   /**
    * e.g. "Spring 2024", "Issue #3"
    */
@@ -1759,6 +1760,7 @@ export interface StoriesSelect<T extends boolean = true> {
  */
 export interface NewslettersSelect<T extends boolean = true> {
   title?: T;
+  slug?: T;
   issueName?: T;
   publishedDate?: T;
   preview?: T;

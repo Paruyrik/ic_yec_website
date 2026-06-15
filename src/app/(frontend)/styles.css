@@ -221,6 +221,9 @@ p { margin: 0; }
 .contact-grid { display: grid; grid-template-columns: 280px 1fr; gap: 48px; align-items: start; }
 @media (max-width: 768px) { .contact-grid { grid-template-columns: 1fr; gap: 32px; } }
 
+.newsletter-card { transition: background 0.15s, border-color 0.15s, transform 0.15s; }
+.newsletter-card:hover { background: rgba(255,255,255,0.14) !important; border-color: rgba(255,255,255,0.28) !important; transform: translateY(-2px); }
+
 /* Mobile nav */
 .nav-desktop { display: flex; align-items: center; gap: 4px; }
 .nav-hamburger { display: none; background: none; border: none; cursor: pointer; padding: 8px; }
