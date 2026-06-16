@@ -12,20 +12,11 @@ import { countryToISO } from '@/lib/countryIso'
 
 const GEO_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json'
 
-const DEFAULT_CITIES: MapCity[] = [
-  { city: 'Yerevan',     country: 'Armenia',       lat: 40.18, lng: 44.51,  isHome: true  },
-  { city: 'Berlin',      country: 'Germany',       lat: 52.52, lng: 13.40,  isHome: false },
-  { city: 'Paris',       country: 'France',        lat: 48.85, lng: 2.35,   isHome: false },
-  { city: 'Warsaw',      country: 'Poland',        lat: 52.23, lng: 21.01,  isHome: false },
-  { city: 'Rome',        country: 'Italy',         lat: 41.90, lng: 12.50,  isHome: false },
-  { city: 'Lisbon',      country: 'Portugal',      lat: 38.72, lng: -9.14,  isHome: false },
-  { city: 'Amsterdam',   country: 'Netherlands',   lat: 52.37, lng: 4.90,   isHome: false },
-  { city: 'Bucharest',   country: 'Romania',       lat: 44.43, lng: 26.10,  isHome: false },
-  { city: 'Athens',      country: 'Greece',        lat: 37.97, lng: 23.73,  isHome: false },
-  { city: 'Prague',      country: 'Czech Republic',lat: 50.08, lng: 14.44,  isHome: false },
-  { city: 'Tbilisi',     country: 'Georgia',       lat: 41.69, lng: 44.83,  isHome: false },
-  { city: 'Madrid',      country: 'Spain',         lat: 40.42, lng: -3.70,  isHome: false },
-  { city: 'Brussels',    country: 'Belgium',       lat: 50.85, lng: 4.35,   isHome: false },
+// Fallback when no cities are configured in the CMS: show only the IC-YEC HQ
+// (always real). Every other city must be added in Site Settings → Interactive
+// Map to appear, so the map always reflects real CMS data.
+const HQ_FALLBACK: MapCity[] = [
+  { city: 'Yerevan', country: 'Armenia', lat: 40.18, lng: 44.51, isHome: true },
 ]
 
 export interface MapCity {
@@ -85,7 +76,7 @@ export function HomeMap({
   const [hoveredCity, setHoveredCity] = useState<string | null>(null)
   const [popup, setPopup] = useState<Popup>(null)
 
-  const displayCities = cities && cities.length > 0 ? cities : DEFAULT_CITIES
+  const displayCities = cities && cities.length > 0 ? cities : HQ_FALLBACK
 
   // Highlight countries strictly from the real partner-country list. A city
   // dot must NOT force its whole country to light up (that previously caused
