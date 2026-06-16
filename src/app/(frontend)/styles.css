@@ -221,6 +221,14 @@ p { margin: 0; }
 .contact-grid { display: grid; grid-template-columns: 280px 1fr; gap: 48px; align-items: start; }
 @media (max-width: 768px) { .contact-grid { grid-template-columns: 1fr; gap: 32px; } }
 
+/* "What happens after you apply" timeline */
+.timeline-grid { display: grid; grid-template-columns: repeat(var(--timeline-cols, 5), 1fr); gap: 0; position: relative; }
+.timeline-line { position: absolute; top: 32px; left: 10%; right: 10%; height: 2px; background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-accent) 100%); opacity: 0.25; z-index: 0; }
+@media (max-width: 768px) {
+  .timeline-grid { grid-template-columns: 1fr; gap: 36px; max-width: 360px; margin: 0 auto; }
+  .timeline-line { display: none; }
+}
+
 .newsletter-card { transition: background 0.15s, border-color 0.15s, transform 0.15s; }
 .newsletter-card:hover { background: rgba(255,255,255,0.14) !important; border-color: rgba(255,255,255,0.28) !important; transform: translateY(-2px); }
 

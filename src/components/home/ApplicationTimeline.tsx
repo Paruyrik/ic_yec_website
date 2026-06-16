@@ -23,24 +23,13 @@ export function ApplicationTimeline({ title, steps }: Props) {
           <h2 style={{ fontSize: 28, fontWeight: 500, marginTop: 8 }}>{title}</h2>
         </div>
 
-        {/* Desktop: horizontal; mobile: vertical */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: `repeat(${Math.min(steps.length, 5)}, 1fr)`,
-          gap: 0,
-          position: 'relative',
-        }}>
-          {/* Connecting line */}
-          <div style={{
-            position: 'absolute',
-            top: 32,
-            left: '10%',
-            right: '10%',
-            height: 2,
-            background: 'linear-gradient(90deg, var(--color-primary) 0%, var(--color-accent) 100%)',
-            opacity: 0.25,
-            zIndex: 0,
-          }} />
+        {/* Desktop: horizontal row; mobile: single vertical column (see styles.css) */}
+        <div
+          className="timeline-grid"
+          style={{ '--timeline-cols': String(Math.min(steps.length, 5)) } as React.CSSProperties}
+        >
+          {/* Connecting line (hidden on mobile) */}
+          <div className="timeline-line" />
 
           {steps.map((step, i) => (
             <div key={i} style={{
