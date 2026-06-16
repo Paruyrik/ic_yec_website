@@ -194,6 +194,21 @@ export const SiteSettings: GlobalConfig = {
           admin: { description: 'Hex color for partner city dots.' },
         },
         {
+          name: 'inactiveCountryColor',
+          type: 'text',
+          defaultValue: '#1e1d3a',
+          admin: { description: 'Hex color for countries without projects.' },
+        },
+        {
+          name: 'backgroundColor',
+          type: 'text',
+          defaultValue: '#0f0e1a',
+          admin: { description: 'Hex background color behind the map.' },
+        },
+        { name: 'legendActiveLabel', type: 'text', defaultValue: 'Partner countries', localized: true, admin: { description: 'Legend label for highlighted countries.' } },
+        { name: 'legendHomeLabel',   type: 'text', defaultValue: 'IC-YEC headquarters', localized: true, admin: { description: 'Legend label for the home city dot.' } },
+        { name: 'legendCityLabel',   type: 'text', defaultValue: 'Partner cities', localized: true, admin: { description: 'Legend label for partner city dots.' } },
+        {
           name: 'cities',
           type: 'array',
           admin: { description: 'Partner cities displayed as pulsing dots. Leave empty to use the built-in default list.' },

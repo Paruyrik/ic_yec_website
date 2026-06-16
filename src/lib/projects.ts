@@ -7,6 +7,7 @@ export type ProjectFilters = {
   theme?: string
   role?: string
   q?: string
+  country?: string
 }
 
 /** Midnight (UTC) for the given date, as a timestamp. */
@@ -79,9 +80,10 @@ export function notCompletedWhere(now: Date = new Date()): Where {
  */
 export function buildProjectWhere(f: ProjectFilters): Where | undefined {
   const and: Where[] = []
-  if (f.theme)  and.push({ theme: { in: [f.theme] } })
-  if (f.role)   and.push({ projectRole: { equals: f.role } })
-  if (f.q)      and.push({ or: [{ title: { like: f.q } }, { summary: { like: f.q } }] })
-  if (f.status) and.push(statusWhere(f.status))
+  if (f.theme)   and.push({ theme: { in: [f.theme] } })
+  if (f.role)    and.push({ projectRole: { equals: f.role } })
+  if (f.q)       and.push({ or: [{ title: { like: f.q } }, { summary: { like: f.q } }] })
+  if (f.country) and.push({ 'countries.country': { equals: f.country } })
+  if (f.status)  and.push(statusWhere(f.status))
   return and.length ? { and } : undefined
 }

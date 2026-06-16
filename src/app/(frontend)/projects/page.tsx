@@ -26,22 +26,24 @@ export default async function ProjectsPage({
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
   const sp = await searchParams
-  const currentStatus = (sp.status as string) ?? ''
-  const currentTheme  = (sp.theme  as string) ?? ''
-  const currentRole   = (sp.role   as string) ?? ''
-  const currentQ      = (sp.q      as string) ?? ''
+  const currentStatus  = (sp.status  as string) ?? ''
+  const currentTheme   = (sp.theme   as string) ?? ''
+  const currentRole    = (sp.role    as string) ?? ''
+  const currentQ       = (sp.q       as string) ?? ''
+  const currentCountry = (sp.country as string) ?? ''
 
   const payload = await getPayloadClient()
 
   // ── build where clause for filtered query ──────────────────────────────────
   const where = buildProjectWhere({
-    status: currentStatus || undefined,
-    theme:  currentTheme  || undefined,
-    role:   currentRole   || undefined,
-    q:      currentQ      || undefined,
+    status:  currentStatus  || undefined,
+    theme:   currentTheme   || undefined,
+    role:    currentRole    || undefined,
+    q:       currentQ       || undefined,
+    country: currentCountry || undefined,
   })
 
-  const hasFilter = currentStatus || currentTheme || currentRole || currentQ
+  const hasFilter = currentStatus || currentTheme || currentRole || currentQ || currentCountry
 
   // ── two parallel queries ───────────────────────────────────────────────────
   const [
@@ -79,6 +81,30 @@ export default async function ProjectsPage({
     new Set(allProjects.flatMap((p) => (p.countries ?? []).map((c: any) => c.country).filter(Boolean)))
   ) as string[]
 
+  // Projects per country (for the hover tooltip count)
+  const countryCounts: Record<string, number> = {}
+  for (const p of allProjects) {
+    for (const c of (p.countries ?? []) as any[]) {
+      if (c.country) countryCounts[c.country] = (countryCounts[c.country] ?? 0) + 1
+    }
+  }
+
+  // Each project's specific map locations → clickable pins
+  const projectPoints = allProjects.flatMap((p: any) =>
+    (p.mapPoints ?? [])
+      .filter((mp: any) => typeof mp.lat === 'number' && typeof mp.lng === 'number')
+      .map((mp: any) => ({
+        title: localStr(p.title) || 'Project',
+        slug: p.slug as string,
+        city: mp.city as string,
+        country: mp.country as string,
+        lat: mp.lat as number,
+        lng: mp.lng as number,
+        type: mp.type ?? null,
+        description: mp.description ?? null,
+      }))
+  )
+
   const mapEnabled   = (settings as any)?.mapSection?.enabled !== false
   const mapTitle     = localStr((settings as any)?.mapSection?.title) || 'Where we work'
   const mapSubtitle  = localStr((settings as any)?.mapSection?.subtitle)
@@ -88,6 +114,13 @@ export default async function ProjectsPage({
   const activeCountryColor = mapCfg.activeCountryColor  || '#3D3785'
   const homeCityColor      = mapCfg.homeCityColor        || '#E8A0A0'
   const partnerCityColor   = mapCfg.partnerCityColor     || '#8B85E8'
+  const inactiveColor      = mapCfg.inactiveCountryColor || '#1e1d3a'
+  const mapBackground      = mapCfg.backgroundColor      || '#0f0e1a'
+  const mapLegend          = {
+    active: localStr(mapCfg.legendActiveLabel) || 'Partner countries',
+    home:   localStr(mapCfg.legendHomeLabel)   || 'IC-YEC headquarters',
+    city:   localStr(mapCfg.legendCityLabel)   || 'Partner cities',
+  }
   const configuredCities   = (mapCfg.cities ?? []) as { city: string; country: string; lat: number; lng: number; isHome?: boolean }[]
 
   const autoStats = stats.length ? stats : [
@@ -152,6 +185,13 @@ export default async function ProjectsPage({
               activeCountryColor={activeCountryColor}
               homeCityColor={homeCityColor}
               partnerCityColor={partnerCityColor}
+              inactiveColor={inactiveColor}
+              backgroundColor={mapBackground}
+              legend={mapLegend}
+              countryCounts={countryCounts}
+              projectPoints={projectPoints}
+              enableCountryLinks
+              zoomable
             />
             {allCountries.length > 0 && (
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 20 }}>
@@ -194,6 +234,7 @@ export default async function ProjectsPage({
                 currentTheme={currentTheme}
                 currentRole={currentRole}
                 currentQ={currentQ}
+                currentCountry={currentCountry}
               />
             </Suspense>
           </div>
@@ -202,10 +243,11 @@ export default async function ProjectsPage({
             initialProjects={projects}
             initialTotalPages={totalPages}
             filters={{
-              status: currentStatus || undefined,
-              theme:  currentTheme  || undefined,
-              role:   currentRole   || undefined,
-              q:      currentQ      || undefined,
+              status:  currentStatus  || undefined,
+              theme:   currentTheme   || undefined,
+              role:    currentRole    || undefined,
+              q:       currentQ       || undefined,
+              country: currentCountry || undefined,
             }}
             hasFilter={Boolean(hasFilter)}
           />

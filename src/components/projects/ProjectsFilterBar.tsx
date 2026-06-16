@@ -30,9 +30,10 @@ interface Props {
   currentTheme: string
   currentRole: string
   currentQ: string
+  currentCountry?: string
 }
 
-export function ProjectsFilterBar({ total, currentStatus, currentTheme, currentRole, currentQ }: Props) {
+export function ProjectsFilterBar({ total, currentStatus, currentTheme, currentRole, currentQ, currentCountry }: Props) {
   const router    = useRouter()
   const pathname  = usePathname()
   const params    = useSearchParams()
@@ -128,6 +129,22 @@ export function ProjectsFilterBar({ total, currentStatus, currentTheme, currentR
           <option key={t.value} value={t.value}>{t.label}</option>
         ))}
       </select>
+
+      {/* Active country filter (set by clicking the map) */}
+      {currentCountry && (
+        <button
+          onClick={() => push({ country: '' })}
+          style={{
+            display: 'inline-flex', alignItems: 'center', gap: 6,
+            padding: '8px 12px', borderRadius: 8, fontSize: 14, cursor: 'pointer',
+            background: 'var(--color-tint)', color: 'var(--color-primary)',
+            border: '1px solid var(--color-primary)', fontWeight: 500,
+          }}
+          aria-label={`Clear country filter ${currentCountry}`}
+        >
+          📍 {currentCountry} <span style={{ fontSize: 15, lineHeight: 1 }}>×</span>
+        </button>
+      )}
 
       {/* Count */}
       <span style={{

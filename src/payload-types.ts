@@ -2081,6 +2081,26 @@ export interface SiteSetting {
      */
     partnerCityColor?: string | null;
     /**
+     * Hex color for countries without projects.
+     */
+    inactiveCountryColor?: string | null;
+    /**
+     * Hex background color behind the map.
+     */
+    backgroundColor?: string | null;
+    /**
+     * Legend label for highlighted countries.
+     */
+    legendActiveLabel?: string | null;
+    /**
+     * Legend label for the home city dot.
+     */
+    legendHomeLabel?: string | null;
+    /**
+     * Legend label for partner city dots.
+     */
+    legendCityLabel?: string | null;
+    /**
      * Partner cities displayed as pulsing dots. Leave empty to use the built-in default list.
      */
     cities?:
@@ -2494,6 +2514,11 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         activeCountryColor?: T;
         homeCityColor?: T;
         partnerCityColor?: T;
+        inactiveCountryColor?: T;
+        backgroundColor?: T;
+        legendActiveLabel?: T;
+        legendHomeLabel?: T;
+        legendCityLabel?: T;
         cities?:
           | T
           | {
