@@ -191,7 +191,6 @@ export default async function ProjectsPage({
               countryCounts={countryCounts}
               projectPoints={projectPoints}
               enableCountryLinks
-              zoomable
             />
             {allCountries.length > 0 && (
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 20 }}>

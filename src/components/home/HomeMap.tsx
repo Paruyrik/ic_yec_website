@@ -7,7 +7,6 @@ import {
   Geographies,
   Geography,
   Marker,
-  ZoomableGroup,
 } from 'react-simple-maps'
 import { countryToISO } from '@/lib/countryIso'
 
@@ -61,7 +60,6 @@ export interface HomeMapProps {
   countryCounts?: Record<string, number>
   projectPoints?: ProjectPoint[]
   enableCountryLinks?: boolean
-  zoomable?: boolean
 }
 
 type Tooltip = { x: number; y: number; content: string } | null
@@ -81,13 +79,11 @@ export function HomeMap({
   countryCounts,
   projectPoints = [],
   enableCountryLinks = false,
-  zoomable = false,
 }: HomeMapProps) {
   const router = useRouter()
   const [tooltip, setTooltip] = useState<Tooltip>(null)
   const [hoveredCity, setHoveredCity] = useState<string | null>(null)
   const [popup, setPopup] = useState<Popup>(null)
-  const [zoom, setZoom] = useState(1)
 
   const displayCities = cities && cities.length > 0 ? cities : DEFAULT_CITIES
 
@@ -229,35 +225,9 @@ export function HomeMap({
       `}</style>
 
       <ComposableMap projectionConfig={{ scale: 680, center: [22, 51] }} style={{ width: '100%', height: 'auto' }}>
-        {zoomable ? (
-          // v3 runtime supports these props; bundled types are incomplete, hence the cast.
-          <ZoomableGroup {...({ zoom, minZoom: 1, maxZoom: 8, onMoveEnd: ({ zoom: z }: { zoom: number }) => setZoom(z) } as any)}>
-            {geographies}
-            {renderMarkers()}
-          </ZoomableGroup>
-        ) : (
-          <>
-            {geographies}
-            {renderMarkers()}
-          </>
-        )}
+        {geographies}
+        {renderMarkers()}
       </ComposableMap>
-
-      {/* Zoom controls */}
-      {zoomable && (
-        <div style={{ position: 'absolute', top: 16, right: 16, display: 'flex', flexDirection: 'column', gap: 6 }}>
-          <button
-            onClick={() => setZoom((z) => Math.min(8, z * 1.5))}
-            aria-label="Zoom in"
-            style={zoomBtnStyle}
-          >+</button>
-          <button
-            onClick={() => setZoom((z) => Math.max(1, z / 1.5))}
-            aria-label="Zoom out"
-            style={zoomBtnStyle}
-          >−</button>
-        </div>
-      )}
 
       {tooltip && (
         <div style={{
@@ -326,11 +296,4 @@ export function HomeMap({
       </div>
     </div>
   )
-}
-
-const zoomBtnStyle: React.CSSProperties = {
-  width: 32, height: 32, borderRadius: 8, cursor: 'pointer',
-  background: 'rgba(15,14,26,0.8)', color: 'white',
-  border: '1px solid rgba(255,255,255,0.15)', fontSize: 18, lineHeight: 1,
-  display: 'flex', alignItems: 'center', justifyContent: 'center',
 }
