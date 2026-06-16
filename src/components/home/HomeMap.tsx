@@ -87,10 +87,11 @@ export function HomeMap({
 
   const displayCities = cities && cities.length > 0 ? cities : DEFAULT_CITIES
 
-  const allActiveCountries = [
-    ...activeCountries,
-    ...displayCities.map((c) => c.country),
-  ]
+  // Highlight countries strictly from the real partner-country list. A city
+  // dot must NOT force its whole country to light up (that previously caused
+  // default-city countries like Germany/Belgium/Netherlands/Portugal/Czechia
+  // to appear active even when no project listed them).
+  const allActiveCountries = activeCountries
 
   // ISO-keyed lookups so matching is robust regardless of name spelling.
   const activeISO = new Set<string>()
