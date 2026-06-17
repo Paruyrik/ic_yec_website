@@ -54,7 +54,9 @@ export interface HomeMapProps {
 }
 
 type Tooltip = { x: number; y: number; content: string } | null
-type Popup = { x: number; y: number; point: ProjectPoint } | null
+type ProjectRef = { title: string; slug: string }
+type PointGroup = { lat: number; lng: number; city: string; country: string; projects: ProjectRef[] }
+type Popup = { x: number; y: number; group: PointGroup } | null
 
 const PROJECT_PIN_COLOR = '#F4B740'
 
@@ -98,6 +100,19 @@ export function HomeMap({
 
   const activeHighlight = activeCountryColor + 'cc'
   const activeHover = activeCountryColor
+
+  // Deduplicate project pins by coordinate so multiple projects at the same
+  // venue (e.g. several exchanges in one city) collapse into a single pin.
+  const pointGroups: PointGroup[] = (() => {
+    const m = new Map<string, PointGroup>()
+    for (const p of projectPoints) {
+      const key = `${p.lat.toFixed(4)},${p.lng.toFixed(4)}`
+      const g = m.get(key)
+      if (g) g.projects.push({ title: p.title, slug: p.slug })
+      else m.set(key, { lat: p.lat, lng: p.lng, city: p.city, country: p.country, projects: [{ title: p.title, slug: p.slug }] })
+    }
+    return [...m.values()]
+  })()
 
   function svgPos(e: React.MouseEvent) {
     const svg = (e.target as SVGElement).closest('svg')
@@ -156,26 +171,38 @@ export function HomeMap({
         )
       })}
 
-      {projectPoints.map((p, i) => (
-        <Marker
-          key={`proj-${p.slug}-${i}`}
-          coordinates={[p.lng, p.lat]}
-          onMouseEnter={(e: React.MouseEvent) => {
-            const pos = svgPos(e)
-            if (pos) setTooltip({ x: pos.x, y: pos.y - 12, content: `${p.title} — ${p.city}` })
-          }}
-          onMouseLeave={() => setTooltip(null)}
-          onClick={(e: React.MouseEvent) => {
-            const pos = svgPos(e)
-            if (pos) setPopup({ x: pos.x, y: pos.y, point: p })
-            setTooltip(null)
-          }}
-          style={{ cursor: 'pointer' }}
-        >
-          <circle r={4.5} fill={PROJECT_PIN_COLOR} stroke="#0f0e1a" strokeWidth={1.2} />
-          <circle r={1.6} fill="#0f0e1a" />
-        </Marker>
-      ))}
+      {pointGroups.map((g, i) => {
+        const n = g.projects.length
+        return (
+          <Marker
+            key={`grp-${g.lat},${g.lng}-${i}`}
+            coordinates={[g.lng, g.lat]}
+            onMouseEnter={(e: React.MouseEvent) => {
+              const pos = svgPos(e)
+              if (pos) setTooltip({ x: pos.x, y: pos.y - 12, content: n === 1 ? `${g.projects[0].title} — ${g.city}` : `${g.city} — ${n} projects` })
+            }}
+            onMouseLeave={() => setTooltip(null)}
+            onClick={(e: React.MouseEvent) => {
+              const pos = svgPos(e)
+              if (pos) setPopup({ x: pos.x, y: pos.y, group: g })
+              setTooltip(null)
+            }}
+            style={{ cursor: 'pointer' }}
+          >
+            {n > 1 ? (
+              <>
+                <circle r={7} fill={PROJECT_PIN_COLOR} stroke="#0f0e1a" strokeWidth={1.2} />
+                <text textAnchor="middle" dominantBaseline="central" style={{ fontSize: 8, fontWeight: 700, fill: '#0f0e1a', pointerEvents: 'none' }}>{n}</text>
+              </>
+            ) : (
+              <>
+                <circle r={4.5} fill={PROJECT_PIN_COLOR} stroke="#0f0e1a" strokeWidth={1.2} />
+                <circle r={1.6} fill="#0f0e1a" />
+              </>
+            )}
+          </Marker>
+        )
+      })}
     </>
   )
 
@@ -244,18 +271,28 @@ export function HomeMap({
             aria-label="Close"
             style={{ position: 'absolute', top: 6, right: 8, border: 'none', background: 'none', cursor: 'pointer', fontSize: 16, color: 'var(--color-text-muted)' }}
           >×</button>
-          <div style={{ fontSize: 11, color: 'var(--color-text-muted)', marginBottom: 4 }}>
-            📍 {popup.point.city}, {popup.point.country}
+          <div style={{ fontSize: 11, color: 'var(--color-text-muted)', marginBottom: popup.group.projects.length > 1 ? 8 : 4, paddingRight: 12 }}>
+            📍 {popup.group.city}, {popup.group.country}
+            {popup.group.projects.length > 1 && ` · ${popup.group.projects.length} projects`}
           </div>
-          <div style={{ fontSize: 14, fontWeight: 600, marginBottom: popup.point.description ? 6 : 10, paddingRight: 12 }}>
-            {popup.point.title}
-          </div>
-          {popup.point.description && (
-            <p style={{ fontSize: 12, color: 'var(--color-text-muted)', lineHeight: 1.5, marginBottom: 10 }}>{popup.point.description}</p>
+          {popup.group.projects.length === 1 ? (
+            <>
+              <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 10, paddingRight: 12 }}>
+                {popup.group.projects[0].title}
+              </div>
+              <a href={`/projects/${popup.group.projects[0].slug}`} style={{ fontSize: 13, fontWeight: 500, color: 'var(--color-primary)', textDecoration: 'none' }}>
+                View project →
+              </a>
+            </>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 7, maxHeight: 220, overflowY: 'auto' }}>
+              {popup.group.projects.map((pr) => (
+                <a key={pr.slug} href={`/projects/${pr.slug}`} style={{ fontSize: 13, color: 'var(--color-primary)', textDecoration: 'none', lineHeight: 1.35 }}>
+                  • {pr.title}
+                </a>
+              ))}
+            </div>
           )}
-          <a href={`/projects/${popup.point.slug}`} style={{ fontSize: 13, fontWeight: 500, color: 'var(--color-primary)', textDecoration: 'none' }}>
-            View project →
-          </a>
         </div>
       )}
 

@@ -335,7 +335,7 @@ export default async function HomePage() {
   const locale = await getLocale()
   const payload = await getPayloadClient()
 
-  const [projectsResult, openCallsResult, storiesResult, newslettersResult, settings] =
+  const [projectsResult, openCallsResult, storiesResult, newslettersResult, settings, mapProjectsResult] =
     await Promise.all([
       payload.getCachedCollection<'projects'>({
         collection: 'projects',
@@ -368,9 +368,19 @@ export default async function HomePage() {
       }).catch(() => ({ docs: [] })),
 
       payload.getCachedGlobal({ slug: 'site-settings' as any }).catch(() => null),
+
+      // All projects — for the map (countries + city pins), independent of the
+      // 3 featured projects shown above.
+      payload.getCachedCollection<'projects'>({
+        collection: 'projects',
+        limit: 200,
+        depth: 1,
+        sort: 'order',
+      }).catch(() => ({ docs: [] as Project[] })),
     ])
 
   const projects = projectsResult.docs
+  const mapProjects = mapProjectsResult.docs
   const openCalls = openCallsResult.docs
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const s = settings as any
@@ -405,8 +415,24 @@ export default async function HomePage() {
   }))
   const newsletters = newslettersResult.docs
   const allCountries = Array.from(
-    new Set(projects.flatMap((p: any) => (p.countries ?? []).map((c: any) => c.country).filter(Boolean)))
+    new Set(mapProjects.flatMap((p: any) => (p.countries ?? []).map((c: any) => c.country).filter(Boolean)))
   ) as string[]
+
+  // City pins from every project's mapPoints (deduped by coordinate in the map)
+  const mapProjectPoints = mapProjects.flatMap((p: any) =>
+    (p.mapPoints ?? [])
+      .filter((mp: any) => typeof mp.lat === 'number' && typeof mp.lng === 'number')
+      .map((mp: any) => ({
+        title: localStr(p.title, locale) || 'Project',
+        slug: p.slug as string,
+        city: mp.city as string,
+        country: mp.country as string,
+        lat: mp.lat as number,
+        lng: mp.lng as number,
+        type: mp.type ?? null,
+        description: mp.description ?? null,
+      }))
+  )
   const urgentDays: number = s?.badgeSettings?.urgentDaysThreshold ?? 7
   const showLiveBadge: boolean = s?.badgeSettings?.showLiveBadge ?? true
 
@@ -620,6 +646,7 @@ export default async function HomePage() {
             activeCountryColor={mapActiveColor}
             homeCityColor={mapHomeCityColor}
             partnerCityColor={mapPartnerColor}
+            projectPoints={mapProjectPoints}
           />
         </div>
       </section>
