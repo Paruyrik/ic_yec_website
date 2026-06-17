@@ -418,6 +418,14 @@ export default async function HomePage() {
     new Set(mapProjects.flatMap((p: any) => (p.countries ?? []).map((c: any) => c.country).filter(Boolean)))
   ) as string[]
 
+  // Projects per country (for the hover tooltip count)
+  const mapCountryCounts: Record<string, number> = {}
+  for (const p of mapProjects as any[]) {
+    for (const c of (p.countries ?? []) as any[]) {
+      if (c.country) mapCountryCounts[c.country] = (mapCountryCounts[c.country] ?? 0) + 1
+    }
+  }
+
   // City pins from every project's mapPoints (deduped by coordinate in the map)
   const mapProjectPoints = mapProjects.flatMap((p: any) =>
     (p.mapPoints ?? [])
@@ -647,6 +655,7 @@ export default async function HomePage() {
             homeCityColor={mapHomeCityColor}
             partnerCityColor={mapPartnerColor}
             projectPoints={mapProjectPoints}
+            countryCounts={mapCountryCounts}
           />
         </div>
       </section>

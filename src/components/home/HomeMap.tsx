@@ -53,10 +53,10 @@ export interface HomeMapProps {
   enableCountryLinks?: boolean
 }
 
-type Tooltip = { x: number; y: number; content: string } | null
+type Tooltip = { x: number; y: number; w: number; content: string } | null
 type ProjectRef = { title: string; slug: string }
 type PointGroup = { lat: number; lng: number; city: string; country: string; projects: ProjectRef[] }
-type Popup = { x: number; y: number; group: PointGroup } | null
+type Popup = { x: number; y: number; w: number; group: PointGroup } | null
 
 const PROJECT_PIN_COLOR = '#F4B740'
 
@@ -118,7 +118,7 @@ export function HomeMap({
     const svg = (e.target as SVGElement).closest('svg')
     const rect = svg?.getBoundingClientRect()
     if (!rect) return null
-    return { x: e.clientX - rect.left, y: e.clientY - rect.top }
+    return { x: e.clientX - rect.left, y: e.clientY - rect.top, w: rect.width }
   }
 
   function onCountryEnter(e: React.MouseEvent, iso: string, geoName: string) {
@@ -127,7 +127,7 @@ export function HomeMap({
     if (!pos) return
     const count = countByISO[iso]
     const label = nameByISO[iso] ?? geoName
-    setTooltip({ x: pos.x, y: pos.y - 12, content: count ? `${label} — ${count} project${count !== 1 ? 's' : ''}` : label })
+    setTooltip({ x: pos.x, y: pos.y - 12, w: pos.w, content: count ? `${label} — ${count} project${count !== 1 ? 's' : ''}` : label })
   }
 
   function onCountryClick(iso: string) {
@@ -150,7 +150,7 @@ export function HomeMap({
             coordinates={[city.lng, city.lat]}
             onMouseEnter={(e: React.MouseEvent) => {
               const pos = svgPos(e)
-              if (pos) setTooltip({ x: pos.x, y: pos.y - 12, content: `${city.city}, ${city.country}` })
+              if (pos) setTooltip({ x: pos.x, y: pos.y - 12, w: pos.w, content: `${city.city}, ${city.country}` })
               setHoveredCity(city.city)
             }}
             onMouseLeave={() => { setTooltip(null); setHoveredCity(null) }}
@@ -179,12 +179,12 @@ export function HomeMap({
             coordinates={[g.lng, g.lat]}
             onMouseEnter={(e: React.MouseEvent) => {
               const pos = svgPos(e)
-              if (pos) setTooltip({ x: pos.x, y: pos.y - 12, content: n === 1 ? `${g.projects[0].title} — ${g.city}` : `${g.city} — ${n} projects` })
+              if (pos) setTooltip({ x: pos.x, y: pos.y - 12, w: pos.w, content: n === 1 ? `${g.projects[0].title} — ${g.city}` : `${g.city} — ${n} projects` })
             }}
             onMouseLeave={() => setTooltip(null)}
             onClick={(e: React.MouseEvent) => {
               const pos = svgPos(e)
-              if (pos) setPopup({ x: pos.x, y: pos.y, group: g })
+              if (pos) setPopup({ x: pos.x, y: pos.y, w: pos.w, group: g })
               setTooltip(null)
             }}
             style={{ cursor: 'pointer' }}
@@ -250,10 +250,14 @@ export function HomeMap({
 
       {tooltip && (
         <div style={{
-          position: 'absolute', left: tooltip.x + 14, top: tooltip.y,
+          position: 'absolute', top: tooltip.y,
+          // Flip to the left of the cursor near the right edge so it never clips.
+          ...(tooltip.x > tooltip.w * 0.6
+            ? { right: tooltip.w - tooltip.x + 14 }
+            : { left: tooltip.x + 14 }),
           background: 'rgba(255,255,255,0.95)', color: '#1A1833',
           padding: '5px 10px', borderRadius: 7, fontSize: 12, fontWeight: 500,
-          pointerEvents: 'none', whiteSpace: 'nowrap', boxShadow: '0 2px 10px rgba(0,0,0,0.2)', zIndex: 10,
+          pointerEvents: 'none', maxWidth: 220, boxShadow: '0 2px 10px rgba(0,0,0,0.2)', zIndex: 10,
         }}>
           {tooltip.content}
         </div>
@@ -262,7 +266,10 @@ export function HomeMap({
       {/* Project point popup */}
       {popup && (
         <div style={{
-          position: 'absolute', left: popup.x + 14, top: Math.max(popup.y - 10, 8),
+          position: 'absolute', top: Math.max(popup.y - 10, 8),
+          ...(popup.x > popup.w * 0.55
+            ? { right: popup.w - popup.x + 14 }
+            : { left: popup.x + 14 }),
           background: 'white', color: '#1A1833', borderRadius: 10, padding: '14px 16px',
           width: 230, boxShadow: '0 6px 24px rgba(0,0,0,0.28)', zIndex: 20,
         }}>
