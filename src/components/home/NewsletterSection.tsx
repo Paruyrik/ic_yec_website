@@ -145,7 +145,7 @@ export function NewsletterSection({ title, subtitle, signupUrl, buttonLabel, sho
                   marginTop: 'auto',
                   fontSize: 13, color: 'var(--color-accent)', fontWeight: 500,
                 }}>
-                  Read issue →
+                  Read more →
                 </span>
               </Link>
             ))}

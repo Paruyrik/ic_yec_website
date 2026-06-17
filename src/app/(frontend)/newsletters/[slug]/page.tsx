@@ -82,14 +82,14 @@ export default async function NewsletterDetailPage({ params }: { params: Promise
                   borderRadius: 10, fontWeight: 600, fontSize: 15, textDecoration: 'none',
                 }}
               >
-                Read the full issue →
+                Read the full update →
               </a>
             </div>
           )}
 
           <div style={{ marginTop: 48, paddingTop: 24, borderTop: '1px solid var(--color-border)' }}>
             <Link href="/#newsletter" style={{ color: 'var(--color-primary)', fontWeight: 500, textDecoration: 'none', fontSize: 14 }}>
-              ← Back to all issues
+              ← Back to newsletter
             </Link>
           </div>
         </div>
