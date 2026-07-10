@@ -27,8 +27,27 @@ import { SiteSettings } from './globals/SiteSettings'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+const serverURL = process.env.NEXT_PUBLIC_SERVER_URL || ''
+
+// Origins allowed to send authenticated (cookie) requests to the API.
+// If the domain the admin is loaded from isn't listed here, Payload rejects
+// the auth cookie via its CSRF check and every request returns 403.
+// Set ALLOWED_ORIGINS to a comma-separated list to permit extra domains
+// (e.g. the www. host and the old *.vercel.app URL).
+const allowedOrigins = Array.from(
+  new Set(
+    [
+      serverURL,
+      ...(process.env.ALLOWED_ORIGINS ?? '')
+        .split(',')
+        .map((o) => o.trim()),
+    ].filter(Boolean),
+  ),
+)
+
 export default buildConfig({
-  serverURL: process.env.NEXT_PUBLIC_SERVER_URL,
+  serverURL,
+  ...(allowedOrigins.length > 0 ? { cors: allowedOrigins, csrf: allowedOrigins } : {}),
   admin: {
     user: Users.slug,
     importMap: {
