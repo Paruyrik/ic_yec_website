@@ -254,10 +254,10 @@ function ProjectCard({ project, showLiveBadge }: {
   return (
     <Link href={`/projects/${project.slug}`} style={{ textDecoration: 'none' }}>
       <div className="card">
-        <div className="card__img" style={{
-          background: coverUrl ? `url(${coverUrl}) center/cover` : 'var(--color-tint-mid)',
-          position: 'relative',
-        }}>
+        <div
+          className={`card__poster${coverUrl ? ' card__poster--image' : ''}`}
+          style={coverUrl ? ({ '--poster': `url(${coverUrl})` } as React.CSSProperties) : undefined}
+        >
           {isLive && showLiveBadge && (
             <div style={{ position: 'absolute', top: 10, left: 10 }}>
               <LiveBadge variant="live" />

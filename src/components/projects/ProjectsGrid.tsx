@@ -59,13 +59,17 @@ function ProjectCard({ p }: { p: any }) {
   return (
     <Link href={`/projects/${p.slug}`} style={{ textDecoration: 'none' }}>
       <div className="card" style={{ height: '100%' }}>
-        <div style={{
-          height: 180,
-          background: coverUrl
-            ? `url(${coverUrl}) center/cover`
-            : `linear-gradient(135deg, ${THEME_COLORS[themes[0]] ?? '#3D3785'}22 0%, ${THEME_COLORS[themes[0]] ?? '#3D3785'}44 100%)`,
-          display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', padding: 12,
-        }}>
+        <div
+          className={`card__poster${coverUrl ? ' card__poster--image' : ''}`}
+          style={{
+            ...(coverUrl
+              ? ({ '--poster': `url(${coverUrl})` } as React.CSSProperties)
+              : {
+                  background: `linear-gradient(135deg, ${THEME_COLORS[themes[0]] ?? '#3D3785'}22 0%, ${THEME_COLORS[themes[0]] ?? '#3D3785'}44 100%)`,
+                }),
+            display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', padding: 12,
+          }}
+        >
           <span style={{
             padding: '3px 10px', borderRadius: 100, fontSize: 11, fontWeight: 500,
             background: status.bg, color: status.text,

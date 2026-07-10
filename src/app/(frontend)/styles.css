@@ -135,6 +135,34 @@ p { margin: 0; }
 }
 .card:hover { box-shadow: var(--shadow-hover); transform: translateY(-2px); }
 .card__img { width: 100%; height: 200px; object-fit: cover; background: var(--color-tint-mid); }
+
+/* Poster frame for project covers. Covers are Instagram posts - roughly square,
+   with the title and dates printed on the image - so cropping them loses the
+   content. Fit the whole poster inside a square frame and fill the leftover
+   space with a blurred copy of itself. Set --poster to `url(...)`. */
+.card__poster {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: var(--color-tint-mid);
+}
+.card__poster--image::before {
+  content: '';
+  position: absolute;
+  inset: -8%;
+  background: var(--poster) center / cover;
+  filter: blur(22px) saturate(1.25);
+  opacity: 0.55;
+}
+.card__poster--image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--poster) center / contain no-repeat;
+}
+.card__poster > * { position: relative; z-index: 1; }
+
 .card__body { padding: 20px 24px 24px; flex: 1; display: flex; flex-direction: column; gap: 10px; }
 .card__meta { display: flex; gap: 6px; flex-wrap: wrap; }
 .card__title { font-size: 18px; font-weight: 500; color: var(--color-text); }
