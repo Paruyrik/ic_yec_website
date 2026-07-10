@@ -81,8 +81,15 @@ export default buildConfig({
     uploadthingStorage({
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       collections: {
-        media:     true,   // public images - project photos, team photos, logos
-        documents: true,   // private documents - applicant CVs
+        // Public images - served straight from the uploadthing CDN.
+        //
+        // Proxying them through /api/media/file/<filename> serves 0-byte
+        // responses: the static handler derives Content-Length from a HEAD
+        // request to uploadthing, which answers chunked with no Content-Length,
+        // so `Number(null)` -> 0 and the body is truncated to nothing.
+        // Media is world-readable anyway, so skip the proxy entirely.
+        media: { disablePayloadAccessControl: true },
+        documents: true,   // private documents - applicant CVs - must stay behind access control
       } as any,
       options: {
         token: process.env.UPLOADTHING_TOKEN ?? '',
