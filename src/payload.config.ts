@@ -29,6 +29,29 @@ const dirname = path.dirname(filename)
 
 const serverURL = process.env.NEXT_PUBLIC_SERVER_URL || ''
 
+// A v7 uploadthing token is base64-encoded JSON: { apiKey, appId, regions }.
+// A legacy `sk_live_...` secret key is not accepted.
+//
+// UTApi constructs happily with a bad token and only throws when a request is
+// made, so an invalid token stays invisible until someone uploads a file - and
+// then surfaces as a generic "Something went wrong" in the admin. Fail at boot,
+// where the message is actionable.
+// The dashboard's "Quick Copy" snippet wraps the value in single quotes. Vercel
+// stores env values literally, so a straight paste keeps them - and uploadthing
+// rejects the token even though base64 decoding tolerates the stray characters.
+const uploadthingToken = (process.env.UPLOADTHING_TOKEN ?? '').trim().replace(/^['"]|['"]$/g, '')
+
+try {
+  const decoded = JSON.parse(Buffer.from(uploadthingToken, 'base64').toString('utf8'))
+  if (!decoded?.apiKey || !decoded?.appId) throw new Error('missing apiKey/appId')
+} catch {
+  throw new Error(
+    'UPLOADTHING_TOKEN is missing or not a valid v7 token. Copy the UPLOADTHING_TOKEN ' +
+      'value from the uploadthing dashboard (API Keys tab) - not the legacy sk_live_... ' +
+      'secret key - and set it for every environment that serves the app.',
+  )
+}
+
 // Origins allowed to send authenticated (cookie) requests to the API.
 // If the domain the admin is loaded from isn't listed here, Payload rejects
 // the auth cookie via its CSRF check and every request returns 403.
@@ -92,7 +115,7 @@ export default buildConfig({
         documents: true,   // private documents - applicant CVs - must stay behind access control
       } as any,
       options: {
-        token: process.env.UPLOADTHING_TOKEN ?? '',
+        token: uploadthingToken,
       },
     }),
   ],
