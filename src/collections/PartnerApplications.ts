@@ -94,11 +94,15 @@ export const PartnerApplications: CollectionConfig = {
       label: 'How did you hear about IC-YEC?',
     },
     // ── Admin-only fields (sidebar) ───────────────────────────────────
+    // The collection accepts public creates, so these are locked down at
+    // field level too - otherwise anyone could POST a pre-approved
+    // application straight to /api/partner-applications.
     {
       name: 'status',
       type: 'select',
       defaultValue: 'new',
       required: true,
+      access: { create: isAdmin, update: isAdmin },
       admin: { position: 'sidebar' },
       options: [
         { label: '🆕 New',       value: 'new' },
@@ -112,6 +116,7 @@ export const PartnerApplications: CollectionConfig = {
       name: 'adminNotes',
       type: 'textarea',
       label: 'Internal notes',
+      access: { create: isAdmin, update: isAdmin },
       admin: { position: 'sidebar', description: 'Only visible to admins.' },
     },
   ],
