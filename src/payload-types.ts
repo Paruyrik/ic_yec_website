@@ -81,6 +81,7 @@ export interface Config {
     stories: Story;
     newsletters: Newsletter;
     'partner-applications': PartnerApplication;
+    'contact-messages': ContactMessage;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -102,6 +103,7 @@ export interface Config {
     stories: StoriesSelect<false> | StoriesSelect<true>;
     newsletters: NewslettersSelect<false> | NewslettersSelect<true>;
     'partner-applications': PartnerApplicationsSelect<false> | PartnerApplicationsSelect<true>;
+    'contact-messages': ContactMessagesSelect<false> | ContactMessagesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -992,6 +994,26 @@ export interface PartnerApplication {
   createdAt: string;
 }
 /**
+ * Messages submitted through the website contact form.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-messages".
+ */
+export interface ContactMessage {
+  id: number;
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+  status: 'new' | 'read' | 'replied' | 'archived';
+  /**
+   * Only visible to admins.
+   */
+  adminNotes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -1070,6 +1092,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'partner-applications';
         value: number | PartnerApplication;
+      } | null)
+    | ({
+        relationTo: 'contact-messages';
+        value: number | ContactMessage;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -1785,6 +1811,20 @@ export interface PartnerApplicationsSelect<T extends boolean = true> {
   projectInterests?: T;
   message?: T;
   howHeard?: T;
+  status?: T;
+  adminNotes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-messages_select".
+ */
+export interface ContactMessagesSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  subject?: T;
+  message?: T;
   status?: T;
   adminNotes?: T;
   updatedAt?: T;
