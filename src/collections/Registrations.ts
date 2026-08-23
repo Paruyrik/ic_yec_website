@@ -6,6 +6,9 @@ import React from 'react'
 
 const FROM = () => process.env.EMAIL_FROM ?? 'IC-YEC <noreply@ic-yec.org>'
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const isAdmin = ({ req: { user } }: any) => Boolean(user)
+
 export const Registrations: CollectionConfig = {
   slug: 'registrations',
   admin: {
@@ -14,7 +17,7 @@ export const Registrations: CollectionConfig = {
   },
   access: {
     read: ({ req }) => Boolean(req.user),
-    create: () => true,
+    create: () => true, // public - the registration form posts here
     update: ({ req }) => Boolean(req.user),
     delete: ({ req }) => Boolean(req.user),
   },
@@ -37,9 +40,16 @@ export const Registrations: CollectionConfig = {
         { name: 'value', type: 'textarea', admin: { readOnly: true } },
       ],
     },
+    // ── Admin-only fields (sidebar) ───────────────────────────────────
+    // The collection accepts public creates, so these are locked down at
+    // field level too - otherwise an applicant could POST themselves in as
+    // 'accepted', with an agreement link and fabricated internal notes.
+    // The form still sends status: 'pending'; it is stripped for anonymous
+    // callers and the defaultValue below fills it back in.
     {
       name: 'status',
       type: 'select',
+      access: { create: isAdmin, update: isAdmin },
       options: [
         { label: 'Pending',             value: 'pending' },
         { label: 'Reviewing',           value: 'reviewing' },
@@ -54,6 +64,7 @@ export const Registrations: CollectionConfig = {
     {
       name: 'agreementUrl',
       type: 'text',
+      access: { create: isAdmin, update: isAdmin },
       admin: {
         position: 'sidebar',
         description: 'Google Form/Doc link - included in the acceptance email',
@@ -63,6 +74,7 @@ export const Registrations: CollectionConfig = {
     {
       name: 'notes',
       type: 'textarea',
+      access: { create: isAdmin, update: isAdmin },
       admin: { position: 'sidebar', description: 'Internal notes - not visible to applicant' },
     },
   ],
