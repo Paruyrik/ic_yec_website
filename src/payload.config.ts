@@ -19,6 +19,7 @@ import { FormTemplates } from './collections/FormTemplates'
 import { Faqs } from './collections/Faqs'
 import { Stories } from './collections/Stories'
 import { Newsletters } from './collections/Newsletters'
+import { Posts } from './collections/Posts'
 import { PartnerApplications } from './collections/PartnerApplications'
 import { ContactMessages } from './collections/ContactMessages'
 import { EmailSettings } from './globals/EmailSettings'
@@ -78,7 +79,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Documents, Projects, OpenCalls, Registrations, TeamMembers, Partners, Pages, FormTemplates, Faqs, Stories, Newsletters, PartnerApplications, ContactMessages],
+  collections: [Users, Media, Documents, Projects, OpenCalls, Registrations, TeamMembers, Partners, Pages, FormTemplates, Faqs, Stories, Posts, Newsletters, PartnerApplications, ContactMessages],
   globals: [EmailSettings, ProjectsSettings, SiteSettings],
   localization: {
     locales: [

@@ -13,6 +13,7 @@ const DEFAULT_COLUMNS: FooterColumn[] = [
     links: [
       { label: 'About IC-YEC', url: '/about' },
       { label: 'Our Projects', url: '/projects' },
+      { label: 'News', url: '/news' },
       { label: 'Team', url: '/about#team' },
     ],
   },

@@ -18,6 +18,7 @@ import * as migration_20260615_111953_about_page_full_config from './20260615_11
 import * as migration_20260615_131248_newsletter_slug from './20260615_131248_newsletter_slug';
 import * as migration_20260616_094911_map_config_legend_colors from './20260616_094911_map_config_legend_colors';
 import * as migration_20260823_000000_contact_messages from './20260823_000000_contact_messages';
+import * as migration_20261021_000000_posts from './20261021_000000_posts';
 
 export const migrations = [
   {
@@ -119,5 +120,10 @@ export const migrations = [
     up: migration_20260823_000000_contact_messages.up,
     down: migration_20260823_000000_contact_messages.down,
     name: '20260823_000000_contact_messages',
+  },
+  {
+    up: migration_20261021_000000_posts.up,
+    down: migration_20261021_000000_posts.down,
+    name: '20261021_000000_posts',
   },
 ];

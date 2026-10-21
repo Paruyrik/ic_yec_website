@@ -11,6 +11,8 @@ import { NewsletterSection } from '@/components/home/NewsletterSection'
 import { LiveBadge } from '@/components/ui/LiveBadge'
 import { FeaturedCallSlider } from '@/components/open-calls/FeaturedCallSlider'
 import { HomeMapClient as HomeMap } from '@/components/home/HomeMapClient'
+import { PostCard } from '@/components/posts/PostCard'
+import { findPosts, toPostCard } from '@/lib/postsQuery'
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 
@@ -335,7 +337,7 @@ export default async function HomePage() {
   const locale = await getLocale()
   const payload = await getPayloadClient()
 
-  const [projectsResult, openCallsResult, storiesResult, newslettersResult, settings, mapProjectsResult] =
+  const [projectsResult, openCallsResult, storiesResult, newslettersResult, settings, mapProjectsResult, postsResult] =
     await Promise.all([
       payload.getCachedCollection<'projects'>({
         collection: 'projects',
@@ -377,6 +379,8 @@ export default async function HomePage() {
         depth: 1,
         sort: 'order',
       }).catch(() => ({ docs: [] as Project[] })),
+
+      findPosts({ locale, limit: 3 }),
     ])
 
   const projects = projectsResult.docs
@@ -414,6 +418,7 @@ export default async function HomePage() {
     projectName: s.projectName,
   }))
   const newsletters = newslettersResult.docs
+  const posts = postsResult.docs.map((p) => toPostCard(p, locale))
   const allCountries = Array.from(
     new Set(mapProjects.flatMap((p: any) => (p.countries ?? []).map((c: any) => c.country).filter(Boolean)))
   ) as string[]
@@ -610,6 +615,24 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Latest news */}
+      {posts.length > 0 && (
+        <section className="section section--tint">
+          <div className="container">
+            <div className="section-header">
+              <div>
+                <div className="section-header__label">What&rsquo;s new</div>
+                <h2 className="section-header__title">Latest News</h2>
+              </div>
+              <Link href="/news" className="section-header__link">All news →</Link>
+            </div>
+            <div className="grid-3">
+              {posts.map((p) => <PostCard key={p.id} post={p} />)}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ── Interactive map ───────────────────────────────────────────────── */}
       <section style={{ background: '#0f0e1a', padding: '72px 0' }}>

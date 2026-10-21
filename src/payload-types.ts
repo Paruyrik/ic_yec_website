@@ -79,6 +79,7 @@ export interface Config {
     'form-templates': FormTemplate;
     faqs: Faq;
     stories: Story;
+    posts: Post;
     newsletters: Newsletter;
     'partner-applications': PartnerApplication;
     'contact-messages': ContactMessage;
@@ -101,6 +102,7 @@ export interface Config {
     'form-templates': FormTemplatesSelect<false> | FormTemplatesSelect<true>;
     faqs: FaqsSelect<false> | FaqsSelect<true>;
     stories: StoriesSelect<false> | StoriesSelect<true>;
+    posts: PostsSelect<false> | PostsSelect<true>;
     newsletters: NewslettersSelect<false> | NewslettersSelect<true>;
     'partner-applications': PartnerApplicationsSelect<false> | PartnerApplicationsSelect<true>;
     'contact-messages': ContactMessagesSelect<false> | ContactMessagesSelect<true>;
@@ -939,6 +941,56 @@ export interface Story {
   createdAt: string;
 }
 /**
+ * News and blog posts shown on /news and in the "Latest news" section of the homepage.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts".
+ */
+export interface Post {
+  id: number;
+  title: string;
+  slug: string;
+  /**
+   * Short summary shown on post cards (1–2 sentences).
+   */
+  excerpt?: string | null;
+  /**
+   * Shown on cards and at the top of the post. Posters are shown uncropped.
+   */
+  coverImage?: (number | null) | Media;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  publishedDate: string;
+  category: 'news' | 'event' | 'story' | 'announcement';
+  /**
+   * Optional, e.g. "IC-YEC Team"
+   */
+  author?: string | null;
+  /**
+   * Pin as the big headline post on /news.
+   */
+  featured?: boolean | null;
+  /**
+   * Untick to hide from the website.
+   */
+  published?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "newsletters".
  */
@@ -1084,6 +1136,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'stories';
         value: number | Story;
+      } | null)
+    | ({
+        relationTo: 'posts';
+        value: number | Post;
       } | null)
     | ({
         relationTo: 'newsletters';
@@ -1777,6 +1833,24 @@ export interface StoriesSelect<T extends boolean = true> {
   photo?: T;
   featured?: T;
   order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts_select".
+ */
+export interface PostsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  excerpt?: T;
+  coverImage?: T;
+  content?: T;
+  publishedDate?: T;
+  category?: T;
+  author?: T;
+  featured?: T;
+  published?: T;
   updatedAt?: T;
   createdAt?: T;
 }
